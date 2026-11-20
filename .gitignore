@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.DS_Store
+# 캐글 원본 데이터는 용량이 커서 저장소에 올리지 않음 (HANDOFF.md의 캐글 링크로 받기)
+data/raw/
+# 번역 작업용 임시 묶음
+results/translate_work/

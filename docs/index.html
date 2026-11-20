@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Olist 첫 구매 탐색기</title>
+<meta name="description" content="브라질 이커머스 Olist 첫 구매 고객 55,261명의 배송·리뷰·재구매를 카테고리, 기간, 지역, 결제 금액별로 직접 조회해 보는 대시보드.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F3F1EB; --paper: #F9F8F4; --ink: #0B0B0B; --text: #2a2926; --mute: #85827A; --line: #DDD9CF;
+  --acc: #E04A1F; --acc-soft: #F4D8CC; --base: #C6C1B5; --dark: #0B0B0B;
+  --e: cubic-bezier(.2,.7,.2,1);
+  --top: 56px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: Inter, 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+/* ===== 상단 막대 ===== */
+.top { height: var(--top); display: flex; align-items: center; gap: 28px; padding: 0 24px; border-bottom: 1px solid var(--line); background: var(--bg); }
+.mark { display: inline-flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.mark::before, .mark::after { content: ''; border: 5px solid transparent; }
+.mark::before { border-right: 9px solid var(--acc); border-left: 0; }
+.mark::after { border-left: 9px solid var(--acc); border-right: 0; }
+.top nav { display: flex; gap: 4px; height: 100%; }
+.top nav a { display: flex; align-items: center; padding: 0 12px; font-size: 13px; color: var(--mute); text-decoration: none; border-bottom: 2px solid transparent; }
+.top nav a.on { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+.top nav a:hover { color: var(--ink); }
+.info { position: relative; margin-left: auto; }
+.info summary { list-style: none; cursor: pointer; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--text); white-space: nowrap; }
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { border-color: var(--ink); }
+.info .pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 340px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 12px 32px rgba(0,0,0,.12); font-size: 12.5px; line-height: 1.6; color: var(--text); }
+.info .pop b { display: block; margin-top: 10px; color: var(--ink); font-weight: 600; }
+.info .pop b:first-child { margin-top: 0; }
+.info .pop p { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--mute); font-size: 11.5px; }
+
+/* ===== 앱 배치: 한 화면 ===== */
+.app { display: grid; grid-template-columns: 272px 1fr; height: calc(100vh - var(--top)); height: calc(100dvh - var(--top)); }
+
+/* 조건 패널 */
+.filters { overflow-y: auto; padding: 18px 20px 24px; border-right: 1px solid var(--line); background: var(--paper); }
+.fsum small { display: block; font-size: 11px; color: var(--mute); }
+.fsum strong { display: block; margin-top: 4px; font-size: 26px; font-weight: 300; letter-spacing: -.8px; }
+.fsum strong b { font-weight: 700; }
+.fsum span { display: block; font-size: 11.5px; color: var(--mute); }
+.fsum .bar { margin-top: 8px; height: 2px; background: var(--line); }
+.fsum .bar i { display: block; height: 100%; background: var(--acc); width: 100%; transition: width .4s var(--e); }
+.fg { padding: 14px 0; border-top: 1px solid var(--line); }
+.fsum + .ftoggle + .fbody .fg:first-child { margin-top: 14px; }
+.fg h4 { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; font-weight: 600; }
+.fg h4 button { border: 0; background: none; font-size: 11px; color: var(--mute); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+.chip { padding: 4px 9px; border: 1px solid var(--line); border-radius: 999px; background: transparent; font-size: 11.5px; line-height: 1.3; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+.chip:hover { border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.chip small { margin-left: 3px; font-size: 10px; opacity: .6; }
+.chips.st .chip { min-width: 36px; text-align: center; padding: 3px 5px; font-size: 11px; }
+.stsel { margin-top: 7px; font-size: 11px; line-height: 1.5; color: var(--mute); }
+.range { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; margin-top: 9px; font-size: 12px; color: var(--mute); }
+select { width: 100%; padding: 6px 6px; border: 1px solid var(--line); border-radius: 3px; background: #fff; font: inherit; font-size: 12px; color: var(--ink); }
+.reset { width: 100%; margin-top: 4px; padding: 9px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 12px; font-weight: 600; cursor: pointer; }
+.reset:hover { background: var(--ink); color: #fff; }
+.fnote { margin-top: 16px; font-size: 10.5px; line-height: 1.6; color: var(--mute); }
+.ftoggle { display: none; }
+
+/* 작업 영역 */
+.work { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); flex: none; }
+.kpi { padding: 14px 22px 12px; }
+.kpi + .kpi { border-left: 1px solid var(--line); }
+.kpi small { display: block; font-size: 11.5px; color: var(--mute); }
+.kpi strong { display: block; margin-top: 4px; font-size: 28px; font-weight: 300; letter-spacing: -1px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi strong em { font-style: normal; font-size: 13px; margin-left: 2px; color: var(--mute); }
+.kpi span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--mute); }
+.kpi span b { font-weight: 600; }
+.up { color: var(--acc); }
+.down { color: #3d6b4f; }
+
+.vtabs { display: flex; gap: 2px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; flex: none; scrollbar-width: none; }
+.vtabs button { flex: none; padding: 12px 12px 10px; border: 0; border-bottom: 2px solid transparent; background: none; font-size: 13px; color: var(--mute); cursor: pointer; white-space: nowrap; }
+.vtabs button:hover { color: var(--ink); }
+.vtabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--acc); }
+.vtabs button i { font-style: normal; margin-left: 5px; font-size: 10.5px; color: var(--mute); font-weight: 400; }
+
+.panel { flex: 1; min-height: 0; overflow-y: auto; padding: 20px 26px 28px; }
+.panel[hidden] { display: none; }
+.ph { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
+.ph h2 { font-size: 16px; font-weight: 600; letter-spacing: -.2px; }
+.desc { margin-top: 6px; max-width: 760px; font-size: 12.5px; line-height: 1.65; color: var(--mute); }
+.desc b { color: var(--ink); font-weight: 600; }
+.note { margin-top: 14px; font-size: 11.5px; line-height: 1.6; color: var(--mute); }
+.cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; height: 100%; }
+.cols > div { min-width: 0; }
+.block + .block { margin-top: 26px; }
+.empty { margin-top: 24px; padding: 28px; border: 1px dashed var(--line); text-align: center; font-size: 13px; color: var(--mute); }
+
+/* 판정 */
+.verdict { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--mute); }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--ink); color: var(--ink); white-space: nowrap; }
+.tag.yes { background: var(--acc); border-color: var(--acc); color: #fff; }
+.tag.na { border-style: dashed; color: var(--mute); border-color: var(--mute); }
+
+/* 원 비교 */
+.circles { display: flex; align-items: center; justify-content: center; margin-top: 10px; }
+.cc { position: relative; flex: none; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: width .5s var(--e), height .5s var(--e); }
+.cc.dark { background: var(--dark); color: #fff; z-index: 1; }
+.cc.light { background: linear-gradient(135deg, #8a8781 0%, #dcd9d2 26%, #f6f5f1 48%, #f9f8f5 100%); color: var(--ink); z-index: 2; box-shadow: 0 0 0 1px rgba(0,0,0,.04); margin-top: 18%; }
+.cc b { font-size: 13px; font-weight: 600; }
+.cc strong { display: block; font-weight: 300; letter-spacing: -1.2px; line-height: 1; margin: 5px 0; }
+.cc span { font-size: 11px; opacity: .65; }
+.cc .out { position: absolute; left: 100%; top: 50%; translate: 10px -50%; white-space: nowrap; text-align: left; color: var(--ink); }
+.cc .out strong { font-size: 22px !important; }
+
+/* 신뢰구간 */
+.ci { margin-top: 8px; }
+.ci .row { display: grid; grid-template-columns: 96px 1fr 120px; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.ci .lb b { display: block; font-weight: 600; }
+.ci .lb small { color: var(--mute); font-size: 11px; }
+.ci .tr { position: relative; height: 20px; }
+.ci .tr::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--line); }
+.ci .rg { position: absolute; top: 50%; height: 6px; translate: 0 -50%; border-radius: 3px; background: var(--base); transition: left .5s var(--e), width .5s var(--e); }
+.ci .dot { position: absolute; top: 50%; width: 12px; height: 12px; translate: -50% -50%; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); transition: left .5s var(--e); }
+.ci .row.hi .rg { background: var(--acc-soft); }
+.ci .row.hi .dot { background: var(--acc); }
+.ci .v { text-align: right; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ci .v small { display: block; font-weight: 400; font-size: 10.5px; color: var(--mute); }
+.axis { display: grid; grid-template-columns: 96px 1fr 120px; gap: 14px; margin-top: 5px; font-size: 10.5px; color: var(--mute); }
+.axis .sc { position: relative; height: 14px; }
+.axis .sc span { position: absolute; translate: -50% 0; white-space: nowrap; }
+
+/* 막대 표 */
+.bars { margin-top: 10px; }
+.bars .row { display: grid; grid-template-columns: 110px 1fr 1fr; gap: 18px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.bars .row.head { font-size: 11px; color: var(--mute); border-bottom-color: var(--ink); }
+.bars .lb b { font-weight: 600; display: block; }
+.bars .lb small { color: var(--mute); font-size: 11px; }
+.hb { display: grid; grid-template-columns: 1fr 52px; gap: 8px; align-items: center; }
+.hb i { display: block; height: 14px; background: var(--base); border-radius: 0 2px 2px 0; transition: width .5s var(--e); }
+.hb.acc i { background: var(--acc); }
+.hb span { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hb.dim span { color: var(--mute); font-weight: 400; }
+
+/* 작은 탭 */
+.tabs { display: inline-flex; flex-wrap: nowrap; max-width: 100%; overflow-x: auto; border: 1px solid var(--ink); border-radius: 999px; }
+.tabs button { flex: none; padding: 6px 13px; border: 0; background: transparent; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.tabs button + button { border-left: 1px solid var(--ink); }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+/* SVG 차트 */
+.svgbox { margin-top: 14px; position: relative; }
+.svgbox svg { display: block; width: 100%; overflow: visible; }
+.svgbox text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 11px; fill: var(--mute); }
+.svgbox .gl { stroke: var(--line); stroke-width: 1; }
+.svgbox .ln { fill: none; stroke: var(--acc); stroke-width: 2; }
+.svgbox .pt { fill: var(--bg); stroke: var(--acc); stroke-width: 2; }
+.svgbox .lbl { fill: var(--ink); font-weight: 600; }
+.svgbox .hbar { fill: var(--base); }
+.svgbox .hbar.in { fill: var(--ink); }
+.svgbox .med { stroke: var(--acc); stroke-width: 2; }
+.svgbox .medt { fill: var(--acc); font-weight: 600; }
+.tip { position: absolute; pointer-events: none; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 12px; line-height: 1.5; border-radius: 3px; white-space: nowrap; opacity: 0; transition: opacity .15s; transform: translate(-50%, -110%); }
+.tip.on { opacity: 1; }
+
+/* 리뷰 */
+#p5 { display: flex; flex-direction: column; padding-bottom: 0; }
+#p5[hidden] { display: none; }
+.rvhead { flex: none; }
+.rvtools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+.rvtools input { flex: 1 1 220px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 12.5px; }
+.rvtools input:focus, select:focus { outline: 2px solid var(--acc); outline-offset: 1px; }
+.rvcount { margin-top: 10px; font-size: 12px; color: var(--mute); }
+.rvcount b { color: var(--ink); }
+.rvscroll { flex: 1; min-height: 0; overflow-y: auto; margin: 10px -26px 0; padding: 0 26px 24px; }
+.rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.rv { padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.rv .tp { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 8px; font-size: 11px; color: var(--mute); }
+.rv .stars { color: var(--acc); letter-spacing: 1px; white-space: nowrap; }
+.rv .stars i { color: var(--line); font-style: normal; }
+.rv p { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--ink); }
+.rv p.pt { margin-top: 5px; font-size: 11.5px; line-height: 1.55; color: var(--mute); font-style: italic; }
+.rv p.pt::before { content: '원문 '; font-style: normal; font-size: 10px; font-weight: 600; letter-spacing: .04em; }
+.rv mark { background: var(--acc-soft); color: inherit; padding: 0 2px; }
+.rv .th { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.rv .th span { padding: 1px 7px; border: 1px solid var(--line); border-radius: 999px; font-size: 10.5px; color: var(--text); }
+.more { display: block; margin: 14px auto 0; padding: 8px 24px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 12.5px; cursor: pointer; }
+.more:hover { background: var(--ink); color: #fff; }
+
+/* ===== 좁은 화면: 일반 페이지처럼 스크롤 ===== */
+@media (max-width: 1000px) {
+  .app { display: block; height: auto; }
+  .filters { border-right: 0; border-bottom: 1px solid var(--line); }
+  .ftoggle { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 12px; padding: 9px 16px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .filters:not(.open) .fbody { display: none; }
+  .filters.open .ftoggle .arr { rotate: 180deg; }
+  .vtabs { position: sticky; top: 0; z-index: 5; background: var(--bg); }
+  .panel { overflow: visible; }
+  #p5 { display: block; }
+  .rvscroll { overflow: visible; margin: 10px 0 0; padding: 0 0 24px; }
+  .cols { grid-template-columns: 1fr; gap: 28px; height: auto; }
+}
+@media (max-width: 640px) {
+  .top { gap: 10px; padding: 0 12px; }
+  .mark { font-size: 12px; gap: 6px; }
+  .mark::before, .mark::after { display: none; }
+  .top nav a { padding: 0 7px; font-size: 12px; }
+  .info summary { padding: 5px 9px; font-size: 11.5px; }
+  .info .pop { width: min(320px, calc(100vw - 24px)); }
+  .filters { padding: 14px 16px 16px; }
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .kpi { padding: 12px 16px; }
+  .kpi:nth-child(3) { border-left: 0; }
+  .kpi:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .kpi strong { font-size: 24px; }
+  .vtabs { padding: 0 8px; }
+  .panel { padding: 18px 16px 24px; }
+  .ci .row, .axis { grid-template-columns: 60px 1fr 88px; gap: 8px; }
+  .bars .row { grid-template-columns: 84px 1fr 1fr; gap: 10px; }
+  .hb { grid-template-columns: 1fr 44px; }
+  .rvlist { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="mark">Olist 첫 구매 탐색기</span>
+  <nav><a href="index.html" class="on">탐색</a><a href="story.html">분석 이야기</a><a href="https://github.com/sohyeon1628-prog/olist-analysis">코드 ↗</a></nav>
+  <details class="info">
+    <summary>지표 정의</summary>
+    <div class="pop">
+      <b>대상</b>2017.01 ~ 2018.02에 처음 구매한 고객 55,261명 (브라질 이커머스 Olist)
+      <b>배송 지연</b>실제 도착일이 안내된 예정일보다 늦은 경우
+      <b>부정 리뷰</b>별점 1~2점 (3점은 중립, 4~5점은 긍정)
+      <b>재구매</b>첫 주문 후 24시간 ~ 180일 사이에 배송 완료된 주문이 있는 경우
+      <b>판정 규칙</b>카이제곱 검정 p &lt; 0.05일 때만 "의미 있는 차이". 그룹이 200명 미만이거나 재구매 고객이 10명 미만이면 결론을 내리지 않습니다.
+      <p>관계를 보여 줄 뿐 원인을 증명하지는 않습니다. 해석과 제안은 <a href="story.html">분석 이야기</a>에 있습니다.</p>
+    </div>
+  </details>
+</header>
+
+<div class="app">
+  <aside class="filters" id="filters">
+    <div class="fsum">
+      <small>선택한 고객</small>
+      <strong id="fN"><b>55,261</b>명</strong>
+      <span id="fShare">전체의 100%</span>
+      <div class="bar"><i id="fBar"></i></div>
+    </div>
+    <button class="ftoggle" id="ftoggle" aria-expanded="false" aria-controls="fbody"><span>조건 고르기 <span id="fCount"></span></span><span class="arr">▾</span></button>
+    <div class="fbody" id="fbody">
+      <div class="fg"><h4>카테고리 <button data-clear="c">전체</button></h4><div class="chips" id="fc"></div></div>
+      <div class="fg"><h4>첫 구매 월 <button data-clear="m">전체</button></h4>
+        <div class="range"><select id="m0" aria-label="시작 월"></select><span>~</span><select id="m1" aria-label="끝 월"></select></div></div>
+      <div class="fg"><h4>고객 지역 (주) <button data-clear="s">전체</button></h4><div class="chips st" id="fs"></div><div class="stsel" id="fsName"></div></div>
+      <div class="fg"><h4>결제 금액 (헤알) <button data-clear="p">전체</button></h4><div class="chips" id="fp"></div></div>
+      <button class="reset" id="reset">조건 모두 지우기</button>
+      <p class="fnote">고른 조건은 주소에 담겨 링크로 공유할 수 있습니다.<br>데이터: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Olist (Kaggle)</a> · 조건별 집계만 담았습니다.</p>
+    </div>
+  </aside>
+
+  <main class="work">
+    <div class="kpis" id="kpis"></div>
+    <div class="vtabs" id="vtabs" role="tablist" aria-label="보기 선택">
+      <button role="tab" aria-selected="true" aria-controls="p0" data-t="0">배송 → 리뷰</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">재구매 비교</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">지연 일수별</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">월별 추이</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">재구매 시점</button>
+      <button role="tab" aria-selected="false" aria-controls="p5" data-t="5">리뷰 원문<i id="rvTabN"></i></button>
+    </div>
+
+    <section class="panel" id="p0" role="tabpanel">
+      <div class="cols">
+        <div>
+          <div class="ph"><h2>배송이 늦으면 부정 리뷰가 늘어날까?</h2><div class="verdict" id="v1"></div></div>
+          <p class="desc">원의 넓이 = 부정 리뷰(1~2점) 비율. 검은 원은 배송이 늦은 고객, 밝은 원은 정시에 받은 고객입니다.</p>
+          <div class="circles" id="circles"></div>
+        </div>
+        <div>
+          <div class="ph"><h2>상품을 받기 전에 쓴 리뷰</h2><span class="tag na">사후 탐색</span></div>
+          <p class="desc" id="beforeDesc"></p>
+          <div class="bars" id="beforeBars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p1" role="tabpanel" hidden>
+      <p class="desc" style="margin-top:0">점 = 180일 재구매율, 막대 = 95% 신뢰구간(실제 값이 있을 법한 범위). 막대가 많이 겹치면 우연과 구분하기 어렵습니다.</p>
+      <div class="block" style="margin-top:18px"><div class="ph"><h2>배송 지연 → 재구매</h2><div class="verdict" id="v2"></div></div><div class="ci" id="ci1"></div><div class="axis" id="ax1"></div></div>
+      <div class="block"><div class="ph"><h2>리뷰 → 재구매</h2><div class="verdict" id="v3"></div></div><div class="ci" id="ci2"></div><div class="axis" id="ax2"></div></div>
+      <p class="note">조건을 바꿔 가며 여러 번 비교하면 우연히 "의미 있는 차이"가 나올 수 있습니다. 분석 계획에서 미리 정한 주 비교는 조건을 고르지 않은 전체 고객 기준입니다.</p>
+    </section>
+
+    <section class="panel" id="p2" role="tabpanel" hidden>
+      <div class="ph"><h2>늦어질수록 무엇이 달라질까?</h2></div>
+      <p class="desc">지연 일수 구간별 부정 리뷰 비율과 180일 재구매율입니다.</p>
+      <div class="bars" id="bucketBars"></div>
+    </section>
+
+    <section class="panel" id="p3" role="tabpanel" hidden>
+      <div class="ph"><h2>첫 구매 월별 추이</h2><div class="tabs" id="mtabs" role="group" aria-label="월별 지표 선택"></div></div>
+      <div class="svgbox" id="lineBox"><div class="tip" id="tip"></div></div>
+    </section>
+
+    <section class="panel" id="p4" role="tabpanel" hidden>
+      <div class="ph"><h2>첫 구매 후 며칠 만에 다시 샀나</h2></div>
+      <p class="desc" id="histDesc"></p>
+      <div class="svgbox" id="histBox"></div>
+    </section>
+
+    <section class="panel" id="p5" role="tabpanel" hidden>
+      <div class="rvhead">
+        <div class="ph"><h2>부정 리뷰 원문</h2><div class="tabs" id="rvLate" role="group" aria-label="배송 구분"></div></div>
+        <p class="desc">포르투갈어 원문과 AI(Claude)가 옮긴 한국어 번역입니다. 주제는 미리 정한 단어 사전 기준이고, 한국어·포르투갈어 모두 검색됩니다.</p>
+        <div class="chips" id="rvThemes"></div>
+        <div class="rvtools"><input id="rvq" type="search" placeholder="리뷰 검색 (예: 받지 못, 환불, recebi)" aria-label="리뷰 검색"></div>
+        <div class="rvcount" id="rvcount"></div>
+      </div>
+      <div class="rvscroll" id="rvscroll">
+        <div class="rvlist" id="rvlist"></div>
+        <button class="more" id="rvmore">더 보기</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="data/explorer.js"></script>
+<script>
+(function () {
+  var D = window.OLIST, dims = D.dims;
+  var NM = dims.m.length;
+  var F = { c: new Set(), s: new Set(), p: new Set(), m0: 0, m1: NM - 1 };
+  var fmt = function (n) { return n.toLocaleString('ko-KR'); };
+  var pc = function (x, d) { return isFinite(x) ? (x * 100).toFixed(d == null ? 1 : d) + '%' : '–'; };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  /* ---------- 통계 ---------- */
+  function wilson(k, n) {
+    if (!n) return [NaN, NaN];
+    var z = 1.959964, p = k / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d,
+        h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d;
+    return [Math.max(0, c - h), Math.min(1, c + h)];
+  }
+  function erfc(x) { // Numerical Recipes erfcc
+    var z = Math.abs(x), t = 1 / (1 + .5 * z);
+    var r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (.37409196 + t * (.09678418 + t * (-.18628806 + t * (.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-.82215223 + t * .17087277)))))))));
+    return x >= 0 ? r : 2 - r;
+  }
+  function chi2p(a, b) { // a, b: {n, k}; 2x2, 연속성 보정 없음 (analyze.py 와 같음)
+    var A = a.k, B = a.n - a.k, C = b.k, Dd = b.n - b.k, N = a.n + b.n;
+    var r1 = a.n, r2 = b.n, c1 = A + C, c2 = B + Dd;
+    if (!c1 || !c2) return { p: 1, low: true };
+    var low = [r1 * c1, r1 * c2, r2 * c1, r2 * c2].some(function (x) { return x / N < 5; });
+    var chi = N * Math.pow(A * Dd - B * C, 2) / (r1 * r2 * c1 * c2);
+    return { p: erfc(Math.sqrt(chi / 2)), low: low };
+  }
+  function verdict(a, b, repeat) {
+    if (a.n < 200 || b.n < 200) return { c: 'na', t: '결론 없음', w: '그룹 200명 미만' };
+    if (repeat && (a.k < 10 || b.k < 10)) return { c: 'na', t: '표본 부족', w: '재구매 10명 미만' };
+    var r = chi2p(a, b);
+    if (r.low) return { c: 'na', t: '표본 부족', w: '기대 빈도 5 미만' };
+    var ps = r.p < .001 ? 'p < 0.001' : 'p = ' + (r.p < .1 ? r.p.toFixed(3) : r.p.toFixed(2));
+    return r.p < .05 ? { c: 'yes', t: '의미 있는 차이', w: ps } : { c: '', t: '차이 없음', w: ps + ' · 우연 범위' };
+  }
+  function niceMax(v) { // 눈금 4칸이 1·2·2.5·5 단위로 떨어지도록
+    var raw = v / 4, p = Math.pow(10, Math.floor(Math.log10(raw))), s = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(function (m) { return m * p >= raw; });
+    return s * p * 4;
+  }
+  var vtag = function (v) { return '<span class="tag ' + v.c + '">' + v.t + '</span> <span>' + v.w + '</span>'; };
+
+  /* ---------- 집계 ---------- */
+  function pass(r) {
+    return r[0] >= F.m0 && r[0] <= F.m1 && (!F.c.size || F.c.has(r[1])) && (!F.s.size || F.s.has(r[2])) && (!F.p.size || F.p.has(r[3]));
+  }
+  function agg(all) {
+    var a = { n: 0, rep: 0, known: 0, late: 0, rev: 0, neg: 0,
+      L: { n: 0, k: 0 }, O: { n: 0, k: 0 }, Lr: { n: 0, k: 0 }, Or: { n: 0, k: 0 },
+      R: [0, 1, 2, 3].map(function () { return { n: 0, k: 0 }; }),
+      B: [0, 1, 2, 3].map(function () { return { n: 0, rep: 0, rev: 0, neg: 0 }; }),
+      M: dims.m.map(function () { return { n: 0, rep: 0, known: 0, late: 0, rev: 0, neg: 0 }; }),
+      bf: { n: 0, k: 0 }, af: { n: 0, k: 0 } };
+    D.cube.forEach(function (r) {
+      if (!all && !pass(r)) return;
+      var b = r[4], rv = r[5], w = r[6], n = r[7], rep = r[8], hasRev = rv !== 3, isNeg = rv === 2, m = a.M[r[0]];
+      a.n += n; a.rep += rep; m.n += n; m.rep += rep;
+      a.R[rv].n += n; a.R[rv].k += rep;
+      if (hasRev) { a.rev += n; m.rev += n; if (isNeg) { a.neg += n; m.neg += n; } }
+      if (b === 4) return; // 배송일 기록 없음
+      a.known += n; m.known += n;
+      var late = b > 0, g = late ? a.L : a.O, gr = late ? a.Lr : a.Or, bk = a.B[b];
+      g.n += n; g.k += rep; bk.n += n; bk.rep += rep;
+      if (late) { a.late += n; m.late += n; }
+      if (hasRev) {
+        gr.n += n; bk.rev += n; if (isNeg) { gr.k += n; bk.neg += n; }
+        if (late) { var t = w ? a.bf : a.af; t.n += n; if (isNeg) t.k += n; }
+      }
+    });
+    return a;
+  }
+  var ALL = agg(true);
+
+  /* ---------- 조건 패널 ---------- */
+  function chips(el, key, labels, counts) {
+    el.innerHTML = labels.map(function (l, i) {
+      return '<button class="chip" data-k="' + key + '" data-i="' + i + '" aria-pressed="false">' + esc(l) + (counts ? '<small>' + fmt(counts[i]) + '</small>' : '') + '</button>';
+    }).join('');
+  }
+  var cnt = function (j, len) { var c = new Array(len).fill(0); D.cube.forEach(function (r) { c[r[j]] += r[7]; }); return c; };
+  chips($('fc'), 'c', dims.c, cnt(1, dims.c.length));
+  chips($('fs'), 's', dims.s);
+  var SKO = D.stateKo || dims.s;
+  $('fs').querySelectorAll('.chip').forEach(function (b, i) { b.title = SKO[i]; b.setAttribute('aria-label', SKO[i] + ' (' + dims.s[i] + ')'); });
+  chips($('fp'), 'p', dims.p, cnt(3, dims.p.length));
+  ['m0', 'm1'].forEach(function (id) {
+    $(id).innerHTML = dims.m.map(function (m, i) { return '<option value="' + i + '">' + m.replace('-', '년 ') + '월</option>'; }).join('');
+  });
+  $('m1').value = NM - 1;
+  document.querySelector('.app').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip[data-k]');
+    if (b && b.closest('#filters')) {
+      var set = F[b.dataset.k], i = +b.dataset.i;
+      set.has(i) ? set.delete(i) : set.add(i);
+      b.setAttribute('aria-pressed', set.has(i));
+      return update();
+    }
+    var c = e.target.closest('[data-clear]');
+    if (c) { clearKey(c.dataset.clear); update(); }
+  });
+  function clearKey(k) {
+    if (k === 'm') { F.m0 = 0; F.m1 = NM - 1; $('m0').value = 0; $('m1').value = NM - 1; return; }
+    F[k].clear();
+    document.querySelectorAll('.chip[data-k="' + k + '"]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+  }
+  $('m0').onchange = $('m1').onchange = function () {
+    var a = +$('m0').value, b = +$('m1').value;
+    if (a > b) { if (this.id === 'm0') { b = a; $('m1').value = b; } else { a = b; $('m0').value = a; } }
+    F.m0 = a; F.m1 = b; update();
+  };
+  $('reset').onclick = function () { ['c', 's', 'p', 'm'].forEach(clearKey); update(); };
+  $('ftoggle').onclick = function () {
+    var f = $('filters'), o = f.classList.toggle('open');
+    this.setAttribute('aria-expanded', o);
+  };
+
+  /* ---------- 탭 ---------- */
+  var TAB = 0, wide = function () { return window.innerWidth > 1000; };
+  function room(el, min, fallback) { // 탭 안에서 el 아래로 남은 높이
+    if (!wide()) return fallback;
+    var p = el.closest('.panel'), r = p.getBoundingClientRect(), b = el.getBoundingClientRect();
+    return Math.max(min, Math.floor(r.bottom - b.top - 32));
+  }
+  function showTab(t) {
+    TAB = t;
+    document.querySelectorAll('#vtabs [role=tab]').forEach(function (b) { b.setAttribute('aria-selected', +b.dataset.t === t); });
+    document.querySelectorAll('.panel').forEach(function (p, i) { p.hidden = i !== t; });
+    if (lastAgg && lastAgg.n) { if (t === 0) renderCircles(lastAgg); if (t === 3) renderLine(lastAgg); if (t === 4) renderHist(); }
+  }
+  $('vtabs').onclick = function (e) { var b = e.target.closest('[role=tab]'); if (b) { showTab(+b.dataset.t); writeHash(); } };
+  $('vtabs').onkeydown = function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var t = (TAB + (e.key === 'ArrowRight' ? 1 : 5)) % 6; showTab(t); writeHash();
+    document.querySelector('#vtabs [data-t="' + t + '"]').focus();
+  };
+
+  /* ---------- 그리기 ---------- */
+  function delta(x, base, d, upGood) { // 나쁜 방향은 주황, 좋은 방향은 초록
+    if (!isFinite(x) || !isFinite(base)) return '';
+    var v = (x - base) * 100, s = (v >= 0 ? '+' : '') + v.toFixed(d == null ? 1 : d) + '%p';
+    return Math.abs(v) < .05 ? '전체와 같음' : '전체 대비 <b class="' + ((v > 0) !== !!upGood ? 'up' : 'down') + '">' + s + '</b>';
+  }
+  function renderKpis(a) {
+    var k = [
+      ['고객 수', fmt(a.n), '<em>명</em>', '전체의 ' + pc(a.n / ALL.n)],
+      ['배송 지연 비율', (a.late / a.known * 100).toFixed(1), '<em>%</em>', delta(a.late / a.known, ALL.late / ALL.known)],
+      ['부정 리뷰 비율', (a.neg / a.rev * 100).toFixed(1), '<em>%</em>', delta(a.neg / a.rev, ALL.neg / ALL.rev)],
+      ['180일 재구매율', (a.rep / a.n * 100).toFixed(2), '<em>%</em>', delta(a.rep / a.n, ALL.rep / ALL.n, 2, true) + ' · ' + fmt(a.rep) + '명']
+    ];
+    $('kpis').innerHTML = k.map(function (x) {
+      return '<div class="kpi"><small>' + x[0] + '</small><strong>' + (x[1] === 'NaN' ? '–' : x[1]) + x[2] + '</strong><span>' + x[3] + '</span></div>';
+    }).join('');
+  }
+  function renderCircles(a) {
+    var L = a.Lr, O = a.Or, rl = L.k / L.n, ro = O.k / O.n;
+    var box = $('circles'), W = Math.min(box.clientWidth || 600, 640), max = Math.min(320, W * .58, room(box, 200, 9999) * .8);
+    var dl = isFinite(rl) ? Math.max(28, max * Math.sqrt(rl)) : 28, dO = isFinite(ro) ? Math.max(28, max * Math.sqrt(ro)) : 28;
+    var circ = function (cls, d, title, r, n, extra) {
+      var inside = d >= 120, fs = Math.max(22, Math.min(58, d * .2));
+      var txt = '<b>' + title + '</b><strong style="font-size:' + fs + 'px">' + pc(r) + '</strong><span>' + fmt(n) + '명</span>';
+      return '<div class="cc ' + cls + '" style="width:' + d + 'px;height:' + d + 'px;' + extra + '">' + (inside ? txt : '<div class="out">' + txt + '</div>') + '</div>';
+    };
+    box.innerHTML = circ('dark', dl, '지연', rl, L.n, '') + circ('light', dO, '정시', ro, O.n, 'margin-left:-' + Math.round(Math.min(dl, dO) * .22) + 'px');
+    box.style.minHeight = Math.max(dl, dO) * 1.2 + 'px';
+    var ratio = rl / ro;
+    $('v1').innerHTML = vtag(verdict(L, O, false)) + (isFinite(ratio) && ro > 0 ? '<span>· 지연 고객이 ' + ratio.toFixed(1) + '배</span>' : '');
+    var bf = a.bf, af = a.af, sh = bf.n / (bf.n + af.n);
+    $('beforeDesc').innerHTML = (bf.n + af.n) ? '리뷰를 남긴 지연 고객 ' + fmt(bf.n + af.n) + '명 중 <b>' + pc(sh) + '</b>가 상품이 도착하기 전에 리뷰를 썼습니다. 계획에 없던 분석이라 결론이 아닌 가설로 봐 주세요.' : '이 조건에는 리뷰를 남긴 지연 고객이 없습니다.';
+    var rows = [['지연 · 받기 전', bf, 'acc'], ['지연 · 받은 뒤', af, ''], ['정시', O, '']];
+    $('beforeBars').innerHTML = '<div class="row head"><span></span><span>부정 리뷰 비율</span><span>리뷰 수</span></div>' + rows.map(function (x) {
+      var r = x[1].k / x[1].n;
+      return '<div class="row"><div class="lb"><b>' + x[0] + '</b></div><div class="hb ' + x[2] + '"><i style="width:' + (isFinite(r) ? r * 100 : 0) + '%"></i><span>' + pc(r) + '</span></div><div class="hb dim"><span style="text-align:left">' + fmt(x[1].n) + '건</span></div></div>';
+    }).join('');
+  }
+  function ciRows(el, axEl, rows) {
+    var hi = 0;
+    rows.forEach(function (r) { var c = wilson(r.k, r.n); r.ci = c; if (isFinite(c[1])) hi = Math.max(hi, c[1]); });
+    var top = niceMax(Math.max(.02, hi)), pos = function (x) { return Math.min(100, x / top * 100) + '%'; };
+    el.innerHTML = rows.map(function (r) {
+      var v = r.k / r.n, ok = r.n > 0;
+      return '<div class="row' + (r.hi ? ' hi' : '') + '"><div class="lb"><b>' + r.l + '</b><small>' + fmt(r.n) + '명</small></div><div class="tr">' +
+        (ok ? '<span class="rg" style="left:' + pos(r.ci[0]) + ';width:calc(' + pos(r.ci[1]) + ' - ' + pos(r.ci[0]) + ')"></span><span class="dot" style="left:' + pos(v) + '"></span>' : '') +
+        '</div><div class="v">' + (ok ? pc(v, 2) : '–') + '<small>' + (ok ? (r.ci[0] * 100).toFixed(2) + ' ~ ' + (r.ci[1] * 100).toFixed(2) + ' · ' + fmt(r.k) + '명' : '고객 없음') + '</small></div></div>';
+    }).join('');
+    var t = []; for (var i = 0; i <= 4; i++) t.push(top * i / 4);
+    axEl.innerHTML = '<span></span><div class="sc">' + t.map(function (x, i) { return '<span style="left:' + (i / 4 * 100) + '%;' + (i === 0 ? 'translate:0 0' : i === 4 ? 'translate:-100% 0' : '') + '">' + +(x * 100).toFixed(2) + '%</span>'; }).join('') + '</div><span></span>';
+  }
+  function renderRepeat(a) {
+    ciRows($('ci1'), $('ax1'), [{ l: '지연', n: a.L.n, k: a.L.k, hi: 1 }, { l: '정시', n: a.O.n, k: a.O.k }]);
+    $('v2').innerHTML = vtag(verdict(a.L, a.O, true));
+    ciRows($('ci2'), $('ax2'), [{ l: '부정', n: a.R[2].n, k: a.R[2].k, hi: 1 }, { l: '중립', n: a.R[1].n, k: a.R[1].k }, { l: '긍정', n: a.R[0].n, k: a.R[0].k }]);
+    var v = verdict(a.R[2], a.R[0], true); v.w = '부정 vs 긍정 · ' + v.w;
+    $('v3').innerHTML = vtag(v);
+  }
+  function renderBuckets(a) {
+    var maxRep = Math.max.apply(null, a.B.map(function (b) { return b.n ? b.rep / b.n : 0; }).concat([.03]));
+    $('bucketBars').innerHTML = '<div class="row head"><span>지연 일수</span><span>부정 리뷰 비율</span><span>180일 재구매율</span></div>' + a.B.map(function (b, i) {
+      var nr = b.neg / b.rev, rr = b.rep / b.n;
+      return '<div class="row"><div class="lb"><b>' + dims.b[i] + '</b><small>' + fmt(b.n) + '명</small></div>' +
+        '<div class="hb ' + (i ? 'acc' : '') + '"><i style="width:' + (isFinite(nr) ? nr * 100 : 0) + '%"></i><span>' + pc(nr) + '</span></div>' +
+        '<div class="hb"><i style="width:' + (isFinite(rr) ? rr / maxRep * 100 : 0) + '%"></i><span>' + pc(rr, 2) + '</span></div></div>';
+    }).join('') ;
+  }
+
+  var METRICS = [
+    { l: '부정 리뷰 비율', f: function (m) { return m.neg / m.rev; }, p: 1 },
+    { l: '배송 지연 비율', f: function (m) { return m.late / m.known; }, p: 1 },
+    { l: '180일 재구매율', f: function (m) { return m.rep / m.n; }, p: 2 },
+    { l: '고객 수', f: function (m) { return m.n; }, n: true }
+  ];
+  var curMetric = 0, lastAgg = null;
+  $('mtabs').innerHTML = METRICS.map(function (m, i) { return '<button aria-pressed="' + (i === 0) + '" data-i="' + i + '">' + m.l + '</button>'; }).join('');
+  $('mtabs').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    curMetric = +b.dataset.i;
+    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+    renderLine(lastAgg);
+  };
+  function svgEl(box, w, h, body) {
+    var old = box.querySelector('svg'); if (old) old.remove();
+    box.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 ' + w + ' ' + h + '" height="' + h + '" role="img">' + body + '</svg>');
+  }
+  function renderLine(a) {
+    var box = $('lineBox'), W = box.clientWidth || 640, H = Math.min(420, room(box, 220, 240)), L = 44, R = 16, T = 20, B = 30, M = METRICS[curMetric];
+    var pts = [];
+    for (var i = F.m0; i <= F.m1; i++) { var m = a.M[i], v = M.f(m); pts.push({ i: i, v: m.n ? v : NaN, n: m.n }); }
+    var vals = pts.map(function (p) { return p.v; }).filter(isFinite), mx = vals.length ? Math.max.apply(null, vals) : 1;
+    mx = niceMax(M.n ? Math.max(1, mx * 1.1) : Math.max(.003, mx * 1.1));
+    var x = function (k) { return L + (pts.length === 1 ? (W - L - R) / 2 : k * (W - L - R) / (pts.length - 1)); };
+    var y = function (v) { return T + (H - T - B) * (1 - v / mx); };
+    var lab = function (v) { return M.n ? fmt(Math.round(v)) : (v * 100).toFixed(M.p) + '%'; };
+    var s = '';
+    for (var g = 0; g <= 4; g++) { var gv = mx * g / 4; s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text x="' + (L - 8) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + (M.n ? fmt(Math.round(gv)) : +(gv * 100).toFixed(2) + '%') + '</text>'; }
+    var step = Math.ceil(pts.length / Math.max(2, Math.floor((W - L - R) / 56)));
+    pts.forEach(function (p, k) { var last = k === pts.length - 1; if ((k % step === 0 && (last || pts.length - 1 - k >= step)) || last) s +='<text x="' + x(k) + '" y="' + (H - 8) + '" text-anchor="middle">' + dims.m[p.i].slice(2).replace('-', '.') + '</text>'; });
+    var d = '', on = false;
+    pts.forEach(function (p, k) { if (isFinite(p.v)) { d += (on ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(p.v).toFixed(1); on = true; } else on = false; });
+    s += '<path class="ln" d="' + d + '"/>';
+    pts.forEach(function (p, k) { if (isFinite(p.v)) s += '<circle class="pt" r="4" cx="' + x(k) + '" cy="' + y(p.v) + '" data-k="' + k + '"/>'; });
+    var lastK = -1; pts.forEach(function (p, k) { if (isFinite(p.v)) lastK = k; });
+    if (lastK >= 0) s += '<text class="lbl" x="' + Math.min(x(lastK), W - R) + '" y="' + (y(pts[lastK].v) - 12) + '" text-anchor="end">' + lab(pts[lastK].v) + '</text>';
+    pts.forEach(function (p, k) { s += '<rect x="' + (x(k) - (W - L - R) / pts.length / 2) + '" y="' + T + '" width="' + ((W - L - R) / pts.length) + '" height="' + (H - T - B) + '" fill="transparent" data-k="' + k + '"/>'; });
+    svgEl(box, W, H, s);
+    var tip = $('tip'), svg = box.querySelector('svg');
+    svg.onmousemove = function (e) {
+      var t = e.target.closest('[data-k]'); if (!t) return tip.classList.remove('on');
+      var p = pts[+t.dataset.k]; if (!isFinite(p.v)) return tip.classList.remove('on');
+      tip.innerHTML = '<b>' + dims.m[p.i] + '</b> · ' + lab(p.v) + (M.n ? '' : ' (' + fmt(p.n) + '명)');
+      tip.style.left = x(+t.dataset.k) / W * box.clientWidth + 'px'; tip.style.top = y(p.v) + 'px'; tip.classList.add('on');
+    };
+    svg.onmouseleave = function () { tip.classList.remove('on'); };
+  }
+  function renderHist() {
+    var ds = D.repeaters.filter(pass).map(function (r) { return r[7]; }).sort(function (a, b) { return a - b; });
+    var box = $('histBox'), W = box.clientWidth || 640, H = Math.min(380, room(box, 200, 200)), L = 36, R = 12, T = 24, B = 28, bins = new Array(18).fill(0);
+    ds.forEach(function (d) { bins[Math.min(17, Math.floor((d - 1) / 10))]++; });
+    if (ds.length < 10) { $('histDesc').textContent = '이 조건의 재구매 고객은 ' + ds.length + '명이라 분포를 보여 주기에 너무 적습니다.'; svgEl(box, W, 10, ''); return; }
+    var q = function (p) { var i = (ds.length - 1) * p, lo = Math.floor(i); return ds[lo] + (ds[Math.ceil(i)] - ds[lo]) * (i - lo); };
+    var q1 = Math.round(q(.25)), md = Math.round(q(.5)), q3 = Math.round(q(.75));
+    $('histDesc').innerHTML = '재구매 고객 ' + fmt(ds.length) + '명 중 절반이 첫 구매 후 <b>' + q1 + '~' + q3 + '일</b> 사이에 다시 샀습니다. 중앙값은 <b>' + md + '일</b>입니다. 10일 단위 막대이고, 진한 막대가 가운데 50% 구간입니다.';
+    var mx = Math.max.apply(null, bins), bw = (W - L - R) / 18, y = function (v) { return T + (H - T - B) * (1 - v / mx); }, s = '';
+    for (var g = 0; g <= 2; g++) { var gv = Math.round(mx * g / 2); s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text x="' + (L - 6) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + gv + '</text>'; }
+    bins.forEach(function (c, i) {
+      var inIqr = (i + 1) * 10 > q1 && i * 10 < q3;
+      s += '<rect class="hbar' + (inIqr ? ' in' : '') + '" x="' + (L + i * bw + 1.5) + '" y="' + y(c) + '" width="' + (bw - 3) + '" height="' + (y(0) - y(c)) + '"><title>' + (i * 10 + 1) + '~' + (i * 10 + 10) + '일: ' + c + '명</title></rect>';
+    });
+    [0, 30, 60, 90, 120, 150, 180].forEach(function (d) { s += '<text x="' + (L + d / 10 * bw) + '" y="' + (H - 8) + '" text-anchor="middle">' + d + (d === 180 ? '일' : '') + '</text>'; });
+    var mxp = L + md / 10 * bw;
+    s += '<line class="med" x1="' + mxp + '" x2="' + mxp + '" y1="' + (T - 8) + '" y2="' + y(0) + '"/><text class="medt" x="' + (mxp + 6) + '" y="' + (T - 10) + '">중앙값 ' + md + '일</text>';
+    svgEl(box, W, H, s);
+  }
+
+  /* ---------- 리뷰 ---------- */
+  var RV = { t: -1, late: 0, q: '', shown: 20 };
+  var norm = function (s) { return s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, ''); };
+  D.reviews.forEach(function (r) { r.nx = norm(r[9] + '\n' + (r[10] || '')); });
+  $('rvLate').innerHTML = ['전체', '지연 고객', '정시 고객'].map(function (l, i) { return '<button aria-pressed="' + (i === 0) + '" data-i="' + i + '">' + l + '</button>'; }).join('');
+  $('rvLate').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    RV.late = +b.dataset.i; RV.shown = 20;
+    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+    renderReviews();
+  };
+  $('rvThemes').onclick = function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    RV.t = +b.dataset.t; RV.shown = 20; renderReviews();
+  };
+  var qTimer; $('rvq').oninput = function () { clearTimeout(qTimer); var v = this.value; qTimer = setTimeout(function () { RV.q = norm(v.trim()); RV.shown = 20; renderReviews(); }, 150); };
+  $('rvmore').onclick = function () { RV.shown += 20; renderReviews(); };
+  function renderReviews() {
+    var base = D.reviews.filter(function (r) {
+      if (!pass(r)) return false;
+      if (RV.late === 1 && !(r[4] > 0 && r[4] < 4)) return false;
+      if (RV.late === 2 && r[4] !== 0) return false;
+      return !RV.q || r.nx.indexOf(RV.q) >= 0;
+    });
+    var tc = D.themes.map(function (_, i) { return base.filter(function (r) { return r[8] & (1 << i); }).length; });
+    $('rvThemes').innerHTML = '<button class="chip" data-t="-1" aria-pressed="' + (RV.t === -1) + '">전체<small>' + fmt(base.length) + '</small></button>' +
+      D.themes.map(function (t, i) { return '<button class="chip" data-t="' + i + '" aria-pressed="' + (RV.t === i) + '">' + t + '<small>' + fmt(tc[i]) + '</small></button>'; }).join('');
+    $('rvTabN').textContent = fmt(base.length);
+    var list = RV.t < 0 ? base : base.filter(function (r) { return r[8] & (1 << RV.t); });
+    $('rvcount').innerHTML = '<b>' + fmt(list.length) + '</b>건' + (base.length ? ' · 이 조건 부정 리뷰의 ' + pc(list.length / base.length) : '');
+    var hl = function (s) {
+      var x = esc(s);
+      if (!RV.q) return x;
+      var n = norm(s), i = n.indexOf(RV.q);
+      return i < 0 ? x : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + RV.q.length)) + '</mark>' + esc(s.slice(i + RV.q.length));
+    };
+    $('rvlist').innerHTML = list.slice(0, RV.shown).map(function (r) {
+      var th = D.themes.filter(function (_, i) { return r[8] & (1 << i); });
+      var st = '★'.repeat(r[7]) + '<i>' + '★'.repeat(5 - r[7]) + '</i>';
+      return '<div class="rv"><div class="tp"><span class="stars" aria-label="별점 ' + r[7] + '점">' + st + '</span><span>' + esc(dims.c[r[1]]) + ' · ' + SKO[r[2]] + ' · ' + dims.m[r[0]] + ' · ' + (r[4] === 0 ? '정시' : r[4] === 4 ? '배송일 없음' : '지연 ' + dims.b[r[4]]) + (r[6] ? ' · 받기 전 작성' : '') + '</span></div>' + (r[10] ? '<p>' + hl(r[10]) + '</p><p class="pt" lang="pt">' + hl(r[9]) + '</p>' : '<p lang="pt">' + hl(r[9]) + '</p>') +
+        (th.length ? '<div class="th">' + th.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' : '') + '</div>';
+    }).join('');
+    if (!list.length) $('rvlist').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 리뷰가 없습니다.</div>';
+    $('rvmore').style.display = list.length > RV.shown ? '' : 'none';
+  }
+
+  /* ---------- 갱신 ---------- */
+  function update() {
+    var a = agg(false); lastAgg = a;
+    $('fN').innerHTML = '<b>' + fmt(a.n) + '</b>명';
+    $('fShare').textContent = '전체 ' + fmt(ALL.n) + '명의 ' + pc(a.n / ALL.n);
+    $('fBar').style.width = (a.n / ALL.n * 100) + '%';
+    var k = F.c.size + F.s.size + F.p.size + (F.m0 > 0 || F.m1 < NM - 1 ? 1 : 0);
+    $('fCount').textContent = k ? '· ' + k + '개 선택' : '';
+    $('fsName').textContent = F.s.size ? Array.from(F.s).sort(function (a, b) { return a - b; }).map(function (i) { return SKO[i]; }).join(', ') : 'SP 상파울루, RJ 리우데자네이루, MG 미나스제라이스 순으로 고객이 많습니다. 약어에 마우스를 올리면 이름이 보입니다.';
+    if (!a.n) {
+      document.querySelectorAll('.panel').forEach(function (s) { s.style.opacity = .35; });
+      $('kpis').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 고객이 없습니다. 조건을 줄여 보세요.</div>';
+      return;
+    }
+    document.querySelectorAll('.panel').forEach(function (s) { s.style.opacity = ''; });
+    renderKpis(a); renderCircles(a); renderRepeat(a); renderBuckets(a); renderLine(a); renderHist(); renderReviews(); showTab(TAB);
+  }
+  /* ---------- 주소에 조건 담기 (예: #c=3&s=0,1&p=2&m=2-13) ---------- */
+  function writeHash() {
+    var q = [];
+    ['c', 's', 'p'].forEach(function (k) { if (F[k].size) q.push(k + '=' + Array.from(F[k]).sort(function (a, b) { return a - b; }).join(',')); });
+    if (F.m0 > 0 || F.m1 < NM - 1) q.push('m=' + F.m0 + '-' + F.m1);
+    if (TAB) q.push('t=' + TAB);
+    var h = q.length ? '#' + q.join('&') : '';
+    if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) {}
+  }
+  function readHash() {
+    ['c', 's', 'p', 'm'].forEach(clearKey); TAB = 0;
+    location.hash.slice(1).split('&').forEach(function (kv) {
+      var p = kv.split('='), k = p[0], v = p[1] || '';
+      if (k === 't') { var t = +v; if (t >= 0 && t < 6) TAB = t; }
+      else if (k === 'm') {
+        var r = v.split('-').map(Number);
+        if (r.length === 2 && r[0] >= 0 && r[1] < NM && r[0] <= r[1]) { F.m0 = r[0]; F.m1 = r[1]; $('m0').value = r[0]; $('m1').value = r[1]; }
+      } else if (F[k] instanceof Set) {
+        v.split(',').forEach(function (x) {
+          var b = document.querySelector('.chip[data-k="' + k + '"][data-i="' + (+x) + '"]');
+          if (b) { F[k].add(+x); b.setAttribute('aria-pressed', 'true'); }
+        });
+      }
+    });
+  }
+  window.addEventListener('hashchange', function () { readHash(); update(); });
+  var _update = update; update = function () { _update(); writeHash(); };
+
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (lastAgg && lastAgg.n) showTab(TAB); }, 120); });
+  readHash();
+  update();
+})();
+</script>
+</body>
+</html>

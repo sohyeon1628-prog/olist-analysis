@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첫 구매 경험과 재구매</title>
+<meta name="description" content="Olist 브라질 이커머스 첫 구매 고객 55,261명 분석: 배송 지연은 리뷰를 무너뜨리지만 재구매와는 관계가 보이지 않았다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g: #E04A1F; --g-soft: #F4D8CC; --g-bg: #F7ECE5;
+  --ink: #0b0b0b; --text: #2a2926; --mute: #85827A; --line: #DDD9CF; --panel: #ECE9E1;
+  --late: #E04A1F; --ok: #C6C1B5;
+  --e: cubic-bezier(.2,.7,.2,1);
+  --sw: 220px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { background: #F3F1EB; color: var(--ink); font-family: Inter, 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere; }
+a { color: inherit; }
+
+/* 사이드바 */
+#side { position: fixed; left: 0; top: 0; bottom: 0; width: var(--sw); padding: 32px 18px 24px 22px; background: #ECE9E1; border-right: 1px solid var(--line); display: flex; flex-direction: column; z-index: 10; }
+#side .hd b { display: block; font-size: 15px; font-weight: 900; letter-spacing: -.3px; }
+#side .hd span { display: block; margin-top: 3px; font-size: 11px; color: var(--mute); }
+#side nav { margin-top: 22px; flex: 1; overflow-y: auto; }
+#side nav a { display: flex; gap: 8px; margin-left: -12px; padding: 6px 10px 6px 9px; border-left: 3px solid transparent; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.35; color: #555; text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+#side nav a .n { flex: 0 0 18px; font-size: 10.5px; font-weight: 800; color: #b0b0b0; padding-top: 2px; }
+#side nav a:hover { background: #E3DFD5; color: #111; }
+#side nav a.on { border-left-color: var(--g); background: var(--g-soft); color: #111; font-weight: 800; }
+#side nav a.on .n { color: var(--g); }
+#side .ft { font-size: 11px; line-height: 1.7; color: var(--mute); }
+#side .ft a { font-weight: 700; color: #111; }
+
+main { margin-left: var(--sw); }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 40px; }
+section { padding: 72px 0 8px; }
+section + section { border-top: 1px solid var(--line); margin-top: 56px; }
+
+/* 글자 */
+.kick { font-size: 11px; font-weight: 800; letter-spacing: .14em; color: var(--g); }
+h1 { margin-top: 14px; font-size: 48px; font-weight: 900; line-height: 1.12; letter-spacing: -2px; }
+h2 { margin-top: 8px; font-size: 32px; font-weight: 900; line-height: 1.2; letter-spacing: -1.2px; }
+h3 { margin: 40px 0 6px; font-size: 19px; font-weight: 900; letter-spacing: -.4px; }
+.lead { margin-top: 18px; font-size: 19px; line-height: 1.6; font-weight: 500; letter-spacing: -.3px; color: var(--text); }
+p { margin-top: 14px; font-size: 15px; line-height: 1.75; color: var(--text); }
+p b, li b { color: #111; }
+.sm { font-size: 12.5px; line-height: 1.6; color: var(--mute); }
+.tag { display: inline-block; padding: 2px 10px; border: 1.5px solid var(--g); border-radius: 999px; color: var(--g); font-size: 11px; font-weight: 800; letter-spacing: .02em; vertical-align: middle; }
+.tag.solid { background: var(--g); color: #fff; }
+.tag.gray { border-color: #999; color: #666; }
+
+/* 표지 */
+.hero { padding-top: 88px; }
+.meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; margin-top: 36px; padding-top: 12px; border-top: 2px solid #111; }
+.meta div b { display: block; font-size: 10px; font-weight: 800; letter-spacing: .06em; color: var(--g); }
+.meta div span { display: block; margin-top: 4px; font-size: 13px; line-height: 1.5; color: #222; }
+
+/* 큰 숫자 3개 */
+.st3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; }
+.st3 > div { border-top: 2px solid #111; padding-top: 12px; }
+.st3 .lb { font-size: 11.5px; font-weight: 800; color: var(--g); }
+.st3 strong { display: block; margin-top: 8px; font-size: 40px; font-weight: 900; letter-spacing: -1.8px; line-height: 1; }
+.st3 strong small { margin-left: 3px; font-size: 16px; font-weight: 700; letter-spacing: 0; color: #888; }
+.st3 span { display: block; margin-top: 10px; font-size: 13px; line-height: 1.55; color: #555; }
+
+/* 상자 */
+.hl { margin-top: 24px; padding: 18px 22px; background: var(--panel); }
+.hl .k { font-size: 11px; font-weight: 800; color: #666; letter-spacing: .04em; }
+.hl .t { margin-top: 6px; font-size: 16.5px; font-weight: 700; line-height: 1.6; color: #111; }
+.res { margin-top: 20px; padding: 14px 18px; border-left: 3px solid var(--g); background: var(--g-bg); font-size: 14.5px; line-height: 1.7; color: #222; }
+.res b { color: var(--g); }
+.warn { border-left-color: #111; background: var(--panel); }
+.warn b { color: #111; }
+
+/* 질문 목록 */
+.qs { margin-top: 24px; counter-reset: q; }
+.qs li { list-style: none; display: flex; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #111; }
+.qs li:first-child { border-top: 1px solid #111; }
+.qs .n { flex: 0 0 28px; font-size: 20px; font-weight: 900; color: var(--g); }
+.qs .q { flex: 1; font-size: 17px; font-weight: 800; letter-spacing: -.4px; }
+.qs .a { flex: 0 0 auto; }
+
+/* 규칙 표 */
+.rules { margin-top: 20px; }
+.rules > div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.6; }
+.rules > div:last-child { border-bottom: 1px solid var(--line); }
+.rules b { font-weight: 800; }
+.rules span { color: #333; }
+
+/* 차트 공통 */
+.chart { margin-top: 24px; }
+.chart .cap { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; font-size: 13px; font-weight: 800; }
+.chart .cap small { font-weight: 400; color: var(--mute); font-size: 12px; }
+.legend { display: flex; gap: 16px; margin-top: 8px; font-size: 12px; color: #555; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+/* 가로 막대 */
+.bars { margin-top: 12px; }
+.bar { display: grid; grid-template-columns: 110px 1fr 64px; gap: 12px; align-items: center; padding: 7px 0; font-size: 13.5px; }
+.bar .lb { font-weight: 700; }
+.bar .lb small { display: block; font-weight: 400; font-size: 11.5px; color: var(--mute); }
+.bar .tr { height: 26px; background: #E8E5DD; border-radius: 2px; overflow: hidden; }
+.bar .tr i { display: block; height: 100%; width: var(--w); background: var(--ok); border-radius: 0 3px 3px 0; }
+.bar.hot .tr i { background: var(--late); }
+.bar .v { text-align: right; font-weight: 900; font-size: 15px; font-variant-numeric: tabular-nums; }
+.bar.hot .v { color: var(--g); }
+
+/* 신뢰구간 그림 */
+.ci { margin-top: 14px; }
+.ci .row { display: grid; grid-template-columns: 110px 1fr 120px; gap: 12px; align-items: center; padding: 9px 0; font-size: 13.5px; border-bottom: 1px dashed var(--line); }
+.ci .lb { font-weight: 700; }
+.ci .lb small { display: block; font-weight: 400; font-size: 11.5px; color: var(--mute); }
+.ci .tr { position: relative; height: 22px; }
+.ci .tr::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid #eee; }
+.ci .rg { position: absolute; top: 50%; height: 6px; translate: 0 -50%; left: var(--lo); width: calc(var(--hi) - var(--lo)); background: var(--g-soft); border-radius: 3px; }
+.ci .dot { position: absolute; top: 50%; left: var(--v); width: 13px; height: 13px; translate: -50% -50%; border-radius: 50%; background: var(--g); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--g); }
+.ci .row.dim .dot { background: #888; box-shadow: 0 0 0 1px #888; }
+.ci .row.dim .rg { background: #D6D1C6; }
+.ci .v { text-align: right; font-weight: 900; font-size: 15px; font-variant-numeric: tabular-nums; }
+.ci .v small { display: block; font-weight: 400; font-size: 11px; color: var(--mute); }
+.axis { display: grid; grid-template-columns: 110px 1fr 120px; gap: 12px; margin-top: 6px; font-size: 11px; color: var(--mute); }
+.axis .sc { position: relative; height: 14px; }
+.axis .sc span { position: absolute; translate: -50% 0; white-space: nowrap; }
+.axis .sc span:first-child { translate: 0 0; }
+.axis .sc span:last-child { translate: -100% 0; }
+
+/* 묶음 막대 (불만 주제) */
+.grp { margin-top: 14px; }
+.grp .row { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.grp .lb { font-size: 13.5px; font-weight: 700; }
+.grp .pair div { display: grid; grid-template-columns: 1fr 52px; gap: 8px; align-items: center; }
+.grp .pair div + div { margin-top: 3px; }
+.grp .pair i { display: block; height: 12px; width: var(--w); min-width: 2px; background: var(--ok); border-radius: 0 2px 2px 0; }
+.grp .pair div.l i { background: var(--late); }
+.grp .pair span { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; color: #666; }
+.grp .pair div.l span { color: var(--g); }
+
+/* 표 */
+.tbl { width: 100%; margin-top: 16px; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.tbl th { padding: 8px 6px; border-bottom: 2px solid #111; font-size: 11.5px; font-weight: 800; color: #444; text-align: right; }
+.tbl td { padding: 10px 6px; border-bottom: 1px solid var(--line); text-align: right; }
+.tbl th:first-child, .tbl td:first-child { text-align: left; }
+.tbl td.hot { color: var(--g); font-weight: 800; }
+.tbl .mini { display: inline-block; height: 8px; width: var(--w); background: var(--late); border-radius: 0 2px 2px 0; margin-right: 8px; vertical-align: 0; }
+.tbl .mini.ok { background: var(--ok); }
+.tscroll { overflow-x: auto; }
+
+/* 재구매 시점 */
+.time { position: relative; margin-top: 40px; height: 64px; }
+.time .base { position: absolute; left: 0; right: 0; top: 30px; border-top: 1px solid #111; }
+.time .iqr { position: absolute; top: 23px; height: 14px; left: 12.2%; width: 51.1%; background: var(--g-soft); border-radius: 3px; }
+.time .med { position: absolute; top: 18px; left: 32.8%; width: 3px; height: 24px; translate: -50% 0; background: var(--g); }
+.time .lab { position: absolute; top: -10px; translate: -50% 0; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.time .lab.m { color: var(--g); }
+.time .tick { position: absolute; top: 44px; translate: -50% 0; font-size: 11px; color: var(--mute); white-space: nowrap; }
+
+/* 리뷰 인용 */
+.quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+.qt { padding: 16px 18px; border: 1px solid var(--line); border-radius: 4px; background: #F9F8F4; }
+.qt .tp { display: flex; justify-content: space-between; align-items: center; }
+.qt .stars { font-size: 12px; color: #999; letter-spacing: 1px; }
+.qt .stars b { color: #111; }
+.qt .ko { margin-top: 10px; font-size: 15px; font-weight: 700; line-height: 1.5; color: #111; }
+.qt .pt { margin-top: 6px; font-size: 12px; line-height: 1.5; color: var(--mute); font-style: italic; }
+
+/* 제안 */
+.recs { margin-top: 22px; }
+.rec { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 20px 0; border-top: 1px solid #111; }
+.rec:last-child { border-bottom: 1px solid #111; }
+.rec .n { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1.5px solid var(--g); border-radius: 50%; color: var(--g); font-size: 12px; font-weight: 900; }
+.rec h4 { font-size: 17px; font-weight: 900; letter-spacing: -.4px; }
+.rec p { margin-top: 6px; font-size: 14px; }
+.rec .ab { margin-top: 10px; display: grid; grid-template-columns: 70px 1fr; gap: 4px 12px; font-size: 13px; line-height: 1.55; color: #333; }
+.rec .ab b { color: var(--g); font-weight: 800; }
+.apply { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+.apply > div { padding: 18px 20px; background: var(--panel); }
+.apply b { display: block; font-size: 11px; font-weight: 800; color: var(--g); letter-spacing: .04em; }
+.apply strong { display: block; margin-top: 6px; font-size: 15.5px; font-weight: 900; letter-spacing: -.3px; }
+.apply p { margin-top: 8px; font-size: 13.5px; line-height: 1.65; }
+
+/* 한계 */
+.lim { margin-top: 18px; }
+.lim li { list-style: none; position: relative; padding: 12px 0 12px 22px; border-top: 1px solid var(--line); font-size: 14.5px; line-height: 1.7; color: #333; }
+.lim li::before { content: ''; position: absolute; left: 2px; top: 22px; width: 7px; height: 7px; border-radius: 50%; background: var(--g); }
+
+footer { margin-top: 80px; padding: 28px 0 60px; border-top: 2px solid #111; font-size: 12.5px; line-height: 1.8; color: var(--mute); }
+footer a { color: #111; font-weight: 700; }
+
+/* 등장 */
+/* 스크립트가 켜졌을 때만 숨겼다가 보이게 함 (스크립트가 없으면 처음부터 다 보임) */
+.js .rv { opacity: 0; translate: 0 16px; transition: opacity .6s var(--e), translate .6s var(--e); }
+.js .rv.in { opacity: 1; translate: 0 0; }
+.js .rv .tr i, .js .rv .pair i { transform-origin: 0 0; transform: scaleX(0); transition: transform .9s var(--e) .15s; }
+.js .rv.in .tr i, .js .rv.in .pair i { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .js .rv, .js .rv .tr i, .js .rv .pair i { opacity: 1; translate: none; transform: none; transition: none; }
+}
+
+/* 모바일 */
+@media (max-width: 1000px) {
+  :root { --sw: 0px; }
+  #side { display: none; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .hero { padding-top: 48px; }
+  h1 { font-size: 32px; letter-spacing: -1.2px; }
+  h2 { font-size: 25px; letter-spacing: -.8px; }
+  .lead { font-size: 16.5px; }
+  section { padding-top: 48px; }
+  section + section { margin-top: 40px; }
+  .meta { grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+  .st3 { grid-template-columns: 1fr; gap: 18px; }
+  .st3 strong { font-size: 34px; }
+  .qs .q { font-size: 15.5px; }
+  .qs li { display: grid; grid-template-columns: 28px 1fr; gap: 6px 16px; }
+  .qs .a { grid-column: 2; justify-self: start; }
+  .rules > div { grid-template-columns: 1fr; gap: 2px; }
+  .bar { grid-template-columns: 76px 1fr 52px; gap: 8px; font-size: 12.5px; }
+  .ci .row, .axis { grid-template-columns: 70px 1fr 78px; gap: 8px; }
+  .ci .lb { font-size: 12.5px; }
+  .ci .v { font-size: 13.5px; }
+  .grp .row { grid-template-columns: 1fr; gap: 4px; }
+  .quotes, .apply { grid-template-columns: 1fr; }
+  .rec { grid-template-columns: 1fr; gap: 8px; }
+  .rec .ab { grid-template-columns: 1fr; }
+  .rec .ab b { margin-top: 6px; }
+  .tbl { font-size: 12.5px; }
+}
+@media print {
+  #side { display: none; }
+  main { margin-left: 0; }
+  .js .rv { opacity: 1; translate: none; }
+  .js .rv .tr i, .js .rv .pair i { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<aside id="side">
+  <div class="hd"><b>첫 구매 경험과 재구매</b><span>Olist 데이터 케이스 스터디</span></div>
+  <nav>
+    <a href="#summary"><span class="n">00</span>요약</a>
+    <a href="#question"><span class="n">01</span>배경과 질문</a>
+    <a href="#rules"><span class="n">02</span>데이터와 규칙</a>
+    <a href="#r1"><span class="n">03</span>지연 → 부정 리뷰</a>
+    <a href="#r2"><span class="n">04</span>지연·리뷰 → 재구매</a>
+    <a href="#themes"><span class="n">05</span>불만 주제</a>
+    <a href="#posthoc"><span class="n">06</span>사후 발견</a>
+    <a href="#recs"><span class="n">07</span>제안과 다음 단계</a>
+    <a href="#limits"><span class="n">08</span>한계</a>
+  </nav>
+  <div class="ft"><a href="index.html">← 직접 조회해 보기</a><br><a href="https://github.com/sohyeon1628-prog/olist-analysis">분석 코드 보기 ↗</a><br>박소현</div>
+</aside>
+
+<main>
+<div class="wrap">
+
+<!-- 00 요약 -->
+<section class="hero" id="summary">
+  <div class="kick rv">CASE STUDY · 고객 데이터 분석</div>
+  <h1 class="rv">배송이 늦으면 리뷰는 무너졌다.<br>그런데 재구매는 그대로였다.</h1>
+  <p class="lead rv">브라질 이커머스 Olist의 첫 구매 고객 55,261명을 분석해, 첫 구매 경험(배송·리뷰)이 재구매로 이어지는지 확인했습니다. 결과를 보기 전에 판단 규칙부터 정해 두고, 그 규칙대로만 결론을 내렸습니다.</p>
+
+  <div class="meta rv">
+    <div><b>데이터</b><span>Olist 공개 데이터<br>(Kaggle, 주문 약 10만 건)</span></div>
+    <div><b>대상</b><span>2017.01 ~ 2018.02<br>첫 구매 고객 55,261명</span></div>
+    <div><b>방법</b><span>비율 비교, 카이제곱 검정,<br>로지스틱 회귀, 리뷰 주제 분류</span></div>
+    <div><b>도구</b><span>Python · pandas<br>scipy · statsmodels</span></div>
+  </div>
+
+  <div class="st3 rv">
+    <div><div class="lb">① 지연 → 부정 리뷰</div><strong>6.9<small>배</small></strong><span>배송이 늦은 고객의 65.4%가 1~2점을 줬습니다. 정시 배송 고객은 9.5%였습니다.</span></div>
+    <div><div class="lb">②③ 지연·부정 리뷰 → 재구매</div><strong>차이 없음</strong><span>지연 1.61% vs 정시 1.98%, 부정 1.68% vs 긍정 2.01%로, 둘 다 우연으로 볼 수 있는 범위였습니다.</span></div>
+    <div><div class="lb">재구매까지 걸린 기간</div><strong>59<small>일</small></strong><span>재구매 고객의 절반은 첫 구매 후 22~114일 사이에 다시 샀습니다(중앙값 59일).</span></div>
+  </div>
+
+  <p class="rv" style="margin-top:22px"><a href="index.html" style="font-weight:700;color:var(--g)">카테고리·기간·지역별로 직접 조회해 보기 →</a></p>
+  <div class="res rv"><b>그래서</b> 배송 관리는 재구매보다 <b>리뷰, 즉 다음 신규 고객이 보는 평판</b>을 지키는 일로 봐야 합니다. 재구매는 구매 주기(약 2개월)에 맞춘 리마인드 같은 별도 수단이 필요합니다.</div>
+</section>
+
+<!-- 01 배경과 질문 -->
+<section id="question">
+  <div class="kick rv">01 · 배경과 질문</div>
+  <h2 class="rv">첫 구매에서 겪은 불편이<br>두 번째 구매를 막을까?</h2>
+  <p class="rv">신규 고객을 데려오는 비용은 계속 오르고, 그래서 첫 구매 고객을 두 번째 구매로 이끄는 일이 중요해졌습니다. 흔히 "첫 경험이 나쁘면 다시 안 산다"고 생각합니다. 이 생각이 데이터에서도 맞는지, 맞다면 어떤 경험이 문제인지 확인하고 싶었습니다.</p>
+  <ul class="qs rv">
+    <li><span class="n">①</span><span class="q">배송이 늦으면 부정 리뷰가 늘어날까?</span><span class="a tag solid">의미 있는 차이</span></li>
+    <li><span class="n">②</span><span class="q">배송이 늦으면 재구매가 줄어들까?</span><span class="a tag gray">차이 없음</span></li>
+    <li><span class="n">③</span><span class="q">부정 리뷰를 남긴 고객은 재구매를 덜 할까?</span><span class="a tag gray">차이 없음</span></li>
+  </ul>
+</section>
+
+<!-- 02 데이터와 규칙 -->
+<section id="rules">
+  <div class="kick rv">02 · 데이터와 규칙</div>
+  <h2 class="rv">결과를 보기 전에<br>판단 규칙부터 정했습니다</h2>
+  <p class="rv">원하는 결론이 나올 때까지 기준을 바꾸지 않도록, 분석 전에 계획서(규칙 v1.2)를 확정했습니다. 코드는 이 규칙을 그대로 옮긴 것이고, 결과가 기대와 달라도 규칙을 고치지 않았습니다.</p>
+  <div class="rules rv">
+    <div><b>첫 구매 고객</b><span>배송 완료된 첫 주문이 2017년 1월 ~ 2018년 2월인 고객. 180일 뒤까지 관찰할 수 있도록 끝을 잘랐습니다.</span></div>
+    <div><b>재구매</b><span>첫 주문 후 24시간 ~ 180일 사이에 배송 완료된 주문이 하나라도 있으면 재구매로 봤습니다. 전체 재구매율은 1.95%(1,080명)입니다.</span></div>
+    <div><b>배송 지연</b><span>실제 도착일이 안내된 예정일보다 늦은 경우(날짜 기준)를 지연으로 봤습니다. 대상 고객의 6.6%가 해당합니다.</span></div>
+    <div><b>부정 리뷰</b><span>별점 1~2점은 부정, 3점은 중립, 4~5점은 긍정으로 나눴습니다.</span></div>
+    <div><b>판단 기준</b><span>카이제곱 검정에서 p &lt; 0.05일 때만 "의미 있는 차이"로 봤습니다. 그룹이 200명 미만이거나 재구매 고객이 10명 미만이면 결론을 내리지 않았습니다.</span></div>
+  </div>
+</section>
+
+<!-- 03 결과 ① -->
+<section id="r1">
+  <div class="kick rv">03 · 결과 ①</div>
+  <h2 class="rv">배송이 늦으면 부정 리뷰가<br>6.9배 많아졌습니다</h2>
+  <div class="chart rv">
+    <div class="cap">부정 리뷰(1~2점) 비율 <small>p &lt; 0.001</small></div>
+    <div class="bars">
+      <div class="bar hot"><div class="lb">지연<small>3,584명</small></div><div class="tr"><i style="--w:65.4%"></i></div><div class="v">65.4%</div></div>
+      <div class="bar"><div class="lb">정시<small>51,266명</small></div><div class="tr"><i style="--w:9.5%"></i></div><div class="v">9.5%</div></div>
+    </div>
+  </div>
+
+  <h3 class="rv">늦어질수록 더 나빠졌습니다</h3>
+  <p class="rv">지연 일수가 길수록 부정 리뷰 비율이 계속 올라갔습니다. 반면 재구매율은 지연 일수와 상관없이 2% 안팎에 머물렀습니다.</p>
+  <div class="tscroll rv">
+    <table class="tbl">
+      <thead><tr><th>지연 일수</th><th>고객</th><th>부정 리뷰 비율</th><th>재구매율</th></tr></thead>
+      <tbody>
+        <tr><td>정시</td><td>51,588</td><td><span class="mini ok" style="--w:9.5px"></span>9.5%</td><td>1.98%</td></tr>
+        <tr><td>1~3일</td><td>987</td><td class="hot"><span class="mini" style="--w:35.6px"></span>35.6%</td><td>1.82%</td></tr>
+        <tr><td>4~7일</td><td>970</td><td class="hot"><span class="mini" style="--w:69.9px"></span>69.9%</td><td>1.44%</td></tr>
+        <tr><td>8일 이상</td><td>1,714</td><td class="hot"><span class="mini" style="--w:80.5px"></span>80.5%</td><td>1.58%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sm rv">지연 구간별 재구매 고객은 14~27명뿐이라 구간끼리의 재구매율 차이는 해석하지 않았습니다(보조 분석, 검정 없음).</p>
+</section>
+
+<!-- 04 결과 ②③ -->
+<section id="r2">
+  <div class="kick rv">04 · 결과 ② ③</div>
+  <h2 class="rv">재구매율은 지연에도, 부정 리뷰에도<br>뚜렷하게 흔들리지 않았습니다</h2>
+  <p class="rv">점은 재구매율, 옅은 막대는 95% 신뢰구간(실제 값이 있을 법한 범위)입니다. 그룹 사이의 막대가 서로 많이 겹칩니다. 규칙대로라면 "차이가 있다"고 말할 수 없습니다.</p>
+
+  <div class="chart rv">
+    <div class="cap">② 배송 지연 → 180일 재구매율 <small>p = 0.12</small></div>
+    <div class="ci">
+      <div class="row"><div class="lb">지연<small>3,671명</small></div><div class="tr"><span class="rg" style="--lo:41.7%;--hi:69%"></span><span class="dot" style="--v:53.7%"></span></div><div class="v">1.61%<small>1.25 ~ 2.07</small></div></div>
+      <div class="row dim"><div class="lb">정시<small>51,588명</small></div><div class="tr"><span class="rg" style="--lo:62%;--hi:70%"></span><span class="dot" style="--v:66%"></span></div><div class="v">1.98%<small>1.86 ~ 2.10</small></div></div>
+    </div>
+    <div class="axis"><span></span><div class="sc"><span style="left:0">0%</span><span style="left:33.3%">1%</span><span style="left:66.7%">2%</span><span style="left:100%">3%</span></div><span></span></div>
+  </div>
+
+  <div class="chart rv" style="margin-top:36px">
+    <div class="cap">③ 리뷰 → 180일 재구매율 <small>부정 vs 긍정 p = 0.061</small></div>
+    <div class="ci">
+      <div class="row"><div class="lb">부정<small>7,209명</small></div><div class="tr"><span class="rg" style="--lo:47%;--hi:66.7%"></span><span class="dot" style="--v:56%"></span></div><div class="v">1.68%<small>1.41 ~ 2.00</small></div></div>
+      <div class="row dim"><div class="lb">중립<small>4,790명</small></div><div class="tr"><span class="rg" style="--lo:53.7%;--hi:80%"></span><span class="dot" style="--v:65.3%"></span></div><div class="v">1.96%<small>1.61 ~ 2.40</small></div></div>
+      <div class="row dim"><div class="lb">긍정<small>42,853명</small></div><div class="tr"><span class="rg" style="--lo:62.7%;--hi:71.7%"></span><span class="dot" style="--v:67%"></span></div><div class="v">2.01%<small>1.88 ~ 2.15</small></div></div>
+    </div>
+    <div class="axis"><span></span><div class="sc"><span style="left:0">0%</span><span style="left:33.3%">1%</span><span style="left:66.7%">2%</span><span style="left:100%">3%</span></div><span></span></div>
+  </div>
+
+  <div class="res warn rv"><b>다른 조건을 함께 넣어도 같았습니다.</b> 카테고리, 구매 월, 결제 금액을 함께 고려한 로지스틱 회귀에서도 배송 지연(오즈비 0.90, 95% 구간 0.68~1.21)과 부정 리뷰(0.87, 0.70~1.07) 모두 재구매와 뚜렷한 관계가 보이지 않았습니다.</div>
+
+  <h3 class="rv">대신 재구매에는 "시점"이 보였습니다</h3>
+  <p class="rv">재구매한 1,080명이 다시 사기까지 걸린 기간입니다. 절반은 첫 구매 후 22~114일 사이에 돌아왔고, 중앙값은 59일, 약 두 달이었습니다.</p>
+  <div class="time rv" aria-label="재구매까지 걸린 일수: 25% 22일, 중앙값 59일, 75% 114일">
+    <div class="base"></div>
+    <div class="iqr"></div>
+    <div class="med"></div>
+    <span class="lab" style="left:12.2%">22일</span>
+    <span class="lab m" style="left:32.8%">중앙값 59일</span>
+    <span class="lab" style="left:63.3%">114일</span>
+    <span class="tick" style="left:0;translate:0 0">첫 구매</span>
+    <span class="tick" style="left:50%">90일</span>
+    <span class="tick" style="left:100%;translate:-100% 0">180일</span>
+  </div>
+</section>
+
+<!-- 05 불만 주제 -->
+<section id="themes">
+  <div class="kick rv">05 · 불만 주제</div>
+  <h2 class="rv">늦은 고객은 "아직 못 받았다"고,<br>정시 고객은 "상품이 이상하다"고 썼습니다</h2>
+  <p class="rv">글이 있는 부정 리뷰 5,395건을 미리 정한 포르투갈어 단어 사전으로 다섯 가지 주제로 나눴습니다. 한 리뷰가 여러 주제에 걸릴 수 있습니다.</p>
+  <div class="chart rv">
+    <div class="cap">부정 리뷰 중 주제별 비율</div>
+    <div class="legend"><span><i style="background:var(--late)"></i>지연 고객 1,627건</span><span><i style="background:var(--ok)"></i>정시 고객 3,768건</span></div>
+    <div class="grp">
+      <div class="row"><div class="lb">미수령</div><div class="pair"><div class="l"><i style="--w:86.3%"></i><span>51.8%</span></div><div><i style="--w:21%"></i><span>12.6%</span></div></div></div>
+      <div class="row"><div class="lb">배송 지연</div><div class="pair"><div class="l"><i style="--w:18.8%"></i><span>11.3%</span></div><div><i style="--w:8.7%"></i><span>5.2%</span></div></div></div>
+      <div class="row"><div class="lb">일부 누락</div><div class="pair"><div class="l"><i style="--w:5.8%"></i><span>3.5%</span></div><div><i style="--w:22%"></i><span>13.2%</span></div></div></div>
+      <div class="row"><div class="lb">품질·파손</div><div class="pair"><div class="l"><i style="--w:1.2%"></i><span>0.7%</span></div><div><i style="--w:17.7%"></i><span>10.6%</span></div></div></div>
+      <div class="row"><div class="lb">설명과 다름·오배송</div><div class="pair"><div class="l"><i style="--w:1.8%"></i><span>1.1%</span></div><div><i style="--w:17.3%"></i><span>10.4%</span></div></div></div>
+    </div>
+  </div>
+  <div class="quotes rv">
+    <div class="qt"><div class="tp"><span class="tag">미수령</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"상품을 못 받았고 아무 소식도 없어요."</div><div class="pt">Não recebi o produto e não tenho nenhuma notícia</div></div>
+    <div class="qt"><div class="tp"><span class="tag">일부 누락</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"담요 두 개를 샀는데 하나만 왔어요."</div><div class="pt">Comprei dois cobertores e recebi apenas um</div></div>
+    <div class="qt"><div class="tp"><span class="tag">품질·파손</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"상품이 깨져서 왔어요. 반품하고 싶어요."</div><div class="pt">o produto veio quebrado ,,, quero devolver</div></div>
+    <div class="qt"><div class="tp"><span class="tag">설명과 다름·오배송</span><span class="stars"><b>★★</b>☆☆☆</span></div><div class="ko">"하나만 왔고 색도 틀렸어요. 베이지를 샀는데 흰색이 왔어요."</div><div class="pt">Foi entrege apenas 1 produto e na cor errada, veio branco e eu comprei bege</div></div>
+  </div>
+</section>
+
+<!-- 06 사후 발견 -->
+<section id="posthoc">
+  <div class="kick rv">06 · 사후 발견 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
+  <h2 class="rv">늦은 고객 4명 중 3명은<br>상품을 받기도 전에 리뷰를 썼습니다</h2>
+  <p class="rv">"미수령"이 이렇게 많은 이유가 궁금해 리뷰 작성 시점을 확인했습니다. 지연 고객의 <b>76.5%</b>가 실제 도착 전에 리뷰를 남겼습니다. Olist는 상품이 도착하거나 배송 예정일이 되면 만족도 설문을 보내기 때문에, 상품이 늦으면 고객은 받지도 못한 상태에서 평가를 하게 됩니다.</p>
+  <div class="chart rv">
+    <div class="cap">부정 리뷰(1~2점) 비율</div>
+    <div class="bars">
+      <div class="bar hot"><div class="lb">지연 · 받기 전<small>작성</small></div><div class="tr"><i style="--w:77.2%"></i></div><div class="v">77.2%</div></div>
+      <div class="bar"><div class="lb">지연 · 받은 뒤<small>작성</small></div><div class="tr"><i style="--w:27.2%"></i></div><div class="v">27.2%</div></div>
+      <div class="bar"><div class="lb">정시</div><div class="tr"><i style="--w:9.5%"></i></div><div class="v">9.5%</div></div>
+    </div>
+  </div>
+  <div class="quotes rv" style="grid-template-columns:1fr">
+    <div class="qt"><div class="tp"><span class="tag">미수령</span><span class="stars"><b>★★★</b>☆☆</span></div><div class="ko">"아직 못 받아서 평가할 수가 없어요."</div><div class="pt">Ainda não recebi então não posso avaliar</div></div>
+  </div>
+  <p class="sm rv">같은 지연 고객이라도 상품을 받은 뒤에 쓴 리뷰는 부정 비율이 크게 낮았습니다. 다만 이 비교는 결과를 본 뒤에 추가한 탐색적 분석이라, 검증된 결론이 아니라 다음에 실험해 볼 가설로 다룹니다.</p>
+</section>
+
+<!-- 07 제안 -->
+<section id="recs">
+  <div class="kick rv">07 · 제안과 다음 단계</div>
+  <h2 class="rv">배송은 평판을 지키는 일로,<br>재구매는 따로 설계해야 합니다</h2>
+  <div class="recs rv">
+    <div class="rec"><span class="n">01</span><div>
+      <h4>리뷰 요청은 "예정일"이 아니라 "실제 도착 후"에</h4>
+      <p>받기 전에 쓴 리뷰가 부정 리뷰의 큰 부분을 차지합니다. 도착 확인 뒤에 요청하면 상품과 상관없는 1점을 줄일 수 있습니다. 별점은 다음 신규 고객이 구매를 결정할 때 보는 정보입니다.</p>
+      <div class="ab"><b>실험</b><span>리뷰 요청 시점: 예정일 발송(기존) vs 도착 확인 후 발송</span><b>지표</b><span>부정 리뷰 비율, 리뷰 작성률</span></div>
+    </div></div>
+    <div class="rec"><span class="n">02</span><div>
+      <h4>지연이 예상되면 고객보다 먼저 알리기</h4>
+      <p>지연 고객의 부정 리뷰 절반 이상이 "아직 못 받았다"는 내용이었습니다. 늦는다는 사실과 새 도착 예정일을 먼저 안내하면, 고객이 리뷰 창에서 처음 지연을 알게 되는 상황을 막을 수 있습니다.</p>
+      <div class="ab"><b>실험</b><span>지연 예상 주문에 선제 안내 메시지 발송 vs 미발송</span><b>지표</b><span>부정 리뷰 비율, 문의 건수</span></div>
+    </div></div>
+    <div class="rec"><span class="n">03</span><div>
+      <h4>재구매는 구매 주기에 맞춘 리마인드로</h4>
+      <p>재구매는 첫 경험의 좋고 나쁨보다 시점과 더 관련이 있어 보였습니다. 첫 구매 후 3주~4개월, 특히 두 달 전후에 맞춘 리마인드·추천을 별도로 설계하는 것이 맞습니다.</p>
+      <div class="ab"><b>실험</b><span>첫 구매 후 약 50일 리마인드 발송 vs 미발송</span><b>지표</b><span>180일 재구매율</span></div>
+    </div></div>
+  </div>
+
+  <h3 class="rv">이렇게 적용할 수 있습니다</h3>
+  <div class="apply rv">
+    <div><b>여러 브랜드가 입점한 플랫폼이라면</b><strong>카테고리별 첫 구매 고객 관리</strong><p>같은 방법으로 카테고리마다 지연→리뷰, 리뷰→재구매 관계와 재구매 주기를 따로 보고, 카테고리별 리마인드 시점을 다르게 잡습니다. 이번 데이터에서는 카테고리별 표본이 부족했기 때문에, 규모가 더 큰 자체 데이터로 확인해야 합니다.</p></div>
+    <div><b>자사몰을 운영하는 브랜드라면</b><strong>첫 구매 → 두 번째 구매 설계</strong><p>소모품은 사용 기간이 곧 재구매 주기입니다. 첫 구매 고객의 실제 재구매 간격을 같은 방식으로 재고, 그 시점에 맞춘 리마인드와 도착 후 리뷰 요청을 함께 실험합니다.</p></div>
+  </div>
+</section>
+
+<!-- 08 한계 -->
+<section id="limits">
+  <div class="kick rv">08 · 한계</div>
+  <h2 class="rv">이 분석이 말해 주지 않는 것</h2>
+  <ul class="lim rv">
+    <li><b>관계일 뿐 원인은 아닙니다.</b> 지연과 부정 리뷰가 함께 나타난다는 것까지가 이 분석의 결론입니다. 원인인지는 위의 A/B 테스트로 확인해야 합니다.</li>
+    <li><b>재구매율 자체가 낮습니다(1.95%).</b> 재구매 고객이 적어 작은 차이는 잡아내지 못했을 수 있습니다. 부정 vs 긍정은 p = 0.061로 기준에 가까웠지만, 규칙대로 "차이 없음"으로 판단했습니다.</li>
+    <li><b>단어 사전에 오류가 하나 있었습니다.</b> 칭찬인 "ótima qualidade(아주 좋은 품질)"가 부정 표현 "ma qualidade(나쁜 품질)"와 글자가 겹쳐 품질 주제에 잘못 걸렸습니다. 고치면 품질 주제가 412건 → 400건(7.6% → 7.4%)이라 결론은 같습니다. 규칙을 바꾸지 않는다는 원칙에 따라 v1.2 결과를 그대로 싣고 오류를 공개합니다.</li>
+    <li><b>카테고리별 결론은 내리지 않았습니다.</b> 대부분 카테고리에서 지연 후 재구매 고객이 10명 미만이었습니다.</li>
+    <li><b>2017~2018년 브라질 데이터입니다.</b> 배송 환경과 구매 습관이 다른 시장에 그대로 옮기기보다, 같은 방법을 자체 데이터에 다시 적용해야 합니다.</li>
+  </ul>
+</section>
+
+<footer>
+  데이터: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Brazilian E-Commerce Public Dataset by Olist (Kaggle)</a><br>
+  분석 코드와 결과 표: <a href="https://github.com/sohyeon1628-prog/olist-analysis">GitHub 저장소</a> · <a href="index.html">조회 사이트</a><br>
+  박소현 · 2026
+</footer>
+
+</div>
+</main>
+
+<script>
+(function () {
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js');
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function (e) { io.observe(e); });
+
+  var links = document.querySelectorAll('#side nav a');
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var nav = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting) {
+        links.forEach(function (a) { a.classList.remove('on'); });
+        var a = map[e.target.id]; if (a) a.classList.add('on');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('main section[id]').forEach(function (s) { nav.observe(s); });
+})();
+</script>
+</body>
+</html>
