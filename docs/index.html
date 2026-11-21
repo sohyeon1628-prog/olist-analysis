@@ -3,224 +3,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Olist 첫 구매 탐색기</title>
-<meta name="description" content="브라질 이커머스 Olist 첫 구매 고객 55,261명의 배송·리뷰·재구매를 카테고리, 기간, 지역, 결제 금액별로 직접 조회해 보는 대시보드.">
+<title>Olist</title>
+<meta name="description" content="브라질 이커머스 Olist의 주문 99,441건과 고객 96,096명을 기간·주문 상태·카테고리·지역·결제·배송·리뷰 조건으로 직접 검색해 보는 데이터 탐색 사이트.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F3F1EB; --paper: #F9F8F4; --ink: #0B0B0B; --text: #2a2926; --mute: #85827A; --line: #DDD9CF;
-  --acc: #E04A1F; --acc-soft: #F4D8CC; --base: #C6C1B5; --dark: #0B0B0B;
-  --e: cubic-bezier(.2,.7,.2,1);
-  --top: 56px;
+  --bg: #F3F1EB; --paper: #F9F8F4; --soft: #ECE9E1; --ink: #0B0B0B; --text: #2a2926; --mute: #6E6A62; --line: #DDD9CF;
+  --acc: #E04A1F; --acc-soft: #F4D8CC; --bar: #8E897F;
+  --e: cubic-bezier(.2,.7,.2,1); --top: 56px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--ink); font-family: Inter, 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere; }
 a { color: inherit; }
-button { font: inherit; color: inherit; }
+button, input, select { font: inherit; color: inherit; }
 
-/* ===== 상단 막대 ===== */
-.top { height: var(--top); display: flex; align-items: center; gap: 28px; padding: 0 24px; border-bottom: 1px solid var(--line); background: var(--bg); }
-.mark { display: inline-flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+/* ===== 상단 ===== */
+.top { height: var(--top); display: flex; align-items: center; gap: 28px; padding: 0 24px; border-bottom: 1px solid var(--line); }
+.mark { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
 .mark::before, .mark::after { content: ''; border: 5px solid transparent; }
 .mark::before { border-right: 9px solid var(--acc); border-left: 0; }
 .mark::after { border-left: 9px solid var(--acc); border-right: 0; }
-.top nav { display: flex; gap: 4px; height: 100%; }
-.top nav a { display: flex; align-items: center; padding: 0 12px; font-size: 13px; color: var(--mute); text-decoration: none; border-bottom: 2px solid transparent; }
+.top nav { display: flex; height: 100%; }
+.top nav a { display: flex; align-items: center; padding: 0 12px; font-size: 13.5px; color: var(--mute); text-decoration: none; border-bottom: 2px solid transparent; }
 .top nav a.on { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
 .top nav a:hover { color: var(--ink); }
 .info { position: relative; margin-left: auto; }
-.info summary { list-style: none; cursor: pointer; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--text); white-space: nowrap; }
+.info summary { list-style: none; cursor: pointer; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 12.5px; white-space: nowrap; }
 .info summary::-webkit-details-marker { display: none; }
 .info[open] summary { border-color: var(--ink); }
-.info .pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 340px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 12px 32px rgba(0,0,0,.12); font-size: 12.5px; line-height: 1.6; color: var(--text); }
+.info .pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 50; width: 380px; max-height: 70vh; overflow-y: auto; padding: 18px 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 12px 32px rgba(0,0,0,.12); font-size: 13px; line-height: 1.65; color: var(--text); }
 .info .pop b { display: block; margin-top: 10px; color: var(--ink); font-weight: 600; }
 .info .pop b:first-child { margin-top: 0; }
-.info .pop p { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--mute); font-size: 11.5px; }
+.info .pop .ai { margin-top: 14px; padding: 12px 14px; background: var(--soft); border-radius: 4px; }
 
-/* ===== 앱 배치: 한 화면 ===== */
-.app { display: grid; grid-template-columns: 272px 1fr; height: calc(100vh - var(--top)); height: calc(100dvh - var(--top)); }
+/* ===== 배치 ===== */
+.app { display: grid; grid-template-columns: 208px 1fr; height: calc(100vh - var(--top)); height: calc(100dvh - var(--top)); }
+.menu { display: flex; flex-direction: column; gap: 2px; padding: 18px 12px; border-right: 1px solid var(--line); background: var(--paper); overflow-y: auto; }
+.menu button { width: 100%; text-align: left; padding: 10px 14px; border: 0; border-radius: 6px; background: none; font-size: 14.5px; color: var(--text); cursor: pointer; }
+.menu button:hover { background: var(--soft); color: var(--ink); }
+.menu button[aria-selected="true"] { background: var(--ink); color: #fff; font-weight: 600; }
+.menu button i { margin-left: 6px; font-style: normal; font-size: 11.5px; color: var(--mute); }
+.menu button[aria-selected="true"] i { color: rgba(255,255,255,.7); }
+.menu .card { margin-top: auto; display: block; padding: 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); text-decoration: none; }
+.menu .card:hover { border-color: var(--ink); }
+.menu .card b { display: block; font-size: 13.5px; }
+.menu .card span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.5; color: var(--mute); }
+.menu .made { margin-top: 10px; padding: 0 4px; font-size: 11.5px; line-height: 1.5; color: var(--mute); }
 
-/* 조건 패널 */
-.filters { overflow-y: auto; padding: 18px 20px 24px; border-right: 1px solid var(--line); background: var(--paper); }
-.fsum small { display: block; font-size: 11px; color: var(--mute); }
-.fsum strong { display: block; margin-top: 4px; font-size: 26px; font-weight: 300; letter-spacing: -.8px; }
-.fsum strong b { font-weight: 700; }
-.fsum span { display: block; font-size: 11.5px; color: var(--mute); }
-.fsum .bar { margin-top: 8px; height: 2px; background: var(--line); }
-.fsum .bar i { display: block; height: 100%; background: var(--acc); width: 100%; transition: width .4s var(--e); }
-.fg { padding: 14px 0; border-top: 1px solid var(--line); }
-.fsum + .ftoggle + .fbody .fg:first-child { margin-top: 14px; }
-.fg h4 { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; font-weight: 600; }
-.fg h4 button { border: 0; background: none; font-size: 11px; color: var(--mute); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
-.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
-.chip { padding: 4px 9px; border: 1px solid var(--line); border-radius: 999px; background: transparent; font-size: 11.5px; line-height: 1.3; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
-.chip:hover { border-color: var(--ink); }
-.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.chip small { margin-left: 3px; font-size: 10px; opacity: .6; }
-.chips.st .chip { min-width: 36px; text-align: center; padding: 3px 5px; font-size: 11px; }
-.stsel { margin-top: 7px; font-size: 11px; line-height: 1.5; color: var(--mute); }
-.range { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; margin-top: 9px; font-size: 12px; color: var(--mute); }
-select { width: 100%; padding: 6px 6px; border: 1px solid var(--line); border-radius: 3px; background: #fff; font: inherit; font-size: 12px; color: var(--ink); }
-.reset { width: 100%; margin-top: 4px; padding: 9px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 12px; font-weight: 600; cursor: pointer; }
-.reset:hover { background: var(--ink); color: #fff; }
-.fnote { margin-top: 16px; font-size: 10.5px; line-height: 1.6; color: var(--mute); }
-.ftoggle { display: none; }
-
-/* 작업 영역 */
 .work { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-.kpis { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); flex: none; }
-.kpi { padding: 14px 22px 12px; }
-.kpi + .kpi { border-left: 1px solid var(--line); }
-.kpi small { display: block; font-size: 11.5px; color: var(--mute); }
-.kpi strong { display: block; margin-top: 4px; font-size: 28px; font-weight: 300; letter-spacing: -1px; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.kpi strong em { font-style: normal; font-size: 13px; margin-left: 2px; color: var(--mute); }
-.kpi span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--mute); }
-.kpi span b { font-weight: 600; }
-.up { color: var(--acc); }
-.down { color: #3d6b4f; }
+.toolbar { flex: none; display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 10px 26px; border-bottom: 1px solid var(--line); }
+.fopen { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.fopen:hover, .fopen[aria-expanded="true"] { background: var(--ink); color: #fff; }
+.fopen i { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--acc); color: #fff; font-style: normal; font-size: 11px; line-height: 18px; text-align: center; }
+.fopen i:empty { display: none; }
+.active { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.active .hint { font-size: 13px; color: var(--mute); }
+.ach { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--acc); border-radius: 999px; background: #FBEDE7; font-size: 12.5px; cursor: pointer; }
+.ach small { font-size: 11px; color: var(--mute); }
+.ach span { font-size: 10px; color: var(--acc); }
+.ach:hover { background: var(--acc-soft); }
+.aclr { border: 0; background: none; font-size: 12.5px; color: var(--mute); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.tn { flex: none; font-size: 13px; color: var(--text); white-space: nowrap; }
+.tn b { font-size: 15px; font-weight: 700; }
 
-.vtabs { display: flex; gap: 2px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; flex: none; scrollbar-width: none; }
-.vtabs button { flex: none; padding: 12px 12px 10px; border: 0; border-bottom: 2px solid transparent; background: none; font-size: 13px; color: var(--mute); cursor: pointer; white-space: nowrap; }
-.vtabs button:hover { color: var(--ink); }
-.vtabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--acc); }
-.vtabs button i { font-style: normal; margin-left: 5px; font-size: 10.5px; color: var(--mute); font-weight: 400; }
-
-.panel { flex: 1; min-height: 0; overflow-y: auto; padding: 20px 26px 28px; }
+.panel { flex: 1; min-height: 0; overflow-y: auto; padding: 22px 26px 30px; }
 .panel[hidden] { display: none; }
+h1 { font-size: 26px; font-weight: 300; line-height: 1.3; letter-spacing: -.6px; }
+h1 b { font-weight: 700; }
 .ph { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
 .ph h2 { font-size: 16px; font-weight: 600; letter-spacing: -.2px; }
-.desc { margin-top: 6px; max-width: 760px; font-size: 12.5px; line-height: 1.65; color: var(--mute); }
+.desc { margin-top: 8px; max-width: 820px; font-size: 13.5px; line-height: 1.7; color: var(--mute); }
 .desc b { color: var(--ink); font-weight: 600; }
-.note { margin-top: 14px; font-size: 11.5px; line-height: 1.6; color: var(--mute); }
-.cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; height: 100%; }
-.cols > div { min-width: 0; }
-.block + .block { margin-top: 26px; }
-.empty { margin-top: 24px; padding: 28px; border: 1px dashed var(--line); text-align: center; font-size: 13px; color: var(--mute); }
+.note { margin-top: 14px; font-size: 12.5px; line-height: 1.6; color: var(--mute); }
+.note a { color: var(--ink); }
+.empty { margin-top: 16px; padding: 28px; border: 1px dashed var(--line); text-align: center; font-size: 13.5px; color: var(--mute); }
 
-/* 판정 */
-.verdict { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--mute); }
-.tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--ink); color: var(--ink); white-space: nowrap; }
-.tag.yes { background: var(--acc); border-color: var(--acc); color: #fff; }
-.tag.na { border-style: dashed; color: var(--mute); border-color: var(--mute); }
+/* 카드 */
+.card2 { min-width: 0; padding: 16px 18px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.card2 .ph h2 { font-size: 15px; }
+.card2 .ph small { font-size: 12.5px; color: var(--mute); }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: start; }
 
-/* 원 비교 */
-.circles { display: flex; align-items: center; justify-content: center; margin-top: 10px; }
-.cc { position: relative; flex: none; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: width .5s var(--e), height .5s var(--e); }
-.cc.dark { background: var(--dark); color: #fff; z-index: 1; }
-.cc.light { background: linear-gradient(135deg, #8a8781 0%, #dcd9d2 26%, #f6f5f1 48%, #f9f8f5 100%); color: var(--ink); z-index: 2; box-shadow: 0 0 0 1px rgba(0,0,0,.04); margin-top: 18%; }
-.cc b { font-size: 13px; font-weight: 600; }
-.cc strong { display: block; font-weight: 300; letter-spacing: -1.2px; line-height: 1; margin: 5px 0; }
-.cc span { font-size: 11px; opacity: .65; }
-.cc .out { position: absolute; left: 100%; top: 50%; translate: 10px -50%; white-space: nowrap; text-align: left; color: var(--ink); }
-.cc .out strong { font-size: 22px !important; }
+/* 지표 */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+.kpi { padding: 18px 20px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.kpi small { display: block; font-size: 13px; color: var(--text); }
+.kpi strong { display: block; margin-top: 6px; font-size: 34px; font-weight: 300; letter-spacing: -1.2px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi strong em { margin-left: 3px; font-style: normal; font-size: 14px; color: var(--mute); }
+.kpi span { display: block; margin-top: 6px; font-size: 12.5px; color: var(--mute); }
+.scale { margin-top: 10px; font-size: 13px; color: var(--mute); }
+.scale b { color: var(--ink); font-weight: 600; }
 
-/* 신뢰구간 */
-.ci { margin-top: 8px; }
-.ci .row { display: grid; grid-template-columns: 96px 1fr 120px; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
-.ci .lb b { display: block; font-weight: 600; }
-.ci .lb small { color: var(--mute); font-size: 11px; }
-.ci .tr { position: relative; height: 20px; }
-.ci .tr::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--line); }
-.ci .rg { position: absolute; top: 50%; height: 6px; translate: 0 -50%; border-radius: 3px; background: var(--base); transition: left .5s var(--e), width .5s var(--e); }
-.ci .dot { position: absolute; top: 50%; width: 12px; height: 12px; translate: -50% -50%; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); transition: left .5s var(--e); }
-.ci .row.hi .rg { background: var(--acc-soft); }
-.ci .row.hi .dot { background: var(--acc); }
-.ci .v { text-align: right; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.ci .v small { display: block; font-weight: 400; font-size: 10.5px; color: var(--mute); }
-.axis { display: grid; grid-template-columns: 96px 1fr 120px; gap: 14px; margin-top: 5px; font-size: 10.5px; color: var(--mute); }
-.axis .sc { position: relative; height: 14px; }
-.axis .sc span { position: absolute; translate: -50% 0; white-space: nowrap; }
+/* 분포 막대 */
+.dist { margin-top: 10px; }
+.dr { display: grid; grid-template-columns: 124px 1fr 112px; gap: 10px; align-items: center; margin: 0 -4px; padding: 4px; border-radius: 3px; font-size: 13.5px; }
+.dr .l { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dr .t { height: 12px; background: var(--soft); border-radius: 2px; overflow: hidden; }
+.dr .t i { display: block; height: 100%; background: var(--bar); border-radius: 0 2px 2px 0; transition: width .4s var(--e); }
+.dr .v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dr .v small { margin-left: 5px; font-weight: 400; font-size: 12px; color: var(--mute); }
+.dr.click { cursor: pointer; }
+.dr.click:hover, .dr.click:focus-visible { background: var(--soft); outline: none; }
+.dr.on .l { font-weight: 600; }
+.dr.on .t i { background: var(--acc); }
+.sub { margin-top: 14px; font-size: 12.5px; color: var(--mute); }
+.sub b { color: var(--ink); font-weight: 600; }
+.sb { display: flex; height: 18px; margin-top: 12px; border-radius: 3px; overflow: hidden; background: var(--soft); }
+.sb i { display: block; height: 100%; transition: width .4s var(--e); }
+.k0 { background: var(--bar); }
+.k1 { background: var(--acc); }
+.sbl { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 13.5px; }
+.sbl b { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 2px; vertical-align: -1px; }
+.sbl strong { font-weight: 600; }
+.sbl small { margin-left: 4px; font-size: 12px; color: var(--mute); }
 
-/* 막대 표 */
-.bars { margin-top: 10px; }
-.bars .row { display: grid; grid-template-columns: 110px 1fr 1fr; gap: 18px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
-.bars .row.head { font-size: 11px; color: var(--mute); border-bottom-color: var(--ink); }
-.bars .lb b { font-weight: 600; display: block; }
-.bars .lb small { color: var(--mute); font-size: 11px; }
-.hb { display: grid; grid-template-columns: 1fr 52px; gap: 8px; align-items: center; }
-.hb i { display: block; height: 14px; background: var(--base); border-radius: 0 2px 2px 0; transition: width .5s var(--e); }
-.hb.acc i { background: var(--acc); }
-.hb span { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-.hb.dim span { color: var(--mute); font-weight: 400; }
-
-/* 작은 탭 */
-.tabs { display: inline-flex; flex-wrap: nowrap; max-width: 100%; overflow-x: auto; border: 1px solid var(--ink); border-radius: 999px; }
-.tabs button { flex: none; padding: 6px 13px; border: 0; background: transparent; font-size: 12px; cursor: pointer; white-space: nowrap; }
+/* 차트 */
+.svgbox { position: relative; margin-top: 12px; }
+.svgbox svg { display: block; width: 100%; overflow: visible; }
+.svgbox text, .fsvg text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 12px; fill: var(--mute); }
+.gl { stroke: var(--line); stroke-width: 1; }
+.mbar { fill: var(--ink); opacity: .85; }
+.mbar:hover { fill: var(--acc); opacity: 1; }
+.ln { fill: none; stroke: var(--acc); stroke-width: 2; }
+.pt { fill: var(--bg); stroke: var(--acc); stroke-width: 2; }
+.tip { position: absolute; z-index: 5; pointer-events: none; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 13px; line-height: 1.5; border-radius: 3px; white-space: nowrap; opacity: 0; transform: translate(-50%, -115%); transition: opacity .15s; }
+.tip.on { opacity: 1; }
+.tabs { display: inline-flex; max-width: 100%; overflow-x: auto; border: 1px solid var(--ink); border-radius: 999px; }
+.tabs button { flex: none; padding: 6px 14px; border: 0; background: transparent; font-size: 13px; white-space: nowrap; cursor: pointer; }
 .tabs button + button { border-left: 1px solid var(--ink); }
 .tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
-/* SVG 차트 */
-.svgbox { margin-top: 14px; position: relative; }
-.svgbox svg { display: block; width: 100%; overflow: visible; }
-.svgbox text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 11px; fill: var(--mute); }
-.svgbox .gl { stroke: var(--line); stroke-width: 1; }
-.svgbox .ln { fill: none; stroke: var(--acc); stroke-width: 2; }
-.svgbox .pt { fill: var(--bg); stroke: var(--acc); stroke-width: 2; }
-.svgbox .lbl { fill: var(--ink); font-weight: 600; }
-.svgbox .hbar { fill: var(--base); }
-.svgbox .hbar.in { fill: var(--ink); }
-.svgbox .med { stroke: var(--acc); stroke-width: 2; }
-.svgbox .medt { fill: var(--acc); font-weight: 600; }
-.tip { position: absolute; pointer-events: none; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 12px; line-height: 1.5; border-radius: 3px; white-space: nowrap; opacity: 0; transition: opacity .15s; transform: translate(-50%, -110%); }
-.tip.on { opacity: 1; }
-
 /* 리뷰 */
-#p5 { display: flex; flex-direction: column; padding-bottom: 0; }
-#p5[hidden] { display: none; }
-.rvhead { flex: none; }
-.rvtools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
-.rvtools input { flex: 1 1 220px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 12.5px; }
-.rvtools input:focus, select:focus { outline: 2px solid var(--acc); outline-offset: 1px; }
-.rvcount { margin-top: 10px; font-size: 12px; color: var(--mute); }
+#p3 { display: flex; flex-direction: column; padding-bottom: 0; }
+#p3[hidden] { display: none; }
+.rvtools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 12px; }
+.rvtools input[type=search] { flex: 1 1 240px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 13.5px; }
+.rvtools label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); cursor: pointer; }
+input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+.rvcount { margin-top: 10px; font-size: 13px; color: var(--mute); }
 .rvcount b { color: var(--ink); }
 .rvscroll { flex: 1; min-height: 0; overflow-y: auto; margin: 10px -26px 0; padding: 0 26px 24px; }
-.rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
 .rv { padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
-.rv .tp { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 8px; font-size: 11px; color: var(--mute); }
-.rv .stars { color: var(--acc); letter-spacing: 1px; white-space: nowrap; }
-.rv .stars i { color: var(--line); font-style: normal; }
-.rv p { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--ink); }
-.rv p.pt { margin-top: 5px; font-size: 11.5px; line-height: 1.55; color: var(--mute); font-style: italic; }
-.rv p.pt::before { content: '원문 '; font-style: normal; font-size: 10px; font-weight: 600; letter-spacing: .04em; }
+.rv .tp { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; font-size: 12px; color: var(--mute); }
+.rvbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--paper); }
+.seg button { padding: 8px 16px; border: 0; background: transparent; font-size: 13.5px; cursor: pointer; white-space: nowrap; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button small { margin-left: 6px; font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.seg button:hover { background: var(--soft); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; font-weight: 600; }
+.seg button[aria-pressed="true"] small { color: rgba(255,255,255,.7); }
+.sortl { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--mute); }
+.sortl select { width: auto; padding: 7px 10px; }
+.rv .tp { align-items: center; }
+.rv .score { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; background: var(--soft); font-size: 12.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.rv .score b { color: var(--acc); font-weight: 400; }
+.rv p { margin-top: 8px; font-size: 14.5px; line-height: 1.6; }
+.rv p.pt { margin-top: 5px; font-size: 12.5px; color: var(--mute); font-style: italic; }
+.rv p.pt::before { content: '원문 '; font-style: normal; font-size: 10.5px; font-weight: 600; }
 .rv mark { background: var(--acc-soft); color: inherit; padding: 0 2px; }
-.rv .th { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-.rv .th span { padding: 1px 7px; border: 1px solid var(--line); border-radius: 999px; font-size: 10.5px; color: var(--text); }
-.more { display: block; margin: 14px auto 0; padding: 8px 24px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 12.5px; cursor: pointer; }
+.more { display: block; margin: 14px auto 0; padding: 8px 24px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 13px; cursor: pointer; }
 .more:hover { background: var(--ink); color: #fff; }
+.more[hidden] { display: none; }
 
-/* ===== 좁은 화면: 일반 페이지처럼 스크롤 ===== */
+/* 흐름 */
+.fsel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 10px; min-height: 26px; font-size: 13px; color: var(--text); }
+.fsel b { font-weight: 700; }
+.fsvg { position: relative; overflow-x: auto; margin-top: 6px; }
+.fsvg svg { display: block; max-width: none; overflow: visible; }
+.fsvg .hd1 { font-size: 12px; font-weight: 600; fill: var(--ink); }
+.fsvg .hd2 { font-size: 13px; fill: var(--text); }
+.fsvg .lb1 { font-size: 13px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
+.fsvg .lb2 { font-size: 12px; fill: var(--text); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
+.rb { fill: var(--bar); opacity: .32; transition: opacity .2s; }
+.rb:hover { opacity: .55; }
+.fsvg.sel .rb { opacity: .16; }
+.rs { fill: var(--acc); opacity: .85; }
+.nd { fill: var(--ink); }
+.hit { fill: transparent; }
+.fsvg g[data-g] { cursor: pointer; outline: none; transition: opacity .2s; }
+.fsvg g[data-g].dim { opacity: .4; }
+.fsvg g[data-g]:hover .nd, .fsvg g[data-g]:focus-visible .nd { stroke: var(--ink); stroke-width: 2px; }
+.fsvg g[data-g].on .nd { fill: var(--acc); stroke: var(--ink); stroke-width: 2px; }
+
+/* ===== 조건 패널 ===== */
+.filters { position: fixed; top: var(--top); left: 0; bottom: 0; z-index: 40; width: min(340px, 100vw); overflow-y: auto; padding: 18px 20px 28px; background: var(--paper); border-right: 1px solid var(--line); box-shadow: 16px 0 40px rgba(0,0,0,.12); transform: translateX(-100%); visibility: hidden; transition: transform .3s var(--e), visibility 0s linear .3s; }
+.filters.open { transform: none; visibility: visible; transition: transform .3s var(--e); }
+.fhead { display: flex; justify-content: space-between; align-items: center; }
+.fhead b { font-size: 16px; }
+.xbtn { flex: none; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; background: transparent; font-size: 13px; cursor: pointer; }
+.xbtn:hover { border-color: var(--ink); }
+.fcount { margin: 10px 0 14px; font-size: 13px; color: var(--mute); }
+.fcount b { font-size: 17px; color: var(--ink); }
+.fg { padding: 12px 0; border-top: 1px solid var(--line); }
+.fg summary { display: flex; align-items: center; gap: 8px; list-style: none; cursor: pointer; }
+.fg summary::-webkit-details-marker { display: none; }
+.fg summary::before { content: '▸'; flex: none; font-size: 11px; color: var(--mute); transition: rotate .2s; }
+.fg[open] summary::before { rotate: 90deg; }
+.fg h4 { flex: none; font-size: 13.5px; font-weight: 600; }
+.fg .fsv { flex: 1; min-width: 0; font-size: 12px; font-weight: 600; color: var(--acc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fg summary button { flex: none; margin-left: auto; border: 0; background: none; font-size: 12px; color: var(--mute); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.chip { padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; background: transparent; font-size: 12.5px; line-height: 1.3; cursor: pointer; }
+.chip small { margin-left: 4px; font-size: 10.5px; color: var(--mute); }
+.chip:hover { border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.chip[aria-pressed="true"] small { color: rgba(255,255,255,.7); }
+.chip[hidden] { display: none; }
+.chips.list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; max-height: 240px; overflow-y: auto; padding-right: 4px; }
+.chips.list .chip { min-width: 0; text-align: left; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fsearch { width: 100%; margin-top: 10px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 13px; }
+.range { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; margin-top: 10px; font-size: 12px; color: var(--mute); }
+select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-radius: 3px; background: #fff; font-size: 12.5px; }
+.reset { width: 100%; margin-top: 6px; padding: 10px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 13px; font-weight: 600; cursor: pointer; }
+.reset:hover { background: var(--ink); color: #fff; }
+.scrim { position: fixed; top: var(--top); left: 0; right: 0; bottom: 0; z-index: 35; background: rgba(11,11,11,.18); }
+.scrim[hidden] { display: none; }
+.loading { font-size: 13.5px; color: var(--mute); }
+
+@media (prefers-reduced-motion: reduce) { .filters, .filters.open, .dr .t i, .sb i { transition: none; } }
+@media (max-width: 1200px) { .grid3 { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 1000px) {
   .app { display: block; height: auto; }
-  .filters { border-right: 0; border-bottom: 1px solid var(--line); }
-  .ftoggle { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 12px; padding: 9px 16px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .filters:not(.open) .fbody { display: none; }
-  .filters.open .ftoggle .arr { rotate: 180deg; }
-  .vtabs { position: sticky; top: 0; z-index: 5; background: var(--bg); }
+  .menu { flex-direction: row; position: sticky; top: 0; z-index: 5; padding: 8px; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .menu button { width: auto; flex: none; padding: 8px 12px; font-size: 13.5px; }
+  .menu .card, .menu .made { display: none; }
+  .toolbar { flex-wrap: wrap; padding: 10px 16px; }
   .panel { overflow: visible; }
-  #p5 { display: block; }
+  #p3 { display: block; }
   .rvscroll { overflow: visible; margin: 10px 0 0; padding: 0 0 24px; }
-  .cols { grid-template-columns: 1fr; gap: 28px; height: auto; }
+  .kpis { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
   .top { gap: 10px; padding: 0 12px; }
-  .mark { font-size: 12px; gap: 6px; }
+  .mark { font-size: 13px; gap: 6px; }
   .mark::before, .mark::after { display: none; }
-  .top nav a { padding: 0 7px; font-size: 12px; }
-  .info summary { padding: 5px 9px; font-size: 11.5px; }
-  .info .pop { width: min(320px, calc(100vw - 24px)); }
-  .filters { padding: 14px 16px 16px; }
-  .kpis { grid-template-columns: 1fr 1fr; }
-  .kpi { padding: 12px 16px; }
-  .kpi:nth-child(3) { border-left: 0; }
-  .kpi:nth-child(n+3) { border-top: 1px solid var(--line); }
-  .kpi strong { font-size: 24px; }
-  .vtabs { padding: 0 8px; }
+  .top nav a { padding: 0 7px; font-size: 12.5px; }
+  .info summary { padding: 5px 10px; font-size: 12px; }
+  .info .pop { width: min(340px, calc(100vw - 24px)); }
   .panel { padding: 18px 16px 24px; }
-  .ci .row, .axis { grid-template-columns: 60px 1fr 88px; gap: 8px; }
-  .bars .row { grid-template-columns: 84px 1fr 1fr; gap: 10px; }
-  .hb { grid-template-columns: 1fr 44px; }
+  h1 { font-size: 21px; }
+  .grid3 { grid-template-columns: 1fr; }
+  .kpi { padding: 14px; }
+  .kpi strong { font-size: 26px; }
+  .dr { grid-template-columns: 96px 1fr 100px; }
+  .tn { width: 100%; }
   .rvlist { grid-template-columns: 1fr; }
 }
 </style>
@@ -228,474 +258,525 @@ select { width: 100%; padding: 6px 6px; border: 1px solid var(--line); border-ra
 <body>
 
 <header class="top">
-  <span class="mark">Olist 첫 구매 탐색기</span>
+  <span class="mark">Olist</span>
   <nav><a href="index.html" class="on">탐색</a><a href="story.html">분석 이야기</a><a href="https://github.com/sohyeon1628-prog/olist-analysis">코드 ↗</a></nav>
   <details class="info">
-    <summary>지표 정의</summary>
+    <summary>이 사이트에 대해</summary>
     <div class="pop">
-      <b>대상</b>2017.01 ~ 2018.02에 처음 구매한 고객 55,261명 (브라질 이커머스 Olist)
-      <b>배송 지연</b>실제 도착일이 안내된 예정일보다 늦은 경우
-      <b>부정 리뷰</b>별점 1~2점 (3점은 중립, 4~5점은 긍정)
-      <b>재구매</b>첫 주문 후 24시간 ~ 180일 사이에 배송 완료된 주문이 있는 경우
-      <b>판정 규칙</b>카이제곱 검정 p &lt; 0.05일 때만 "의미 있는 차이". 그룹이 200명 미만이거나 재구매 고객이 10명 미만이면 결론을 내리지 않습니다.
-      <p>관계를 보여 줄 뿐 원인을 증명하지는 않습니다. 해석과 제안은 <a href="story.html">분석 이야기</a>에 있습니다.</p>
+      <b>데이터</b>브라질 이커머스 Olist 공개 데이터(Kaggle). 2016년 9월 ~ 2018년 10월 주문 99,441건, 고객 96,096명. 공개 데이터에는 주문 기록만 있어서, 가입만 하고 주문하지 않은 고객은 없습니다.
+      <b>고객</b>같은 사람(고객 고유 번호)은 주문이 여러 건이어도 한 명으로 셉니다.
+      <b>카테고리 · 판매자</b>주문에 담긴 첫 번째 상품 기준입니다.
+      <b>결제</b>금액은 주문의 결제 합계(헤알), 결제 수단은 가장 큰 결제 기준입니다.
+      <b>배송</b>실제 도착일을 안내된 예정일과 비교합니다(날짜 기준). '도착 기록 없음'은 배송 중, 취소 등으로 도착일이 없는 주문입니다.
+      <b>리뷰</b>주문마다 가장 늦게 답변된 리뷰 하나를 씁니다.
+      <b>재주문</b>같은 고객의 두 번째 이후 주문입니다.
+      <div class="ai"><b>AI 활용</b>데이터 정리 코드, 이 사이트, 리뷰 번역은 AI(Claude)와 함께 만들었습니다. 화면의 숫자는 모두 원본 데이터에서 코드로 계산했고, 이 화면에서는 해석하지 않습니다. 해석은 보는 분의 몫입니다. AI와 함께 해 본 분석 예시는 <a href="story.html">분석 이야기</a>에 있습니다.</div>
     </div>
   </details>
 </header>
 
 <div class="app">
-  <aside class="filters" id="filters">
-    <div class="fsum">
-      <small>선택한 고객</small>
-      <strong id="fN"><b>55,261</b>명</strong>
-      <span id="fShare">전체의 100%</span>
-      <div class="bar"><i id="fBar"></i></div>
-    </div>
-    <button class="ftoggle" id="ftoggle" aria-expanded="false" aria-controls="fbody"><span>조건 고르기 <span id="fCount"></span></span><span class="arr">▾</span></button>
-    <div class="fbody" id="fbody">
-      <div class="fg"><h4>카테고리 <button data-clear="c">전체</button></h4><div class="chips" id="fc"></div></div>
-      <div class="fg"><h4>첫 구매 월 <button data-clear="m">전체</button></h4>
-        <div class="range"><select id="m0" aria-label="시작 월"></select><span>~</span><select id="m1" aria-label="끝 월"></select></div></div>
-      <div class="fg"><h4>고객 지역 (주) <button data-clear="s">전체</button></h4><div class="chips st" id="fs"></div><div class="stsel" id="fsName"></div></div>
-      <div class="fg"><h4>결제 금액 (헤알) <button data-clear="p">전체</button></h4><div class="chips" id="fp"></div></div>
-      <button class="reset" id="reset">조건 모두 지우기</button>
-      <p class="fnote">고른 조건은 주소에 담겨 링크로 공유할 수 있습니다.<br>데이터: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Olist (Kaggle)</a> · 조건별 집계만 담았습니다.</p>
-    </div>
-  </aside>
+  <nav class="menu" id="menu" role="tablist" aria-label="메뉴" aria-orientation="vertical">
+    <button role="tab" aria-selected="true" aria-controls="p0" data-t="0">홈</button>
+    <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">분포</button>
+    <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">월별 추이</button>
+    <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">리뷰 원문<i id="rvN"></i></button>
+    <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">주문 흐름</button>
+    <a class="card" href="story.html"><b>분석 이야기 →</b><span>AI와 함께 해 본 분석 예시</span></a>
+    <p class="made">AI(Claude)와 함께 만든 프로젝트입니다.</p>
+  </nav>
 
   <main class="work">
-    <div class="kpis" id="kpis"></div>
-    <div class="vtabs" id="vtabs" role="tablist" aria-label="보기 선택">
-      <button role="tab" aria-selected="true" aria-controls="p0" data-t="0">배송 → 리뷰</button>
-      <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">재구매 비교</button>
-      <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">지연 일수별</button>
-      <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">월별 추이</button>
-      <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">재구매 시점</button>
-      <button role="tab" aria-selected="false" aria-controls="p5" data-t="5">리뷰 원문<i id="rvTabN"></i></button>
+    <div class="toolbar">
+      <button class="fopen" id="fOpen" aria-expanded="false" aria-controls="filters">조건<i id="fBadge"></i></button>
+      <div class="active" id="active"></div>
+      <div class="tn" id="tN"></div>
     </div>
 
     <section class="panel" id="p0" role="tabpanel">
-      <div class="cols">
-        <div>
-          <div class="ph"><h2>배송이 늦으면 부정 리뷰가 늘어날까?</h2><div class="verdict" id="v1"></div></div>
-          <p class="desc">원의 넓이 = 부정 리뷰(1~2점) 비율. 검은 원은 배송이 늦은 고객, 밝은 원은 정시에 받은 고객입니다.</p>
-          <div class="circles" id="circles"></div>
-        </div>
-        <div>
-          <div class="ph"><h2>상품을 받기 전에 쓴 리뷰</h2><span class="tag na">사후 탐색</span></div>
-          <p class="desc" id="beforeDesc"></p>
-          <div class="bars" id="beforeBars"></div>
-        </div>
-      </div>
+      <h1>Olist 주문·고객 데이터 <b>탐색</b></h1>
+      <p class="desc">브라질 이커머스 Olist의 주문과 고객 기록을 있는 그대로 보여 줍니다. 위의 <b>조건</b>으로 기간, 주문 상태, 카테고리, 지역, 결제, 배송, 리뷰를 골라 검색하고, 왼쪽 메뉴에서 자세한 통계를 볼 수 있어요.</p>
+      <p class="scale" id="scale"></p>
+      <div class="kpis" id="kpis"></div>
+      <div class="card2" style="margin-top:16px"><div class="ph"><h2>월별 주문 수</h2></div><div class="svgbox" id="homeChart"><div class="tip"></div></div></div>
     </section>
 
     <section class="panel" id="p1" role="tabpanel" hidden>
-      <p class="desc" style="margin-top:0">점 = 180일 재구매율, 막대 = 95% 신뢰구간(실제 값이 있을 법한 범위). 막대가 많이 겹치면 우연과 구분하기 어렵습니다.</p>
-      <div class="block" style="margin-top:18px"><div class="ph"><h2>배송 지연 → 재구매</h2><div class="verdict" id="v2"></div></div><div class="ci" id="ci1"></div><div class="axis" id="ax1"></div></div>
-      <div class="block"><div class="ph"><h2>리뷰 → 재구매</h2><div class="verdict" id="v3"></div></div><div class="ci" id="ci2"></div><div class="axis" id="ax2"></div></div>
-      <p class="note">조건을 바꿔 가며 여러 번 비교하면 우연히 "의미 있는 차이"가 나올 수 있습니다. 분석 계획에서 미리 정한 주 비교는 조건을 고르지 않은 전체 고객 기준입니다.</p>
+      <div class="grid3" id="dists"></div>
+      <p class="note">막대를 누르면 그 항목이 조건으로 추가됩니다. 같은 막대를 다시 누르면 빠집니다.</p>
     </section>
 
     <section class="panel" id="p2" role="tabpanel" hidden>
-      <div class="ph"><h2>늦어질수록 무엇이 달라질까?</h2></div>
-      <p class="desc">지연 일수 구간별 부정 리뷰 비율과 180일 재구매율입니다.</p>
-      <div class="bars" id="bucketBars"></div>
+      <div class="ph"><h2>월별 추이</h2><div class="tabs" id="mtabs" role="group" aria-label="지표 선택"></div></div>
+      <div class="svgbox" id="lineBox"><div class="tip"></div></div>
     </section>
 
     <section class="panel" id="p3" role="tabpanel" hidden>
-      <div class="ph"><h2>첫 구매 월별 추이</h2><div class="tabs" id="mtabs" role="group" aria-label="월별 지표 선택"></div></div>
-      <div class="svgbox" id="lineBox"><div class="tip" id="tip"></div></div>
+      <div class="ph"><h2>리뷰 원문</h2></div>
+      <p class="desc">글이 있는 리뷰를 조건에 맞게 모아 봅니다. 원문은 포르투갈어이고, 일부 리뷰에는 AI(Claude)가 옮긴 한국어 번역이 붙어 있습니다. 한국어와 포르투갈어 모두 검색됩니다.</p>
+      <div class="rvbar">
+        <div class="seg" id="rvStars" role="group" aria-label="별점 고르기"></div>
+        <label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
+          <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
+        </select></label>
+      </div>
+      <div class="rvtools">
+        <input type="search" id="rvq" placeholder="리뷰 검색 (예: 배송, 환불, recebi)" aria-label="리뷰 검색">
+        <label><input type="checkbox" id="rvKo"> 한국어 번역이 있는 리뷰만</label>
+      </div>
+      <div class="rvcount" id="rvcount"></div>
+      <div class="rvscroll"><div class="rvlist" id="rvlist"></div><button class="more" id="rvmore" hidden>더 보기</button></div>
     </section>
 
     <section class="panel" id="p4" role="tabpanel" hidden>
-      <div class="ph"><h2>첫 구매 후 며칠 만에 다시 샀나</h2></div>
-      <p class="desc" id="histDesc"></p>
-      <div class="svgbox" id="histBox"></div>
-    </section>
-
-    <section class="panel" id="p5" role="tabpanel" hidden>
-      <div class="rvhead">
-        <div class="ph"><h2>부정 리뷰 원문</h2><div class="tabs" id="rvLate" role="group" aria-label="배송 구분"></div></div>
-        <p class="desc">포르투갈어 원문과 AI(Claude)가 옮긴 한국어 번역입니다. 주제는 미리 정한 단어 사전 기준이고, 한국어·포르투갈어 모두 검색됩니다.</p>
-        <div class="chips" id="rvThemes"></div>
-        <div class="rvtools"><input id="rvq" type="search" placeholder="리뷰 검색 (예: 받지 못, 환불, recebi)" aria-label="리뷰 검색"></div>
-        <div class="rvcount" id="rvcount"></div>
-      </div>
-      <div class="rvscroll" id="rvscroll">
-        <div class="rvlist" id="rvlist"></div>
-        <button class="more" id="rvmore">더 보기</button>
-      </div>
+      <div class="ph"><h2>주문 흐름</h2></div>
+      <p class="desc">생키 다이어그램 · 주문이 배송 결과와 리뷰 별점으로 어떻게 나뉘는지 보여 줍니다. 띠 두께가 주문 수입니다. 칸을 누르면 그 주문만 조건으로 골라집니다.</p>
+      <div class="fsel" id="fSel"></div>
+      <div class="fsvg" id="fSvg"></div>
+      <p class="note" id="fNote"></p>
     </section>
   </main>
 </div>
 
-<script src="data/explorer.js"></script>
+<aside class="filters" id="filters" aria-label="조건 고르기">
+  <div class="fhead"><b>조건 고르기</b><button class="xbtn" id="fClose" aria-label="조건 닫기">✕</button></div>
+  <p class="fcount" id="fCount"></p>
+  <details class="fg" open><summary><h4>기간 (주문 월)</h4><span class="fsv" id="fsv-m"></span><button data-clear="m">전체</button></summary>
+    <div class="range"><select id="m0" aria-label="시작 월"></select><span>~</span><select id="m1" aria-label="끝 월"></select></div></details>
+  <div id="fgroups"></div>
+  <button class="reset" id="reset">조건 모두 지우기</button>
+  <p class="note">고른 조건은 주소에 담겨 링크로 공유할 수 있습니다.</p>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<script src="data/orders.js"></script>
 <script>
 (function () {
-  var D = window.OLIST, dims = D.dims;
-  var NM = dims.m.length;
-  var F = { c: new Set(), s: new Set(), p: new Set(), m0: 0, m1: NM - 1 };
-  var fmt = function (n) { return n.toLocaleString('ko-KR'); };
-  var pc = function (x, d) { return isFinite(x) ? (x * 100).toFixed(d == null ? 1 : d) + '%' : '–'; };
-  var $ = function (id) { return document.getElementById(id); };
-  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  'use strict';
+  const D = window.OLIST, dims = D.dims, C = D.cols, N = C.m.length, NM = dims.m.length;
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => Math.round(n).toLocaleString('ko-KR');
+  const pc = (x, d = 1) => (isFinite(x) ? (x * 100).toFixed(d) + '%' : '–');
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const man = (v) => (v >= 1e4 ? fmt(v / 1e4) + '만' : fmt(v));
+  const mlabel = (i) => dims.m[i].replace('-', '.');
+  const wide = () => window.innerWidth > 1000;
 
-  /* ---------- 통계 ---------- */
-  function wilson(k, n) {
-    if (!n) return [NaN, NaN];
-    var z = 1.959964, p = k / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d,
-        h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d;
-    return [Math.max(0, c - h), Math.min(1, c + h)];
-  }
-  function erfc(x) { // Numerical Recipes erfcc
-    var z = Math.abs(x), t = 1 / (1 + .5 * z);
-    var r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (.37409196 + t * (.09678418 + t * (-.18628806 + t * (.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-.82215223 + t * .17087277)))))))));
-    return x >= 0 ? r : 2 - r;
-  }
-  function chi2p(a, b) { // a, b: {n, k}; 2x2, 연속성 보정 없음 (analyze.py 와 같음)
-    var A = a.k, B = a.n - a.k, C = b.k, Dd = b.n - b.k, N = a.n + b.n;
-    var r1 = a.n, r2 = b.n, c1 = A + C, c2 = B + Dd;
-    if (!c1 || !c2) return { p: 1, low: true };
-    var low = [r1 * c1, r1 * c2, r2 * c1, r2 * c2].some(function (x) { return x / N < 5; });
-    var chi = N * Math.pow(A * Dd - B * C, 2) / (r1 * r2 * c1 * c2);
-    return { p: erfc(Math.sqrt(chi / 2)), low: low };
-  }
-  function verdict(a, b, repeat) {
-    if (a.n < 200 || b.n < 200) return { c: 'na', t: '결론 없음', w: '그룹 200명 미만' };
-    if (repeat && (a.k < 10 || b.k < 10)) return { c: 'na', t: '표본 부족', w: '재구매 10명 미만' };
-    var r = chi2p(a, b);
-    if (r.low) return { c: 'na', t: '표본 부족', w: '기대 빈도 5 미만' };
-    var ps = r.p < .001 ? 'p < 0.001' : 'p = ' + (r.p < .1 ? r.p.toFixed(3) : r.p.toFixed(2));
-    return r.p < .05 ? { c: 'yes', t: '의미 있는 차이', w: ps } : { c: '', t: '차이 없음', w: ps + ' · 우연 범위' };
-  }
-  function niceMax(v) { // 눈금 4칸이 1·2·2.5·5 단위로 떨어지도록
-    var raw = v / 4, p = Math.pow(10, Math.floor(Math.log10(raw))), s = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(function (m) { return m * p >= raw; });
-    return s * p * 4;
-  }
-  var vtag = function (v) { return '<span class="tag ' + v.c + '">' + v.t + '</span> <span>' + v.w + '</span>'; };
+  /* ---------- 조건 정의 ---------- */
+  const PB = ['R$ 50 미만', 'R$ 50~100', 'R$ 100~200', 'R$ 200 이상'];
+  const pbOf = new Int8Array(N);
+  for (let i = 0; i < N; i++) { const v = C.pv[i]; pbOf[i] = v < 50 ? 0 : v < 100 ? 1 : v < 200 ? 2 : 3; }
+  const RS = ['리뷰 없음', '★1', '★2', '★3', '★4', '★5'];
+  const FD = [
+    { k: 'st', t: '주문 상태', labels: dims.st, get: (i) => C.st[i], open: true },
+    { k: 'sq', t: '주문 구분', labels: ['첫 주문', '재주문'], get: (i) => C.sq[i] },
+    { k: 'dl', t: '배송', labels: dims.dl, get: (i) => C.dl[i] },
+    { k: 'rs', t: '리뷰 별점', labels: RS, get: (i) => C.rs[i], order: [5, 4, 3, 2, 1, 0] },
+    { k: 'pt', t: '결제 수단', labels: dims.pt, get: (i) => C.pt[i] },
+    { k: 'pb', t: '결제 금액', labels: PB, get: (i) => pbOf[i] },
+    { k: 'c', t: '카테고리', labels: dims.c, get: (i) => C.c[i], list: true, search: true },
+    { k: 's', t: '고객 지역 (주)', labels: dims.sKo, small: dims.s, get: (i) => C.s[i], list: true },
+  ];
+  const FK = {}; FD.forEach((f) => { FK[f.k] = f; });
+  const F = { m0: 0, m1: NM - 1, sets: {} };
+  FD.forEach((f) => { F.sets[f.k] = new Set(); });
 
   /* ---------- 집계 ---------- */
-  function pass(r) {
-    return r[0] >= F.m0 && r[0] <= F.m1 && (!F.c.size || F.c.has(r[1])) && (!F.s.size || F.s.has(r[2])) && (!F.p.size || F.p.has(r[3]));
+  let NCU = 0, NSE = 0;
+  for (let i = 0; i < N; i++) { if (C.cu[i] >= NCU) NCU = C.cu[i] + 1; if (C.se[i] >= NSE) NSE = C.se[i] + 1; }
+  const cuStamp = new Int32Array(NCU), cuCnt = new Int32Array(NCU), seStamp = new Int32Array(NSE);
+  let gen = 0;
+  const dG = (dl) => (dl === 0 ? 0 : dl < 4 ? 1 : 2);                 // 흐름: 정시 / 늦게 / 기록 없음
+  const rG = (rs) => (rs >= 4 ? 0 : rs === 3 ? 1 : rs >= 1 ? 2 : 3);   // 흐름: ★4~5 / ★3 / ★1~2 / 없음
+
+  function passOf(skip) {
+    const act = FD.filter((f) => F.sets[f.k].size && !(skip && skip.includes(f.k)));
+    return (i) => {
+      const m = C.m[i]; if (m < F.m0 || m > F.m1) return false;
+      for (const f of act) if (!F.sets[f.k].has(f.get(i))) return false;
+      return true;
+    };
   }
-  function agg(all) {
-    var a = { n: 0, rep: 0, known: 0, late: 0, rev: 0, neg: 0,
-      L: { n: 0, k: 0 }, O: { n: 0, k: 0 }, Lr: { n: 0, k: 0 }, Or: { n: 0, k: 0 },
-      R: [0, 1, 2, 3].map(function () { return { n: 0, k: 0 }; }),
-      B: [0, 1, 2, 3].map(function () { return { n: 0, rep: 0, rev: 0, neg: 0 }; }),
-      M: dims.m.map(function () { return { n: 0, rep: 0, known: 0, late: 0, rev: 0, neg: 0 }; }),
-      bf: { n: 0, k: 0 }, af: { n: 0, k: 0 } };
-    D.cube.forEach(function (r) {
-      if (!all && !pass(r)) return;
-      var b = r[4], rv = r[5], w = r[6], n = r[7], rep = r[8], hasRev = rv !== 3, isNeg = rv === 2, m = a.M[r[0]];
-      a.n += n; a.rep += rep; m.n += n; m.rep += rep;
-      a.R[rv].n += n; a.R[rv].k += rep;
-      if (hasRev) { a.rev += n; m.rev += n; if (isNeg) { a.neg += n; m.neg += n; } }
-      if (b === 4) return; // 배송일 기록 없음
-      a.known += n; m.known += n;
-      var late = b > 0, g = late ? a.L : a.O, gr = late ? a.Lr : a.Or, bk = a.B[b];
-      g.n += n; g.k += rep; bk.n += n; bk.rep += rep;
-      if (late) { a.late += n; m.late += n; }
-      if (hasRev) {
-        gr.n += n; bk.rev += n; if (isNeg) { gr.k += n; bk.neg += n; }
-        if (late) { var t = w ? a.bf : a.af; t.n += n; if (isNeg) t.k += n; }
-      }
-    });
-    return a;
+  function compute(skip) {
+    const pass = passOf(skip); gen++;
+    const R = { n: 0, cu: 0, se: 0, pv: 0, rev: 0, rsum: 0, done: 0, dlv: 0, late: 0, can: 0, dd: 0, ddn: 0, items: 0,
+      M: Array.from({ length: NM }, () => ({ n: 0, pv: 0, rev: 0, rsum: 0, dlv: 0, late: 0, can: 0 })),
+      cnt: {}, fl: [0, 1, 2].map(() => [0, 0, 0, 0]), oc: [0, 0, 0, 0] };
+    FD.forEach((f) => { R.cnt[f.k] = new Array(f.labels.length).fill(0); });
+    const seen = [];
+    for (let i = 0; i < N; i++) {
+      if (!pass(i)) continue;
+      const cu = C.cu[i], se = C.se[i], rs = C.rs[i], dl = C.dl[i], st = C.st[i], mo = R.M[C.m[i]];
+      R.n++; mo.n++;
+      if (cuStamp[cu] !== gen) { cuStamp[cu] = gen; cuCnt[cu] = 0; R.cu++; seen.push(cu); }
+      cuCnt[cu]++;
+      if (se >= 0 && seStamp[se] !== gen) { seStamp[se] = gen; R.se++; }
+      R.pv += C.pv[i]; mo.pv += C.pv[i]; R.items += C.n[i];
+      if (rs > 0) { R.rev++; R.rsum += rs; mo.rev++; mo.rsum += rs; }
+      if (st === 0) R.done++;
+      if (st === 6 || st === 7) { R.can++; mo.can++; }
+      if (dl < 4) { R.dlv++; mo.dlv++; if (dl > 0) { R.late++; mo.late++; } }
+      if (C.dd[i] >= 0) { R.dd += C.dd[i]; R.ddn++; }
+      for (const f of FD) R.cnt[f.k][f.get(i)]++;
+      R.fl[dG(dl)][rG(rs)]++;
+    }
+    for (const cu of seen) R.oc[Math.min(3, cuCnt[cu] - 1)]++;
+    return R;
   }
-  var ALL = agg(true);
+  const ALL = compute();
+  let S = ALL;
 
   /* ---------- 조건 패널 ---------- */
-  function chips(el, key, labels, counts) {
-    el.innerHTML = labels.map(function (l, i) {
-      return '<button class="chip" data-k="' + key + '" data-i="' + i + '" aria-pressed="false">' + esc(l) + (counts ? '<small>' + fmt(counts[i]) + '</small>' : '') + '</button>';
-    }).join('');
-  }
-  var cnt = function (j, len) { var c = new Array(len).fill(0); D.cube.forEach(function (r) { c[r[j]] += r[7]; }); return c; };
-  chips($('fc'), 'c', dims.c, cnt(1, dims.c.length));
-  chips($('fs'), 's', dims.s);
-  var SKO = D.stateKo || dims.s;
-  $('fs').querySelectorAll('.chip').forEach(function (b, i) { b.title = SKO[i]; b.setAttribute('aria-label', SKO[i] + ' (' + dims.s[i] + ')'); });
-  chips($('fp'), 'p', dims.p, cnt(3, dims.p.length));
-  ['m0', 'm1'].forEach(function (id) {
-    $(id).innerHTML = dims.m.map(function (m, i) { return '<option value="' + i + '">' + m.replace('-', '년 ') + '월</option>'; }).join('');
-  });
+  ['m0', 'm1'].forEach((id) => { $(id).innerHTML = dims.m.map((m, i) => `<option value="${i}">${m.replace('-', '년 ')}월</option>`).join(''); });
   $('m1').value = NM - 1;
-  document.querySelector('.app').addEventListener('click', function (e) {
-    var b = e.target.closest('.chip[data-k]');
-    if (b && b.closest('#filters')) {
-      var set = F[b.dataset.k], i = +b.dataset.i;
-      set.has(i) ? set.delete(i) : set.add(i);
-      b.setAttribute('aria-pressed', set.has(i));
-      return update();
-    }
-    var c = e.target.closest('[data-clear]');
-    if (c) { clearKey(c.dataset.clear); update(); }
+  $('fgroups').innerHTML = FD.map((f) => {
+    const idx = f.order || f.labels.map((_, i) => i);
+    const chips = idx.map((i) => `<button class="chip" data-k="${f.k}" data-i="${i}" aria-pressed="false" title="${esc(f.labels[i])} · 전체 ${fmt(ALL.cnt[f.k][i])}건">${esc(f.labels[i])}${f.small ? `<small>${f.small[i]}</small>` : ''}</button>`).join('');
+    return `<details class="fg"${f.open ? ' open' : ''}><summary><h4>${f.t}</h4><span class="fsv" id="fsv-${f.k}"></span><button data-clear="${f.k}">전체</button></summary>` +
+      (f.search ? `<input class="fsearch" type="search" data-search="${f.k}" placeholder="${f.t} 찾기" aria-label="${f.t} 찾기">` : '') +
+      `<div class="chips${f.list ? ' list' : ''}" id="chips-${f.k}">${chips}</div></details>`;
+  }).join('');
+  document.querySelectorAll('[data-search]').forEach((inp) => {
+    inp.addEventListener('input', () => {
+      const q = inp.value.trim();
+      document.querySelectorAll(`#chips-${inp.dataset.search} .chip`).forEach((b) => { b.hidden = !!q && !b.textContent.includes(q); });
+    });
   });
+  function toggle(k, i) { const s = F.sets[k]; s.has(i) ? s.delete(i) : s.add(i); update(); }
   function clearKey(k) {
-    if (k === 'm') { F.m0 = 0; F.m1 = NM - 1; $('m0').value = 0; $('m1').value = NM - 1; return; }
-    F[k].clear();
-    document.querySelectorAll('.chip[data-k="' + k + '"]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    if (k === 'm') { F.m0 = 0; F.m1 = NM - 1; $('m0').value = 0; $('m1').value = NM - 1; }
+    else F.sets[k].clear();
   }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('.chip[data-k], .dr[data-k]');
+    if (b) return toggle(b.dataset.k, +b.dataset.i);
+    const c = e.target.closest('[data-clear]');
+    if (c) { e.preventDefault(); clearKey(c.dataset.clear); update(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.dr[data-k]')) { e.preventDefault(); toggle(e.target.dataset.k, +e.target.dataset.i); }
+    if (e.key === 'Escape' && $('filters').classList.contains('open')) setFilters(false);
+  });
   $('m0').onchange = $('m1').onchange = function () {
-    var a = +$('m0').value, b = +$('m1').value;
+    let a = +$('m0').value, b = +$('m1').value;
     if (a > b) { if (this.id === 'm0') { b = a; $('m1').value = b; } else { a = b; $('m0').value = a; } }
     F.m0 = a; F.m1 = b; update();
   };
-  $('reset').onclick = function () { ['c', 's', 'p', 'm'].forEach(clearKey); update(); };
-  $('ftoggle').onclick = function () {
-    var f = $('filters'), o = f.classList.toggle('open');
-    this.setAttribute('aria-expanded', o);
-  };
-
-  /* ---------- 탭 ---------- */
-  var TAB = 0, wide = function () { return window.innerWidth > 1000; };
-  function room(el, min, fallback) { // 탭 안에서 el 아래로 남은 높이
-    if (!wide()) return fallback;
-    var p = el.closest('.panel'), r = p.getBoundingClientRect(), b = el.getBoundingClientRect();
-    return Math.max(min, Math.floor(r.bottom - b.top - 32));
+  $('reset').onclick = () => { clearKey('m'); FD.forEach((f) => clearKey(f.k)); update(); };
+  function setFilters(open) {
+    $('filters').classList.toggle('open', open); $('scrim').hidden = !open;
+    $('fOpen').setAttribute('aria-expanded', open);
+    (open ? $('fClose') : $('fOpen')).focus();
   }
+  $('fOpen').onclick = () => setFilters(!$('filters').classList.contains('open'));
+  $('fClose').onclick = $('scrim').onclick = () => setFilters(false);
+
+  function syncFilters() {
+    document.querySelectorAll('.chip[data-k]').forEach((b) => b.setAttribute('aria-pressed', F.sets[b.dataset.k].has(+b.dataset.i)));
+    FD.forEach((f) => { $('fsv-' + f.k).textContent = [...F.sets[f.k]].map((i) => f.labels[i]).join(', '); });
+    const ranged = F.m0 > 0 || F.m1 < NM - 1;
+    $('fsv-m').textContent = ranged ? mlabel(F.m0) + ' ~ ' + mlabel(F.m1) : '';
+    const items = [];
+    if (ranged) items.push(['m', '기간', mlabel(F.m0) + ' ~ ' + mlabel(F.m1)]);
+    FD.forEach((f) => [...F.sets[f.k]].sort((a, b) => a - b).forEach((i) => items.push([f.k + ':' + i, f.t, f.labels[i]])));
+    $('active').innerHTML = items.length
+      ? items.map((x) => `<button class="ach" data-rm="${x[0]}" aria-label="${esc(x[1] + ' ' + x[2])} 조건 지우기"><small>${esc(x[1])}</small>${esc(x[2])}<span aria-hidden="true">✕</span></button>`).join('') + '<button class="aclr" data-rm="all">모두 지우기</button>'
+      : '<span class="hint">조건 없이 전체 주문을 보고 있어요</span>';
+    $('fBadge').textContent = items.length || '';
+    const txt = `주문 <b>${fmt(S.n)}</b>건 · 고객 ${fmt(S.cu)}명` + (S.n < ALL.n ? ` · 전체 주문의 ${pc(S.n / ALL.n)}` : '');
+    $('tN').innerHTML = txt; $('fCount').innerHTML = txt;
+  }
+  $('active').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-rm]'); if (!b) return;
+    const r = b.dataset.rm;
+    if (r === 'all') { clearKey('m'); FD.forEach((f) => clearKey(f.k)); }
+    else if (r === 'm') clearKey('m');
+    else { const [k, i] = r.split(':'); F.sets[k].delete(+i); }
+    update();
+  });
+
+  /* ---------- 그리기 도구 ---------- */
+  function niceMax(v) {
+    const raw = v / 4, p = Math.pow(10, Math.floor(Math.log10(raw)));
+    return [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((m) => m * p >= raw) * p * 4;
+  }
+  function room(el, min, fallback) {
+    if (!wide()) return fallback;
+    const p = el.closest('.panel').getBoundingClientRect(), b = el.getBoundingClientRect();
+    return Math.max(min, Math.floor(p.bottom - b.top - 34));
+  }
+  function svgEl(box, w, h, body) {
+    const old = box.querySelector('svg'); if (old) old.remove();
+    box.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 ${w} ${h}" height="${h}" role="img">${body}</svg>`);
+    return box.querySelector('svg');
+  }
+  function bindTip(box, svg, W, text, pos) {
+    const tip = box.querySelector('.tip');
+    svg.onmousemove = (e) => {
+      const t = e.target.closest('[data-k]'); if (!t) return tip.classList.remove('on');
+      const k = +t.dataset.k, [x, y] = pos(k);
+      tip.innerHTML = text(k); tip.style.left = x / W * box.clientWidth + 'px'; tip.style.top = y + 'px'; tip.classList.add('on');
+    };
+    svg.onmouseleave = () => tip.classList.remove('on');
+  }
+  function axisY(L, R, W, y, mx, label) {
+    let s = '';
+    for (let g = 0; g <= 4; g++) { const v = mx * g / 4; s += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${label(v)}</text>`; }
+    return s;
+  }
+  function axisX(n, x, H, idx) {
+    const span = n > 1 ? x(n - 1) - x(0) : 100, step = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(span / 52))));
+    let s = '';
+    for (let k = 0; k < n; k++) {
+      const last = k === n - 1;
+      if ((k % step === 0 && (last || n - 1 - k >= step)) || last) s += `<text x="${x(k).toFixed(1)}" y="${H - 6}" text-anchor="middle">${dims.m[idx(k)].slice(2).replace('-', '.')}</text>`;
+    }
+    return s;
+  }
+
+  /* ---------- 0. 홈 ---------- */
+  function renderHome() {
+    $('scale').innerHTML = `기간 <b>${mlabel(F.m0)} ~ ${mlabel(F.m1)}</b> · 판매자 <b>${fmt(S.se)}</b>명 · 상품 <b>${fmt(S.items)}</b>개 · 카테고리 <b>${S.cnt.c.filter((v) => v > 0).length}</b>개`;
+    const multi = S.oc[1] + S.oc[2] + S.oc[3];
+    const k = [
+      ['주문', fmt(S.n), '건', '배송 완료 ' + pc(S.done / S.n)],
+      ['고객', fmt(S.cu), '명', '2회 이상 주문 ' + pc(multi / S.cu)],
+      ['결제 금액', 'R$ ' + man(S.pv), '', '주문당 평균 R$ ' + fmt(S.pv / S.n)],
+      ['평균 리뷰 점수', S.rev ? (S.rsum / S.rev).toFixed(2) : '–', '점', '리뷰 ' + fmt(S.rev) + '건 · 작성 ' + pc(S.rev / S.n)],
+    ];
+    $('kpis').innerHTML = k.map((x) => `<div class="kpi"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></div>`).join('');
+    const box = $('homeChart'), W = box.clientWidth || 800, H = wide() ? Math.max(220, Math.min(380, room(box, 220, 260))) : 240;
+    const L = 52, R = 10, T = 16, B = 26, pts = [];
+    for (let i = F.m0; i <= F.m1; i++) pts.push({ i, v: S.M[i].n });
+    const mx = niceMax(Math.max(4, Math.max(...pts.map((p) => p.v)) * 1.05)), bw = (W - L - R) / pts.length;
+    const y = (v) => T + (H - T - B) * (1 - v / mx), xc = (k) => L + k * bw + bw / 2;
+    let s = axisY(L, R, W, y, mx, (v) => fmt(v));
+    pts.forEach((p, k) => { s += `<rect class="mbar" x="${(L + k * bw + bw * .15).toFixed(1)}" y="${y(p.v).toFixed(1)}" width="${(bw * .7).toFixed(1)}" height="${(y(0) - y(p.v)).toFixed(1)}" data-k="${k}"/>`; });
+    s += axisX(pts.length, xc, H, (k) => pts[k].i);
+    const svg = svgEl(box, W, H, s);
+    bindTip(box, svg, W, (k) => `<b>${dims.m[pts[k].i]}</b> · 주문 ${fmt(pts[k].v)}건`, (k) => [xc(k), y(pts[k].v)]);
+  }
+
+  /* ---------- 1. 분포 ---------- */
+  function rows(key, labels, counts, o = {}) {
+    let idx = (o.order || counts.map((_, i) => i)).filter((i) => counts[i] > 0);
+    if (o.sort) idx.sort((a, b) => counts[b] - counts[a]);
+    const tot = counts.reduce((a, b) => a + b, 0), shown = o.top ? idx.slice(0, o.top) : idx, rest = o.top ? idx.slice(o.top) : [];
+    const mx = Math.max(1, ...shown.map((i) => counts[i]));
+    const row = (label, v, i, click) => {
+      const on = click && F.sets[key].has(i);
+      const attrs = click ? ` data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(label)} 조건 ${on ? '빼기' : '추가'}"` : '';
+      return `<div class="dr${click ? ' click' : ''}${on ? ' on' : ''}"${attrs}><span class="l" title="${esc(label)}">${esc(label)}</span><span class="t"><i style="width:${Math.min(100, v / mx * 100)}%"></i></span><span class="v">${fmt(v)}<small>${tot ? pc(v / tot) : '–'}</small></span></div>`;
+    };
+    let h = shown.map((i) => row(labels[i], counts[i], i, !!key)).join('');
+    if (rest.length) h += row(`그 외 ${rest.length}개`, rest.reduce((a, i) => a + counts[i], 0), -1, false);
+    return h || '<p class="sub">해당 주문이 없습니다.</p>';
+  }
+  const card = (title, body, sub) => `<div class="card2"><div class="ph"><h2>${title}</h2>${sub ? `<small>${sub}</small>` : ''}</div>${body}</div>`;
+  function renderDist() {
+    const c = S.cnt, dl = c.dl, dlv = dl[0] + dl[1] + dl[2] + dl[3], late = dl[1] + dl[2] + dl[3];
+    const deliv = (dlv ? `<div class="sb"><i class="k0" style="width:${dl[0] / dlv * 100}%"></i><i class="k1" style="width:${late / dlv * 100}%"></i></div>` +
+      `<div class="sbl"><span><b class="k0"></b>정시 도착 <strong>${pc(dl[0] / dlv)}</strong><small>${fmt(dl[0])}건</small></span><span><b class="k1"></b>늦게 도착 <strong>${pc(late / dlv)}</strong><small>${fmt(late)}건</small></span></div>` : '') +
+      `<p class="sub">도착한 주문의 평균 배송 기간 <b>${S.ddn ? (S.dd / S.ddn).toFixed(1) + '일' : '–'}</b></p>` +
+      `<div class="dist">${rows('dl', dims.dl, dl)}</div>`;
+    const oc = `<div class="dist">${rows(null, ['1회', '2회', '3회', '4회 이상'], S.oc)}</div><p class="sub">주문 기준 (같은 고객의 두 번째 이후 주문 = 재주문)</p><div class="dist">${rows('sq', FK.sq.labels, c.sq)}</div>`;
+    $('dists').innerHTML = [
+      card('주문 상태', `<div class="dist">${rows('st', dims.st, c.st)}</div>`, fmt(S.n) + '건'),
+      card('배송', deliv),
+      card('리뷰 별점', `<div class="dist">${rows('rs', RS, c.rs, { order: [5, 4, 3, 2, 1, 0] })}</div><p class="sub">평균 <b>${S.rev ? (S.rsum / S.rev).toFixed(2) + '점' : '–'}</b></p>`),
+      card('결제 수단', `<div class="dist">${rows('pt', dims.pt, c.pt)}</div>`),
+      card('결제 금액', `<div class="dist">${rows('pb', PB, c.pb)}</div><p class="sub">주문당 평균 <b>R$ ${S.n ? fmt(S.pv / S.n) : '–'}</b></p>`),
+      card('고객별 주문 횟수', oc, fmt(S.cu) + '명'),
+      card('카테고리', `<div class="dist">${rows('c', dims.c, c.c, { sort: 1, top: 10 })}</div>`, '첫 번째 상품 기준'),
+      card('고객 지역 (주)', `<div class="dist">${rows('s', dims.sKo, c.s, { sort: 1, top: 10 })}</div>`),
+    ].join('');
+  }
+
+  /* ---------- 2. 월별 추이 ---------- */
+  const METRICS = [
+    { l: '주문 수', f: (m) => m.n, v: (x) => fmt(x) + '건', ax: (x) => fmt(x) },
+    { l: '결제 금액', f: (m) => m.pv, v: (x) => 'R$ ' + fmt(x), ax: (x) => man(x) },
+    { l: '평균 리뷰 점수', f: (m) => (m.rev ? m.rsum / m.rev : NaN), v: (x) => x.toFixed(2) + '점', ax: (x) => x.toFixed(2).replace(/\.?0+$/, ''), fixed: 5 },
+    { l: '늦게 도착한 비율', f: (m) => (m.dlv ? m.late / m.dlv : NaN), v: (x) => pc(x), ax: (x) => +(x * 100).toFixed(1) + '%' },
+    { l: '취소·상품 없음 비율', f: (m) => (m.n ? m.can / m.n : NaN), v: (x) => pc(x, 2), ax: (x) => +(x * 100).toFixed(2) + '%' },
+  ];
+  let MET = 0;
+  $('mtabs').innerHTML = METRICS.map((m, i) => `<button aria-pressed="${i === 0}" data-i="${i}">${m.l}</button>`).join('');
+  $('mtabs').onclick = (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    MET = +b.dataset.i; $('mtabs').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); renderTrend();
+  };
+  function renderTrend() {
+    const box = $('lineBox'), W = box.clientWidth || 800, H = Math.min(460, room(box, 240, 280)), M = METRICS[MET];
+    const L = 60, R = 20, T = 20, B = 28, pts = [];
+    for (let i = F.m0; i <= F.m1; i++) { const m = S.M[i]; pts.push({ i, v: m.n ? M.f(m) : NaN, n: m.n }); }
+    const vals = pts.map((p) => p.v).filter(isFinite);
+    const mx = M.fixed || niceMax(Math.max(1e-6, (vals.length ? Math.max(...vals) : 1) * 1.1));
+    const x = (k) => L + (pts.length === 1 ? (W - L - R) / 2 : k * (W - L - R) / (pts.length - 1)), y = (v) => T + (H - T - B) * (1 - v / mx);
+    let s = axisY(L, R, W, y, mx, M.ax) + axisX(pts.length, x, H, (k) => pts[k].i), d = '', on = false;
+    pts.forEach((p, k) => { if (isFinite(p.v)) { d += (on ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(p.v).toFixed(1); on = true; } else on = false; });
+    s += `<path class="ln" d="${d}"/>`;
+    pts.forEach((p) => { if (isFinite(p.v)) s += `<circle class="pt" r="3.5" cx="${x(pts.indexOf(p))}" cy="${y(p.v)}"/>`; });
+    const cw = (W - L - R) / Math.max(1, pts.length - 1);
+    pts.forEach((p, k) => { s += `<rect x="${x(k) - cw / 2}" y="${T}" width="${cw}" height="${H - T - B}" fill="transparent" data-k="${k}"/>`; });
+    const svg = svgEl(box, W, H, s);
+    bindTip(box, svg, W, (k) => `<b>${dims.m[pts[k].i]}</b> · ${isFinite(pts[k].v) ? M.v(pts[k].v) : '주문 없음'}${MET ? ` <span style="opacity:.7">(주문 ${fmt(pts[k].n)}건)</span>` : ''}`, (k) => [x(k), isFinite(pts[k].v) ? y(pts[k].v) : y(0)]);
+  }
+
+  /* ---------- 3. 리뷰 원문 ---------- */
+  const RV = { star: 0, sort: 'new', q: '', ko: false, shown: 30, loaded: false, loading: false, list: [] };   // star 0 = 전체
+  const norm = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
+  $('rvStars').onclick = (e) => {
+    const b = e.target.closest('[data-star]'); if (!b) return;
+    RV.star = +b.dataset.star; RV.shown = 30; renderReviews();
+  };
+  $('rvSort').onchange = (e) => { RV.sort = e.target.value; RV.shown = 30; renderReviews(); };
+  let qT; $('rvq').oninput = (e) => { clearTimeout(qT); qT = setTimeout(() => { RV.q = norm(e.target.value.trim()); RV.shown = 30; renderReviews(); }, 150); };
+  $('rvKo').onchange = (e) => { RV.ko = e.target.checked; RV.shown = 30; renderReviews(); };
+  $('rvmore').onclick = () => { RV.shown += 30; renderReviews(); };
+  function loadReviews() {
+    if (RV.loading) return;
+    RV.loading = true; $('rvcount').innerHTML = '<span class="loading">리뷰를 불러오는 중…</span>';
+    const sc = document.createElement('script'); sc.src = 'data/reviews.js';
+    sc.onload = () => { RV.list = window.OLIST_REVIEWS || []; RV.list.forEach((r) => { r.nx = norm(r[2] + '\n' + r[3]); }); RV.loaded = true; renderReviews(); };
+    sc.onerror = () => { $('rvcount').textContent = '리뷰 파일을 불러오지 못했습니다.'; RV.loading = false; };
+    document.body.appendChild(sc);
+  }
+  function renderReviews() {
+    if (!RV.loaded) { loadReviews(); return; }
+    const pass = passOf();
+    const base = RV.list.filter((r) => pass(r[0]) && (!RV.ko || r[3]) && (!RV.q || r.nx.includes(RV.q)));
+    const sc = [base.length, 0, 0, 0, 0, 0]; base.forEach((r) => { sc[r[1]]++; });
+    $('rvStars').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => `<button data-star="${n}" aria-pressed="${RV.star === n}">${n ? n + '점' : '전체'}<small>${fmt(sc[n])}</small></button>`).join('');
+    const list = RV.star ? base.filter((r) => r[1] === RV.star) : base.slice();
+    const by = { new: (a, b) => b[0] - a[0], old: (a, b) => a[0] - b[0], hi: (a, b) => b[1] - a[1] || b[0] - a[0], lo: (a, b) => a[1] - b[1] || b[0] - a[0] }[RV.sort];
+    list.sort(by);
+    $('rvN').textContent = fmt(list.length);
+    $('rvcount').innerHTML = `<b>${fmt(list.length)}</b>건 · 그중 한국어 번역 ${fmt(list.filter((r) => r[3]).length)}건`;
+    const hl = (s) => {
+      if (!RV.q || !s) return esc(s);
+      const i = norm(s).indexOf(RV.q);
+      return i < 0 ? esc(s) : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + RV.q.length)) + '</mark>' + esc(s.slice(i + RV.q.length));
+    };
+    $('rvlist').innerHTML = list.length ? list.slice(0, RV.shown).map((r) => {
+      const i = r[0];
+      const meta = [mlabel(C.m[i]), dims.c[C.c[i]], dims.sKo[C.s[i]], C.st[i] === 0 ? dims.dl[C.dl[i]] : dims.st[C.st[i]]].map(esc).join(' · ');
+      return `<div class="rv"><div class="tp"><span class="score" aria-label="별점 ${r[1]}점"><b>★</b>${r[1]}</span><span>${meta}</span></div>` +
+        (r[3] ? `<p>${hl(r[3])}</p><p class="pt" lang="pt">${hl(r[2])}</p>` : `<p lang="pt">${hl(r[2])}</p>`) + '</div>';
+    }).join('') : '<div class="empty" style="grid-column:1/-1">조건에 맞는 리뷰가 없습니다.</div>';
+    $('rvmore').hidden = list.length <= RV.shown;
+  }
+
+  /* ---------- 4. 주문 흐름 (생키) ---------- */
+  const DGN = ['정시 도착', '늦게 도착', '도착 기록 없음'], RGN = ['★4~5', '★3', '★1~2', '리뷰 없음'];
+  const DGS = [[0], [1, 2, 3], [4]], RGS = [[4, 5], [3], [1, 2], [0]];
+  const isOn = (k, arr) => F.sets[k].size === arr.length && arr.every((x) => F.sets[k].has(x));
+  let refocus = null;
+  function pickNode(col, i) {
+    const k = col === 1 ? 'dl' : 'rs', arr = (col === 1 ? DGS : RGS)[i];
+    F.sets[k] = isOn(k, arr) ? new Set() : new Set(arr);
+    refocus = [col, i]; update();
+  }
+  $('fSvg').addEventListener('click', (e) => { const g = e.target.closest('[data-g]'); if (g) pickNode(+g.dataset.g, +g.dataset.i); });
+  $('fSvg').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const g = e.target.closest('[data-g]'); if (g) { e.preventDefault(); pickNode(+g.dataset.g, +g.dataset.i); }
+  });
+  function renderFlow() {
+    const box = $('fSvg'), B = compute(['dl', 'rs']), f = B.fl, sel = F.sets.dl.size || F.sets.rs.size, fs = S.fl;
+    const dv = [0, 0, 0], rv = [0, 0, 0, 0]; let tot = 0;
+    f.forEach((row, d) => row.forEach((v, r) => { dv[d] += v; rv[r] += v; tot += v; }));
+    $('fSel').innerHTML = sel ? `고른 주문 <b>${fmt(S.n)}</b>건 (흐름 전체의 ${pc(S.n / Math.max(1, tot))})` : '<span style="color:var(--mute)">배송이나 리뷰 칸을 누르면 그 주문만 골라집니다. 고른 조건은 다른 메뉴에도 적용돼요.</span>';
+    $('fNote').textContent = '띠 두께는 주문 수에 비례합니다. 아주 얇은 띠는 보이도록 최소 두께를 줬습니다.';
+    if (!tot) { box.innerHTML = '<div class="empty">조건에 맞는 주문이 없습니다.</div>'; return; }
+    const W = Math.max(box.clientWidth || 760, 680), H = Math.max(240, Math.min(460, room(box, 300, 320) - 70));
+    const TOP = 48, LZ = 120, RZ = 170, NW = 12, G = 24, MINH = 4, k = (H - G * 3 - 8) / tot;
+    const X = [LZ, LZ + (W - LZ - RZ - NW) / 2, W - RZ - NW];
+    const nodes = [[tot], dv, rv].map((vals) => {
+      const hs = vals.map((v) => Math.max(MINH, v * k));
+      let y = Math.max(0, (H - (hs.reduce((a, b) => a + b, 0) + G * (vals.length - 1))) / 2);
+      return vals.map((v, i) => { const n = { v, h: hs[i], y, oc: 0, ic: 0 }; y += hs[i] + G; return n; });
+    });
+    const links = [];
+    [0, 1, 2].forEach((d) => links.push({ c: 0, a: 0, b: d, v: dv[d], s: sel ? fs[d].reduce((x, y) => x + y, 0) : 0 }));
+    [0, 1, 2].forEach((d) => [0, 1, 2, 3].forEach((r) => links.push({ c: 1, a: d, b: r, v: f[d][r], s: sel ? fs[d][r] : 0 })));
+    links.forEach((l) => { const n = nodes[l.c][l.a]; l.sy = n.y + n.oc; n.oc += l.v * k; });
+    links.slice().sort((p, q) => p.c - q.c || p.b - q.b || p.a - q.a).forEach((l) => { const n = nodes[l.c + 1][l.b]; l.ty = n.y + n.ic; n.ic += l.v * k; });
+    const Y = (v) => +(v + TOP).toFixed(1), Rd = (v) => +v.toFixed(1);
+    const rib = (x0, y0, x1, y1, t) => { const xm = (x0 + x1) / 2; return `M${Rd(x0)},${y0}C${Rd(xm)},${y0} ${Rd(xm)},${y1} ${Rd(x1)},${y1}L${Rd(x1)},${Rd(y1 + t)}C${Rd(xm)},${Rd(y1 + t)} ${Rd(xm)},${Rd(y0 + t)} ${Rd(x0)},${Rd(y0 + t)}Z`; };
+    const NMS = [['주문'], DGN, RGN];
+    const tipOf = (l) => `${NMS[l.c][l.a]} → ${NMS[l.c + 1][l.b]}: ${fmt(l.v)}건 (${NMS[l.c][l.a]} 주문의 ${pc(l.v / nodes[l.c][l.a].v)})` + (sel ? ` · 고른 주문 ${fmt(l.s)}건` : '');
+    let s = '';
+    [['주문', fmt(tot) + '건'], ['배송 결과', '정시 도착 ' + pc(dv[0] / tot)], ['리뷰 별점', '★4~5 ' + pc(rv[0] / tot)]].forEach((h, c) => {
+      const x = c ? X[c] : 0; s += `<text class="hd1" x="${x}" y="14">${h[0]}</text><text class="hd2" x="${x}" y="33">${h[1]}</text>`;
+    });
+    links.forEach((l) => { if (l.v > 0) s += `<path class="rb" d="${rib(X[l.c] + NW, Y(l.sy), X[l.c + 1], Y(l.ty), Math.max(1.2, l.v * k))}" data-tip="${esc(tipOf(l))}"/>`; });
+    if (sel) links.forEach((l) => { if (l.s > 0) s += `<path class="rs" d="${rib(X[l.c] + NW, Y(l.sy), X[l.c + 1], Y(l.ty), Math.max(1.2, l.s * k))}" data-tip="${esc(tipOf(l))}"/>`; });
+    nodes.forEach((col, c) => col.forEach((n, i) => {
+      const l1 = c === 0 ? '전체 주문' : NMS[c][i], l2 = fmt(n.v) + '건 · ' + pc(n.v / tot);
+      const cy = Y(n.y + n.h / 2), x = X[c], lx = c === 0 ? x - 8 : x + NW + 8, anc = c === 0 ? 'end' : 'start';
+      const body = `<rect class="nd" x="${Rd(x)}" y="${Y(n.y)}" width="${NW}" height="${Rd(n.h)}" rx="1"/><text class="lb1" x="${Rd(lx)}" y="${Rd(cy - 2)}" text-anchor="${anc}">${esc(l1)}</text><text class="lb2" x="${Rd(lx)}" y="${Rd(cy + 13)}" text-anchor="${anc}">${esc(l2)}</text>`;
+      if (c === 0) { s += `<g data-tip="${esc(l1 + ' · ' + l2)}">${body}</g>`; return; }
+      const k2 = c === 1 ? 'dl' : 'rs', on = isOn(k2, (c === 1 ? DGS : RGS)[i]), dim = F.sets[k2].size && !on, hh = Math.max(n.h + 8, 20);
+      s += `<g class="${on ? 'on' : ''}${dim ? ' dim' : ''}" data-g="${c}" data-i="${i}" data-tip="${esc(l1 + ' · ' + l2)}" tabindex="0" role="button" aria-pressed="${on}" aria-label="${esc(l1 + ', ' + l2)}"><rect class="hit" x="${Rd(x - 4)}" y="${Rd(cy - hh / 2)}" width="${NW + 8}" height="${Rd(hh)}"/>${body}</g>`;
+    }));
+    box.className = 'fsvg' + (sel ? ' sel' : '');
+    box.innerHTML = `<svg width="${W}" height="${H + TOP + 20}" viewBox="0 0 ${W} ${H + TOP + 20}" role="group" aria-label="주문의 배송 결과와 리뷰 별점 흐름">${s}</svg><div class="tip"></div>`;
+    const tip = box.querySelector('.tip'), svg = box.querySelector('svg');
+    svg.onmousemove = (e) => {
+      const t = e.target.closest('[data-tip]'); if (!t) return tip.classList.remove('on');
+      const r = box.getBoundingClientRect();
+      tip.textContent = t.dataset.tip; tip.style.left = e.clientX - r.left + box.scrollLeft + 'px'; tip.style.top = e.clientY - r.top + 'px'; tip.classList.add('on');
+    };
+    svg.onmouseleave = () => tip.classList.remove('on');
+    if (refocus) { const g = box.querySelector(`[data-g="${refocus[0]}"][data-i="${refocus[1]}"]`); refocus = null; if (g) g.focus(); }
+  }
+
+  /* ---------- 메뉴 ---------- */
+  let TAB = 0;
+  const RENDER = [renderHome, renderDist, renderTrend, renderReviews, renderFlow];
   function showTab(t) {
     TAB = t;
-    document.querySelectorAll('#vtabs [role=tab]').forEach(function (b) { b.setAttribute('aria-selected', +b.dataset.t === t); });
-    document.querySelectorAll('.panel').forEach(function (p, i) { p.hidden = i !== t; });
-    if (lastAgg && lastAgg.n) { if (t === 0) renderCircles(lastAgg); if (t === 3) renderLine(lastAgg); if (t === 4) renderHist(); }
+    document.querySelectorAll('#menu [role=tab]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.t === t));
+    document.querySelectorAll('.panel').forEach((p, i) => { p.hidden = i !== t; });
+    if (S.n || t === 3) RENDER[t]();
   }
-  $('vtabs').onclick = function (e) { var b = e.target.closest('[role=tab]'); if (b) { showTab(+b.dataset.t); writeHash(); } };
-  $('vtabs').onkeydown = function (e) {
-    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    var t = (TAB + (e.key === 'ArrowRight' ? 1 : 5)) % 6; showTab(t); writeHash();
-    document.querySelector('#vtabs [data-t="' + t + '"]').focus();
-  };
+  $('menu').addEventListener('click', (e) => { const b = e.target.closest('[role=tab]'); if (b) { showTab(+b.dataset.t); writeHash(); } });
+  $('menu').addEventListener('keydown', (e) => {
+    const fw = e.key === 'ArrowDown' || e.key === 'ArrowRight', bw = e.key === 'ArrowUp' || e.key === 'ArrowLeft';
+    if (!fw && !bw) return; e.preventDefault();
+    const t = (TAB + (fw ? 1 : 4)) % 5; showTab(t); writeHash(); document.querySelector(`#menu [data-t="${t}"]`).focus();
+  });
 
-  /* ---------- 그리기 ---------- */
-  function delta(x, base, d, upGood) { // 나쁜 방향은 주황, 좋은 방향은 초록
-    if (!isFinite(x) || !isFinite(base)) return '';
-    var v = (x - base) * 100, s = (v >= 0 ? '+' : '') + v.toFixed(d == null ? 1 : d) + '%p';
-    return Math.abs(v) < .05 ? '전체와 같음' : '전체 대비 <b class="' + ((v > 0) !== !!upGood ? 'up' : 'down') + '">' + s + '</b>';
-  }
-  function renderKpis(a) {
-    var k = [
-      ['고객 수', fmt(a.n), '<em>명</em>', '전체의 ' + pc(a.n / ALL.n)],
-      ['배송 지연 비율', (a.late / a.known * 100).toFixed(1), '<em>%</em>', delta(a.late / a.known, ALL.late / ALL.known)],
-      ['부정 리뷰 비율', (a.neg / a.rev * 100).toFixed(1), '<em>%</em>', delta(a.neg / a.rev, ALL.neg / ALL.rev)],
-      ['180일 재구매율', (a.rep / a.n * 100).toFixed(2), '<em>%</em>', delta(a.rep / a.n, ALL.rep / ALL.n, 2, true) + ' · ' + fmt(a.rep) + '명']
-    ];
-    $('kpis').innerHTML = k.map(function (x) {
-      return '<div class="kpi"><small>' + x[0] + '</small><strong>' + (x[1] === 'NaN' ? '–' : x[1]) + x[2] + '</strong><span>' + x[3] + '</span></div>';
-    }).join('');
-  }
-  function renderCircles(a) {
-    var L = a.Lr, O = a.Or, rl = L.k / L.n, ro = O.k / O.n;
-    var box = $('circles'), W = Math.min(box.clientWidth || 600, 640), max = Math.min(320, W * .58, room(box, 200, 9999) * .8);
-    var dl = isFinite(rl) ? Math.max(28, max * Math.sqrt(rl)) : 28, dO = isFinite(ro) ? Math.max(28, max * Math.sqrt(ro)) : 28;
-    var circ = function (cls, d, title, r, n, extra) {
-      var inside = d >= 120, fs = Math.max(22, Math.min(58, d * .2));
-      var txt = '<b>' + title + '</b><strong style="font-size:' + fs + 'px">' + pc(r) + '</strong><span>' + fmt(n) + '명</span>';
-      return '<div class="cc ' + cls + '" style="width:' + d + 'px;height:' + d + 'px;' + extra + '">' + (inside ? txt : '<div class="out">' + txt + '</div>') + '</div>';
-    };
-    box.innerHTML = circ('dark', dl, '지연', rl, L.n, '') + circ('light', dO, '정시', ro, O.n, 'margin-left:-' + Math.round(Math.min(dl, dO) * .22) + 'px');
-    box.style.minHeight = Math.max(dl, dO) * 1.2 + 'px';
-    var ratio = rl / ro;
-    $('v1').innerHTML = vtag(verdict(L, O, false)) + (isFinite(ratio) && ro > 0 ? '<span>· 지연 고객이 ' + ratio.toFixed(1) + '배</span>' : '');
-    var bf = a.bf, af = a.af, sh = bf.n / (bf.n + af.n);
-    $('beforeDesc').innerHTML = (bf.n + af.n) ? '리뷰를 남긴 지연 고객 ' + fmt(bf.n + af.n) + '명 중 <b>' + pc(sh) + '</b>가 상품이 도착하기 전에 리뷰를 썼습니다. 계획에 없던 분석이라 결론이 아닌 가설로 봐 주세요.' : '이 조건에는 리뷰를 남긴 지연 고객이 없습니다.';
-    var rows = [['지연 · 받기 전', bf, 'acc'], ['지연 · 받은 뒤', af, ''], ['정시', O, '']];
-    $('beforeBars').innerHTML = '<div class="row head"><span></span><span>부정 리뷰 비율</span><span>리뷰 수</span></div>' + rows.map(function (x) {
-      var r = x[1].k / x[1].n;
-      return '<div class="row"><div class="lb"><b>' + x[0] + '</b></div><div class="hb ' + x[2] + '"><i style="width:' + (isFinite(r) ? r * 100 : 0) + '%"></i><span>' + pc(r) + '</span></div><div class="hb dim"><span style="text-align:left">' + fmt(x[1].n) + '건</span></div></div>';
-    }).join('');
-  }
-  function ciRows(el, axEl, rows) {
-    var hi = 0;
-    rows.forEach(function (r) { var c = wilson(r.k, r.n); r.ci = c; if (isFinite(c[1])) hi = Math.max(hi, c[1]); });
-    var top = niceMax(Math.max(.02, hi)), pos = function (x) { return Math.min(100, x / top * 100) + '%'; };
-    el.innerHTML = rows.map(function (r) {
-      var v = r.k / r.n, ok = r.n > 0;
-      return '<div class="row' + (r.hi ? ' hi' : '') + '"><div class="lb"><b>' + r.l + '</b><small>' + fmt(r.n) + '명</small></div><div class="tr">' +
-        (ok ? '<span class="rg" style="left:' + pos(r.ci[0]) + ';width:calc(' + pos(r.ci[1]) + ' - ' + pos(r.ci[0]) + ')"></span><span class="dot" style="left:' + pos(v) + '"></span>' : '') +
-        '</div><div class="v">' + (ok ? pc(v, 2) : '–') + '<small>' + (ok ? (r.ci[0] * 100).toFixed(2) + ' ~ ' + (r.ci[1] * 100).toFixed(2) + ' · ' + fmt(r.k) + '명' : '고객 없음') + '</small></div></div>';
-    }).join('');
-    var t = []; for (var i = 0; i <= 4; i++) t.push(top * i / 4);
-    axEl.innerHTML = '<span></span><div class="sc">' + t.map(function (x, i) { return '<span style="left:' + (i / 4 * 100) + '%;' + (i === 0 ? 'translate:0 0' : i === 4 ? 'translate:-100% 0' : '') + '">' + +(x * 100).toFixed(2) + '%</span>'; }).join('') + '</div><span></span>';
-  }
-  function renderRepeat(a) {
-    ciRows($('ci1'), $('ax1'), [{ l: '지연', n: a.L.n, k: a.L.k, hi: 1 }, { l: '정시', n: a.O.n, k: a.O.k }]);
-    $('v2').innerHTML = vtag(verdict(a.L, a.O, true));
-    ciRows($('ci2'), $('ax2'), [{ l: '부정', n: a.R[2].n, k: a.R[2].k, hi: 1 }, { l: '중립', n: a.R[1].n, k: a.R[1].k }, { l: '긍정', n: a.R[0].n, k: a.R[0].k }]);
-    var v = verdict(a.R[2], a.R[0], true); v.w = '부정 vs 긍정 · ' + v.w;
-    $('v3').innerHTML = vtag(v);
-  }
-  function renderBuckets(a) {
-    var maxRep = Math.max.apply(null, a.B.map(function (b) { return b.n ? b.rep / b.n : 0; }).concat([.03]));
-    $('bucketBars').innerHTML = '<div class="row head"><span>지연 일수</span><span>부정 리뷰 비율</span><span>180일 재구매율</span></div>' + a.B.map(function (b, i) {
-      var nr = b.neg / b.rev, rr = b.rep / b.n;
-      return '<div class="row"><div class="lb"><b>' + dims.b[i] + '</b><small>' + fmt(b.n) + '명</small></div>' +
-        '<div class="hb ' + (i ? 'acc' : '') + '"><i style="width:' + (isFinite(nr) ? nr * 100 : 0) + '%"></i><span>' + pc(nr) + '</span></div>' +
-        '<div class="hb"><i style="width:' + (isFinite(rr) ? rr / maxRep * 100 : 0) + '%"></i><span>' + pc(rr, 2) + '</span></div></div>';
-    }).join('') ;
-  }
-
-  var METRICS = [
-    { l: '부정 리뷰 비율', f: function (m) { return m.neg / m.rev; }, p: 1 },
-    { l: '배송 지연 비율', f: function (m) { return m.late / m.known; }, p: 1 },
-    { l: '180일 재구매율', f: function (m) { return m.rep / m.n; }, p: 2 },
-    { l: '고객 수', f: function (m) { return m.n; }, n: true }
-  ];
-  var curMetric = 0, lastAgg = null;
-  $('mtabs').innerHTML = METRICS.map(function (m, i) { return '<button aria-pressed="' + (i === 0) + '" data-i="' + i + '">' + m.l + '</button>'; }).join('');
-  $('mtabs').onclick = function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    curMetric = +b.dataset.i;
-    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
-    renderLine(lastAgg);
-  };
-  function svgEl(box, w, h, body) {
-    var old = box.querySelector('svg'); if (old) old.remove();
-    box.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 ' + w + ' ' + h + '" height="' + h + '" role="img">' + body + '</svg>');
-  }
-  function renderLine(a) {
-    var box = $('lineBox'), W = box.clientWidth || 640, H = Math.min(420, room(box, 220, 240)), L = 44, R = 16, T = 20, B = 30, M = METRICS[curMetric];
-    var pts = [];
-    for (var i = F.m0; i <= F.m1; i++) { var m = a.M[i], v = M.f(m); pts.push({ i: i, v: m.n ? v : NaN, n: m.n }); }
-    var vals = pts.map(function (p) { return p.v; }).filter(isFinite), mx = vals.length ? Math.max.apply(null, vals) : 1;
-    mx = niceMax(M.n ? Math.max(1, mx * 1.1) : Math.max(.003, mx * 1.1));
-    var x = function (k) { return L + (pts.length === 1 ? (W - L - R) / 2 : k * (W - L - R) / (pts.length - 1)); };
-    var y = function (v) { return T + (H - T - B) * (1 - v / mx); };
-    var lab = function (v) { return M.n ? fmt(Math.round(v)) : (v * 100).toFixed(M.p) + '%'; };
-    var s = '';
-    for (var g = 0; g <= 4; g++) { var gv = mx * g / 4; s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text x="' + (L - 8) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + (M.n ? fmt(Math.round(gv)) : +(gv * 100).toFixed(2) + '%') + '</text>'; }
-    var step = Math.ceil(pts.length / Math.max(2, Math.floor((W - L - R) / 56)));
-    pts.forEach(function (p, k) { var last = k === pts.length - 1; if ((k % step === 0 && (last || pts.length - 1 - k >= step)) || last) s +='<text x="' + x(k) + '" y="' + (H - 8) + '" text-anchor="middle">' + dims.m[p.i].slice(2).replace('-', '.') + '</text>'; });
-    var d = '', on = false;
-    pts.forEach(function (p, k) { if (isFinite(p.v)) { d += (on ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(p.v).toFixed(1); on = true; } else on = false; });
-    s += '<path class="ln" d="' + d + '"/>';
-    pts.forEach(function (p, k) { if (isFinite(p.v)) s += '<circle class="pt" r="4" cx="' + x(k) + '" cy="' + y(p.v) + '" data-k="' + k + '"/>'; });
-    var lastK = -1; pts.forEach(function (p, k) { if (isFinite(p.v)) lastK = k; });
-    if (lastK >= 0) s += '<text class="lbl" x="' + Math.min(x(lastK), W - R) + '" y="' + (y(pts[lastK].v) - 12) + '" text-anchor="end">' + lab(pts[lastK].v) + '</text>';
-    pts.forEach(function (p, k) { s += '<rect x="' + (x(k) - (W - L - R) / pts.length / 2) + '" y="' + T + '" width="' + ((W - L - R) / pts.length) + '" height="' + (H - T - B) + '" fill="transparent" data-k="' + k + '"/>'; });
-    svgEl(box, W, H, s);
-    var tip = $('tip'), svg = box.querySelector('svg');
-    svg.onmousemove = function (e) {
-      var t = e.target.closest('[data-k]'); if (!t) return tip.classList.remove('on');
-      var p = pts[+t.dataset.k]; if (!isFinite(p.v)) return tip.classList.remove('on');
-      tip.innerHTML = '<b>' + dims.m[p.i] + '</b> · ' + lab(p.v) + (M.n ? '' : ' (' + fmt(p.n) + '명)');
-      tip.style.left = x(+t.dataset.k) / W * box.clientWidth + 'px'; tip.style.top = y(p.v) + 'px'; tip.classList.add('on');
-    };
-    svg.onmouseleave = function () { tip.classList.remove('on'); };
-  }
-  function renderHist() {
-    var ds = D.repeaters.filter(pass).map(function (r) { return r[7]; }).sort(function (a, b) { return a - b; });
-    var box = $('histBox'), W = box.clientWidth || 640, H = Math.min(380, room(box, 200, 200)), L = 36, R = 12, T = 24, B = 28, bins = new Array(18).fill(0);
-    ds.forEach(function (d) { bins[Math.min(17, Math.floor((d - 1) / 10))]++; });
-    if (ds.length < 10) { $('histDesc').textContent = '이 조건의 재구매 고객은 ' + ds.length + '명이라 분포를 보여 주기에 너무 적습니다.'; svgEl(box, W, 10, ''); return; }
-    var q = function (p) { var i = (ds.length - 1) * p, lo = Math.floor(i); return ds[lo] + (ds[Math.ceil(i)] - ds[lo]) * (i - lo); };
-    var q1 = Math.round(q(.25)), md = Math.round(q(.5)), q3 = Math.round(q(.75));
-    $('histDesc').innerHTML = '재구매 고객 ' + fmt(ds.length) + '명 중 절반이 첫 구매 후 <b>' + q1 + '~' + q3 + '일</b> 사이에 다시 샀습니다. 중앙값은 <b>' + md + '일</b>입니다. 10일 단위 막대이고, 진한 막대가 가운데 50% 구간입니다.';
-    var mx = Math.max.apply(null, bins), bw = (W - L - R) / 18, y = function (v) { return T + (H - T - B) * (1 - v / mx); }, s = '';
-    for (var g = 0; g <= 2; g++) { var gv = Math.round(mx * g / 2); s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text x="' + (L - 6) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + gv + '</text>'; }
-    bins.forEach(function (c, i) {
-      var inIqr = (i + 1) * 10 > q1 && i * 10 < q3;
-      s += '<rect class="hbar' + (inIqr ? ' in' : '') + '" x="' + (L + i * bw + 1.5) + '" y="' + y(c) + '" width="' + (bw - 3) + '" height="' + (y(0) - y(c)) + '"><title>' + (i * 10 + 1) + '~' + (i * 10 + 10) + '일: ' + c + '명</title></rect>';
-    });
-    [0, 30, 60, 90, 120, 150, 180].forEach(function (d) { s += '<text x="' + (L + d / 10 * bw) + '" y="' + (H - 8) + '" text-anchor="middle">' + d + (d === 180 ? '일' : '') + '</text>'; });
-    var mxp = L + md / 10 * bw;
-    s += '<line class="med" x1="' + mxp + '" x2="' + mxp + '" y1="' + (T - 8) + '" y2="' + y(0) + '"/><text class="medt" x="' + (mxp + 6) + '" y="' + (T - 10) + '">중앙값 ' + md + '일</text>';
-    svgEl(box, W, H, s);
-  }
-
-  /* ---------- 리뷰 ---------- */
-  var RV = { t: -1, late: 0, q: '', shown: 20 };
-  var norm = function (s) { return s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, ''); };
-  D.reviews.forEach(function (r) { r.nx = norm(r[9] + '\n' + (r[10] || '')); });
-  $('rvLate').innerHTML = ['전체', '지연 고객', '정시 고객'].map(function (l, i) { return '<button aria-pressed="' + (i === 0) + '" data-i="' + i + '">' + l + '</button>'; }).join('');
-  $('rvLate').onclick = function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    RV.late = +b.dataset.i; RV.shown = 20;
-    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
-    renderReviews();
-  };
-  $('rvThemes').onclick = function (e) {
-    var b = e.target.closest('.chip'); if (!b) return;
-    RV.t = +b.dataset.t; RV.shown = 20; renderReviews();
-  };
-  var qTimer; $('rvq').oninput = function () { clearTimeout(qTimer); var v = this.value; qTimer = setTimeout(function () { RV.q = norm(v.trim()); RV.shown = 20; renderReviews(); }, 150); };
-  $('rvmore').onclick = function () { RV.shown += 20; renderReviews(); };
-  function renderReviews() {
-    var base = D.reviews.filter(function (r) {
-      if (!pass(r)) return false;
-      if (RV.late === 1 && !(r[4] > 0 && r[4] < 4)) return false;
-      if (RV.late === 2 && r[4] !== 0) return false;
-      return !RV.q || r.nx.indexOf(RV.q) >= 0;
-    });
-    var tc = D.themes.map(function (_, i) { return base.filter(function (r) { return r[8] & (1 << i); }).length; });
-    $('rvThemes').innerHTML = '<button class="chip" data-t="-1" aria-pressed="' + (RV.t === -1) + '">전체<small>' + fmt(base.length) + '</small></button>' +
-      D.themes.map(function (t, i) { return '<button class="chip" data-t="' + i + '" aria-pressed="' + (RV.t === i) + '">' + t + '<small>' + fmt(tc[i]) + '</small></button>'; }).join('');
-    $('rvTabN').textContent = fmt(base.length);
-    var list = RV.t < 0 ? base : base.filter(function (r) { return r[8] & (1 << RV.t); });
-    $('rvcount').innerHTML = '<b>' + fmt(list.length) + '</b>건' + (base.length ? ' · 이 조건 부정 리뷰의 ' + pc(list.length / base.length) : '');
-    var hl = function (s) {
-      var x = esc(s);
-      if (!RV.q) return x;
-      var n = norm(s), i = n.indexOf(RV.q);
-      return i < 0 ? x : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + RV.q.length)) + '</mark>' + esc(s.slice(i + RV.q.length));
-    };
-    $('rvlist').innerHTML = list.slice(0, RV.shown).map(function (r) {
-      var th = D.themes.filter(function (_, i) { return r[8] & (1 << i); });
-      var st = '★'.repeat(r[7]) + '<i>' + '★'.repeat(5 - r[7]) + '</i>';
-      return '<div class="rv"><div class="tp"><span class="stars" aria-label="별점 ' + r[7] + '점">' + st + '</span><span>' + esc(dims.c[r[1]]) + ' · ' + SKO[r[2]] + ' · ' + dims.m[r[0]] + ' · ' + (r[4] === 0 ? '정시' : r[4] === 4 ? '배송일 없음' : '지연 ' + dims.b[r[4]]) + (r[6] ? ' · 받기 전 작성' : '') + '</span></div>' + (r[10] ? '<p>' + hl(r[10]) + '</p><p class="pt" lang="pt">' + hl(r[9]) + '</p>' : '<p lang="pt">' + hl(r[9]) + '</p>') +
-        (th.length ? '<div class="th">' + th.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' : '') + '</div>';
-    }).join('');
-    if (!list.length) $('rvlist').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 리뷰가 없습니다.</div>';
-    $('rvmore').style.display = list.length > RV.shown ? '' : 'none';
-  }
-
-  /* ---------- 갱신 ---------- */
+  /* ---------- 갱신 · 주소 ---------- */
   function update() {
-    var a = agg(false); lastAgg = a;
-    $('fN').innerHTML = '<b>' + fmt(a.n) + '</b>명';
-    $('fShare').textContent = '전체 ' + fmt(ALL.n) + '명의 ' + pc(a.n / ALL.n);
-    $('fBar').style.width = (a.n / ALL.n * 100) + '%';
-    var k = F.c.size + F.s.size + F.p.size + (F.m0 > 0 || F.m1 < NM - 1 ? 1 : 0);
-    $('fCount').textContent = k ? '· ' + k + '개 선택' : '';
-    $('fsName').textContent = F.s.size ? Array.from(F.s).sort(function (a, b) { return a - b; }).map(function (i) { return SKO[i]; }).join(', ') : 'SP 상파울루, RJ 리우데자네이루, MG 미나스제라이스 순으로 고객이 많습니다. 약어에 마우스를 올리면 이름이 보입니다.';
-    if (!a.n) {
-      document.querySelectorAll('.panel').forEach(function (s) { s.style.opacity = .35; });
-      $('kpis').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 고객이 없습니다. 조건을 줄여 보세요.</div>';
-      return;
-    }
-    document.querySelectorAll('.panel').forEach(function (s) { s.style.opacity = ''; });
-    renderKpis(a); renderCircles(a); renderRepeat(a); renderBuckets(a); renderLine(a); renderHist(); renderReviews(); showTab(TAB);
+    S = compute();
+    syncFilters();
+    document.querySelectorAll('.panel').forEach((p) => { p.style.opacity = S.n ? '' : .4; });
+    if (!S.n) $('kpis').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 주문이 없습니다. 조건을 줄여 보세요.</div>';
+    if (RV.loaded && TAB !== 3) renderReviews();
+    showTab(TAB);
+    writeHash();
   }
-  /* ---------- 주소에 조건 담기 (예: #c=3&s=0,1&p=2&m=2-13) ---------- */
   function writeHash() {
-    var q = [];
-    ['c', 's', 'p'].forEach(function (k) { if (F[k].size) q.push(k + '=' + Array.from(F[k]).sort(function (a, b) { return a - b; }).join(',')); });
-    if (F.m0 > 0 || F.m1 < NM - 1) q.push('m=' + F.m0 + '-' + F.m1);
+    const q = [];
+    if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
+    FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
     if (TAB) q.push('t=' + TAB);
-    var h = q.length ? '#' + q.join('&') : '';
-    if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) {}
+    const h = q.length ? '#' + q.join('&') : '';
+    if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
   }
   function readHash() {
-    ['c', 's', 'p', 'm'].forEach(clearKey); TAB = 0;
-    location.hash.slice(1).split('&').forEach(function (kv) {
-      var p = kv.split('='), k = p[0], v = p[1] || '';
-      if (k === 't') { var t = +v; if (t >= 0 && t < 6) TAB = t; }
-      else if (k === 'm') {
-        var r = v.split('-').map(Number);
-        if (r.length === 2 && r[0] >= 0 && r[1] < NM && r[0] <= r[1]) { F.m0 = r[0]; F.m1 = r[1]; $('m0').value = r[0]; $('m1').value = r[1]; }
-      } else if (F[k] instanceof Set) {
-        v.split(',').forEach(function (x) {
-          var b = document.querySelector('.chip[data-k="' + k + '"][data-i="' + (+x) + '"]');
-          if (b) { F[k].add(+x); b.setAttribute('aria-pressed', 'true'); }
-        });
-      }
+    clearKey('m'); FD.forEach((f) => clearKey(f.k)); TAB = 0;
+    location.hash.slice(1).split('&').forEach((kv) => {
+      const [k, v = ''] = kv.split('=');
+      if (k === 't') { const t = +v; if (t >= 0 && t < 5) TAB = t; }
+      else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
+      else if (FK[k]) v.split(',').forEach((x) => { const i = +x; if (x !== '' && i >= 0 && i < FK[k].labels.length) F.sets[k].add(i); });
     });
   }
-  window.addEventListener('hashchange', function () { readHash(); update(); });
-  var _update = update; update = function () { _update(); writeHash(); };
-
-  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (lastAgg && lastAgg.n) showTab(TAB); }, 120); });
+  window.addEventListener('hashchange', () => { readHash(); update(); });
+  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => showTab(TAB), 120); });
   readHash();
   update();
 })();

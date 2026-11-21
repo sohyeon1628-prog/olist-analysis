@@ -48,10 +48,11 @@
 ```text
 olist-analysis/
 ├── docs/                     # GitHub Pages 배포용 웹 사이트
-│   ├── index.html            # 다차원 필터링 인터랙티브 대시보드
+│   ├── index.html            # 인터랙티브 대시보드 (홈, 분포, 추이, 재구매 시점, 리뷰 원문, 생키 흐름)
 │   ├── story.html            # 분석 케이스 스터디 상세 보고서
 │   └── data/
-│       └── explorer.js       # 대시보드 조회용 경량 집계 데이터
+│       ├── orders.js         # 전체 주문 조건별 경량 집계 데이터
+│       └── reviews.js        # 고객 리뷰 원문 및 한국어 번역 데이터
 ├── results/                  # 분석 산출물
 │   ├── 1_flow_late.png       # 배송 지연 흐름 시각화
 │   ├── 2_repeat_by_review.png # 리뷰 평점별 재구매율 그래프

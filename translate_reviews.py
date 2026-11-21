@@ -7,6 +7,7 @@ build_explorer.py 가 이 파일을 읽어 사이트에 번역문을 넣는다.
     1) 리뷰를 results/translate_work/in_XX.json 묶음으로 나눔
     2) 묶음별로 번역해 out_XX_pN.json ({번호: 번역}) 으로 저장
     3) .venv/bin/python translate_reviews.py --merge  → review_ko.json
+    2차(2026-11-21): 나머지 모든 리뷰를 results/translate_work2/ 에서 같은 방식으로 번역
 Google 번역 무료 주소(main)는 요청 제한(429)으로 쓰지 못했고 참고로만 남겨 둔다.
 """
 import json
@@ -69,18 +70,23 @@ def main():
 
 
 def merge():
-    """translate_work/out_*.json 을 원문 기준 사전으로 합쳐 review_ko.json 에 저장."""
-    import glob
-    work = os.path.join(BASE, "results", "translate_work")
-    texts = json.load(open(os.path.join(work, "all_texts.json"), encoding="utf-8"))
-    out = {}
-    for f in sorted(glob.glob(os.path.join(work, "out_*_p*.json"))):
-        out.update(json.load(open(f, encoding="utf-8")))
-    cache = {texts[int(i)]: k.strip() for i, k in out.items() if k.strip()}
-    missing = [i for i in range(len(texts)) if str(i) not in out]
-    json.dump(cache, open(CACHE, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
-    print(f"번역 {len(cache)}/{len(texts)}건 저장, 빠진 번호 {len(missing)}개 {missing[:10]}")
+    """translate_work*/out_*.json 을 원문 기준 사전으로 합쳐 review_ko.json 에 저장.
 
+    translate_work  : 1차 (첫 구매 고객의 부정 리뷰)
+    translate_work2 : 2차 (나머지 모든 리뷰)
+    """
+    import glob
+    cache = json.load(open(CACHE, encoding="utf-8")) if os.path.exists(CACHE) else {}
+    for wd in sorted(glob.glob(os.path.join(BASE, "results", "translate_work*"))):
+        texts = json.load(open(os.path.join(wd, "all_texts.json"), encoding="utf-8"))
+        out = {}
+        for f in sorted(glob.glob(os.path.join(wd, "out_*_p*.json"))):
+            out.update(json.load(open(f, encoding="utf-8")))
+        cache.update({texts[int(i)]: k.strip() for i, k in out.items() if k.strip()})
+        missing = [i for i in range(len(texts)) if str(i) not in out]
+        print(f"{os.path.basename(wd)}: 번역 {len(out)}/{len(texts)}, 빠진 번호 {len(missing)}개 {missing[:5]}")
+    json.dump(cache, open(CACHE, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+    print(f"저장: {len(cache)}개 문장")
 
 if __name__ == "__main__":
     import sys
