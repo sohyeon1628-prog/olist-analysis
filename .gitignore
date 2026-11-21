@@ -5,3 +5,11 @@ __pycache__/
 data/raw/
 # 번역 작업용 임시 묶음
 results/translate_work*/
+# API 키 (절대 올리지 않음)
+.env
+# Azure 기계 번역 결과 (정확도 문제로 사이트에 쓰지 않음)
+results/azure_unused/
+.venv-ml/
+# 감성 분석 외부 데이터·모델 (용량 큼)
+data/b2w/
+results/sentiment/model/

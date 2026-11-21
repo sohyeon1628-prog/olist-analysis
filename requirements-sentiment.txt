@@ -1,0 +1,6 @@
+# 감성 분석(sentiment_model.py)용 · Intel 맥은 torch 2.2.2가 마지막
+torch==2.2.2
+numpy<2
+transformers==4.46.3
+pandas
+scikit-learn
