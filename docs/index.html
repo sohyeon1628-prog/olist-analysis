@@ -84,7 +84,8 @@ h1 b { font-weight: 700; }
 .card2 { min-width: 0; padding: 16px 18px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .card2 .ph h2 { font-size: 15px; }
 .card2 .ph small { font-size: 12.5px; color: var(--mute); }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: start; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; align-items: start; }
 
 /* 지표 */
 .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
@@ -96,28 +97,42 @@ h1 b { font-weight: 700; }
 .scale { margin-top: 10px; font-size: 13px; color: var(--mute); }
 .scale b { color: var(--ink); font-weight: 600; }
 
-/* 분포 막대 */
-.dist { margin-top: 10px; }
-.dr { display: grid; grid-template-columns: 124px 1fr 112px; gap: 10px; align-items: center; margin: 0 -4px; padding: 4px; border-radius: 3px; font-size: 13.5px; }
-.dr .l { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dr .t { height: 12px; background: var(--soft); border-radius: 2px; overflow: hidden; }
-.dr .t i { display: block; height: 100%; background: var(--bar); border-radius: 0 2px 2px 0; transition: width .4s var(--e); }
-.dr .v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.dr .v small { margin-left: 5px; font-weight: 400; font-size: 12px; color: var(--mute); }
+/* 분포 */
+.dkpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+.dkpi .kpi strong { font-size: 30px; }
+.dkpi .kpi span b { color: var(--ink); font-weight: 600; }
+.dkpi .kpi.hot strong { color: var(--acc); }
+.cd { display: flex; flex-direction: column; }
+.cd .q { margin-top: 4px; font-size: 13px; line-height: 1.55; color: var(--text); }
+.cd .q b { font-weight: 700; }
+.cd .q .a { color: var(--acc); }
+.lgd { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--text); }
+.lgd i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+.lgd i.ln2 { width: 14px; height: 0; border-top: 2px dashed var(--ink); border-radius: 0; vertical-align: 3px; }
+.svgbox .h0 { fill: var(--bar); }
+.svgbox .h1 { fill: var(--acc); }
+.svgbox .hb { fill: var(--ink); opacity: .78; }
+.svgbox .hit { fill: transparent; }
+.svgbox .hit:hover { fill: rgba(0,0,0,.05); }
+.svgbox .base { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.svgbox .medl { stroke: var(--ink); stroke-width: 1.5; }
+.svgbox text.medt { fill: var(--ink); font-weight: 700; }
+.svgbox text.vl { fill: var(--text); font-size: 11px; font-weight: 600; }
+.svgbox text.vl.a { fill: var(--acc); }
+.dist { margin-top: 8px; }
+.dr { display: grid; grid-template-columns: minmax(0, 1fr) 1.3fr 54px; gap: 10px; align-items: center; margin: 0 -8px; padding: 5px 8px; border-radius: 3px; font-size: 13.5px; }
+.dr .l { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dr .t { position: relative; height: 12px; background: var(--soft); border-radius: 2px; }
+.dr .t i { display: block; height: 100%; min-width: 2px; background: #B9B4A8; border-radius: 0 2px 2px 0; transition: width .4s var(--e); }
+.dr .t b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); }
+.dr.peak .t i { background: var(--ink); opacity: .78; }
+.dr .v { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .dr.click { cursor: pointer; }
 .dr.click:hover, .dr.click:focus-visible { background: var(--soft); outline: none; }
-.dr.on .l { font-weight: 600; }
-.dr.on .t i { background: var(--acc); }
-.sub { margin-top: 14px; font-size: 12.5px; color: var(--mute); }
+.dr.on .l { font-weight: 700; }
+.dr.on .t i { background: var(--acc); opacity: 1; }
+.sub { margin-top: 10px; font-size: 12.5px; color: var(--mute); }
 .sub b { color: var(--ink); font-weight: 600; }
-.sb { display: flex; height: 18px; margin-top: 12px; border-radius: 3px; overflow: hidden; background: var(--soft); }
-.sb i { display: block; height: 100%; transition: width .4s var(--e); }
-.k0 { background: var(--bar); }
-.k1 { background: var(--acc); }
-.sbl { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 13.5px; }
-.sbl b { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 2px; vertical-align: -1px; }
-.sbl strong { font-weight: 600; }
-.sbl small { margin-left: 4px; font-size: 12px; color: var(--mute); }
 
 /* 차트 */
 .svgbox { position: relative; margin-top: 12px; }
@@ -225,8 +240,9 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 .scrim[hidden] { display: none; }
 .loading { font-size: 13.5px; color: var(--mute); }
 
-@media (prefers-reduced-motion: reduce) { .filters, .filters.open, .dr .t i, .sb i { transition: none; } }
-@media (max-width: 1200px) { .grid3 { grid-template-columns: 1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .filters, .filters.open, .dr .t i { transition: none; } }
+@media (max-width: 1200px) { .g3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 800px) { .g2, .g3 { grid-template-columns: 1fr; } .dkpi { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 1000px) {
   .app { display: block; height: auto; }
   .menu { flex-direction: row; position: sticky; top: 0; z-index: 5; padding: 8px; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
@@ -247,10 +263,9 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   .info .pop { width: min(340px, calc(100vw - 24px)); }
   .panel { padding: 18px 16px 24px; }
   h1 { font-size: 21px; }
-  .grid3 { grid-template-columns: 1fr; }
   .kpi { padding: 14px; }
   .kpi strong { font-size: 26px; }
-  .dr { grid-template-columns: 96px 1fr 100px; }
+  .dkpi .kpi strong { font-size: 24px; }
   .tn { width: 100%; }
   .rvlist { grid-template-columns: 1fr; }
 }
@@ -311,8 +326,22 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     </section>
 
     <section class="panel" id="p2" role="tabpanel" hidden>
-      <div class="grid3" id="dists"></div>
-      <p class="note">막대를 누르면 그 항목이 조건으로 추가됩니다. 같은 막대를 다시 누르면 빠집니다.</p>
+      <div class="ph"><h2>분포</h2></div>
+      <p class="desc">배송이 얼마나 걸리고, 늦으면 별점이 어떻게 달라지고, 얼마를 결제하는지 봅니다. 조건을 걸면 <b>점선·검은 눈금</b>이 전체 주문 기준입니다.</p>
+      <div class="dkpi" id="dKpi"></div>
+      <div class="g2">
+        <div class="card2 cd"><div class="ph"><h2>배송 소요일</h2><div class="lgd"><span><i style="background:var(--bar)"></i>정시</span><span><i style="background:var(--acc)"></i>늦게 도착</span><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqD"></p><div class="svgbox" id="dhD"><div class="tip"></div></div></div>
+        <div class="card2 cd"><div class="ph"><h2>별점 분포 · 정시 vs 지연</h2><div class="lgd"><span><i style="background:var(--bar)"></i>정시</span><span><i style="background:var(--acc)"></i>늦게 도착</span></div></div><p class="q" id="dqR"></p><div class="svgbox" id="dhR"><div class="tip"></div></div></div>
+      </div>
+      <div class="g2">
+        <div class="card2 cd"><div class="ph"><h2>결제 금액</h2><div class="lgd"><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqP"></p><div class="svgbox" id="dhP"><div class="tip"></div></div></div>
+        <div class="card2 cd"><div class="ph"><h2>결제 수단</h2></div><p class="q" id="dqT"></p><div class="dist" id="drT"></div></div>
+      </div>
+      <div class="g2">
+        <div class="card2 cd"><div class="ph"><h2>카테고리 상위 8</h2><small>첫 번째 상품 기준</small></div><div class="dist" id="drC"></div></div>
+        <div class="card2 cd"><div class="ph"><h2>고객 지역 상위 8</h2></div><div class="dist" id="drS"></div></div>
+      </div>
+      <p class="note">결제 수단·카테고리·지역 막대를 누르면 그 항목이 조건으로 추가되고, 위 차트가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
     </section>
 
     <section class="panel" id="p3" role="tabpanel" hidden>
@@ -561,38 +590,157 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   }
 
   /* ---------- 1. 분포 ---------- */
+  const PBIN = 17;   // 0: R$10 미만, 1~15: 로그 구간(1/6 decade), 16: R$3,162 이상
+  const pBin = (v) => (v < 10 ? 0 : Math.min(16, 1 + Math.floor(6 * (Math.log10(v) - 1))));
+  const pEdge = (b) => Math.pow(10, 1 + (b - 1) / 6);
+  const pPos = (v) => (v < 10 ? .5 : Math.min(16.5, 1 + 6 * (Math.log10(v) - 1)));
+  const median = (a) => { if (!a.length) return NaN; a.sort(); return a[a.length >> 1]; };
+  function distStats(pass) {
+    const R = { n: 0, dlv: 0, late: 0, rev: 0, neg: 0, re: 0, l20: 0, l20n: 0, e20: 0, e20n: 0, dh: Array.from({ length: 31 }, () => [0, 0]), ph: new Array(PBIN).fill(0), sr: [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]] };
+    const dd = [], pv = [];
+    for (let i = 0; i < N; i++) {
+      if (!pass(i)) continue;
+      const dl = C.dl[i], rs = C.rs[i];
+      R.n++; if (C.sq[i]) R.re++;
+      if (rs > 0) { R.rev++; if (rs <= 2) R.neg++; }
+      if (dl < 4) {
+        const L = dl > 0 ? 1 : 0; R.dlv++; R.late += L;
+        const d = C.dd[i]; if (d >= 0) { R.dh[Math.min(30, d >> 1)][L]++; dd.push(d); if (d > 20) { R.l20n++; R.l20 += L; } else { R.e20n++; R.e20 += L; } }
+        if (rs > 0) R.sr[L][rs]++;
+      }
+      pv.push(C.pv[i]); R.ph[pBin(C.pv[i])]++;
+    }
+    R.ddm = median(Float64Array.from(dd)); R.pvm = median(Float64Array.from(pv)); R.ddn = dd.length;
+    return R;
+  }
+  let DALL = null;
+
+  function hist(box, bins, o) {
+    // bins: [[a,b?],...] 개수. 비율(전체 대비)로 그림. o.base: 전체 기준 비율 배열(조건이 있을 때만)
+    const W = box.clientWidth || 520, H = 210, L = 40, R = 6, T = 22, B = 24, nb = bins.length;
+    const tot = bins.reduce((a, x) => a + x[0] + (x[1] || 0), 0) || 1, sh = bins.map((x) => (x[0] + (x[1] || 0)) / tot);
+    const mx = niceMax(Math.max(1e-4, ...sh, ...(o.base || [])) * 1.08), bw = (W - L - R) / nb;
+    const y = (v) => T + (H - T - B) * (1 - v / mx), X = (p) => L + p * bw;
+    let s = axisY(L, R, W, y, mx, (v) => +(v * 100).toFixed(1) + '%');
+    bins.forEach((x, k) => {
+      const x0 = X(k) + Math.min(1, bw * .1), w = Math.max(1, bw - 2 * Math.min(1, bw * .1));
+      const h0 = x[0] / tot, h1 = (x[1] || 0) / tot;
+      if (x.length > 1) {
+        s += `<rect class="h0" x="${x0}" y="${y(h0)}" width="${w}" height="${y(0) - y(h0)}"/>`;
+        if (h1) s += `<rect class="h1" x="${x0}" y="${y(h0 + h1)}" width="${w}" height="${y(h0) - y(h0 + h1)}"/>`;
+      } else s += `<rect class="hb" x="${x0}" y="${y(h0)}" width="${w}" height="${y(0) - y(h0)}"/>`;
+    });
+    if (o.base) {
+      let d = '';
+      o.base.forEach((v, k) => { d += (k ? 'L' : 'M') + X(k).toFixed(1) + ' ' + y(v).toFixed(1) + 'L' + X(k + 1).toFixed(1) + ' ' + y(v).toFixed(1); });
+      s += `<path class="base" d="${d}"/>`;
+    }
+    if (isFinite(o.med)) {
+      const mxp = X(o.med);
+      s += `<line class="medl" x1="${mxp}" x2="${mxp}" y1="${T - 4}" y2="${y(0)}"/><text class="medt" x="${mxp + 5}" y="${T + 6}">${o.medLabel}</text>`;
+    }
+    o.ticks.forEach((t) => { s += `<text x="${X(t[0])}" y="${H - 6}" text-anchor="${t[0] === 0 ? 'start' : t[0] >= nb ? 'end' : 'middle'}">${t[1]}</text>`; });
+    bins.forEach((_, k) => { s += `<rect class="hit" x="${X(k)}" y="${T}" width="${bw}" height="${H - T - B}" data-k="${k}"/>`; });
+    const svg = svgEl(box, W, H, s);
+    bindTip(box, svg, W, (k) => o.tip(k, bins[k], tot), (k) => [X(k + .5), y(sh[k])]);
+  }
+
+  function starChart(box, sr) {
+    const W = box.clientWidth || 520, H = 210, L = 40, R = 6, T = 22, B = 24;
+    const t0 = sr[0].reduce((a, b) => a + b, 0) || 1, t1 = sr[1].reduce((a, b) => a + b, 0) || 1;
+    const v = [1, 2, 3, 4, 5].map((r) => [sr[0][r] / t0, sr[1][r] / t1]);
+    const mx = niceMax(Math.max(.01, ...v.flat()) * 1.12), gw = (W - L - R) / 5, bw = Math.min(34, gw * .32);
+    const y = (x) => T + (H - T - B) * (1 - x / mx);
+    let s = axisY(L, R, W, y, mx, (x) => Math.round(x * 100) + '%');
+    v.forEach((p, k) => {
+      const cx = L + gw * k + gw / 2;
+      p.forEach((x, j) => {
+        const bx = cx + (j ? 2 : -bw - 2);
+        s += `<rect class="h${j}" x="${bx}" y="${y(x)}" width="${bw}" height="${y(0) - y(x)}"/>`;
+        s += `<text class="vl${j ? ' a' : ''}" x="${bx + bw / 2}" y="${y(x) - 5}" text-anchor="middle">${Math.round(x * 100)}%</text>`;
+      });
+      s += `<text x="${cx}" y="${H - 6}" text-anchor="middle">★${k + 1}</text>`;
+      s += `<rect class="hit" x="${L + gw * k}" y="${T}" width="${gw}" height="${H - T - B}" data-k="${k}"/>`;
+    });
+    const svg = svgEl(box, W, H, s);
+    bindTip(box, svg, W, (k) => `<b>★${k + 1}</b> · 정시 ${pc(v[k][0])} (${fmt(sr[0][k + 1])}건) · 지연 ${pc(v[k][1])} (${fmt(sr[1][k + 1])}건)`, (k) => [L + gw * k + gw / 2, y(Math.max(...v[k]))]);
+  }
+
   function rows(key, labels, counts, o = {}) {
-    let idx = (o.order || counts.map((_, i) => i)).filter((i) => counts[i] > 0);
-    if (o.sort) idx.sort((a, b) => counts[b] - counts[a]);
-    const tot = counts.reduce((a, b) => a + b, 0), shown = o.top ? idx.slice(0, o.top) : idx, rest = o.top ? idx.slice(o.top) : [];
-    const mx = Math.max(1, ...shown.map((i) => counts[i]));
-    const row = (label, v, i, click) => {
-      const on = click && F.sets[key].has(i);
-      const attrs = click ? ` data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(label)} 조건 ${on ? '빼기' : '추가'}"` : '';
-      return `<div class="dr${click ? ' click' : ''}${on ? ' on' : ''}"${attrs}><span class="l" title="${esc(label)}">${esc(label)}</span><span class="t"><i style="width:${Math.min(100, v / mx * 100)}%"></i></span><span class="v">${fmt(v)}<small>${tot ? pc(v / tot) : '–'}</small></span></div>`;
+    // 막대 길이 = 비율. 조건이 걸려 있으면 검은 눈금 = 전체 주문에서의 비율
+    const base = S.n < ALL.n ? ALL.cnt[key] : null, btot = base ? base.reduce((a, b) => a + b, 0) : 1;
+    let idx = counts.map((_, i) => i).filter((i) => counts[i] > 0 || (base && base[i] > 0 && F.sets[key].has(i)));
+    idx.sort((a, b) => counts[b] - counts[a]);
+    const tot = counts.reduce((a, b) => a + b, 0) || 1, shown = idx.slice(0, o.top || idx.length), rest = idx.slice(o.top || idx.length);
+    const share = (i) => counts[i] / tot, bshare = (i) => (base ? base[i] / btot : 0);
+    const mx = Math.max(1e-9, ...shown.map((i) => Math.max(share(i), bshare(i))));
+    const row = (label, v, b, i) => {
+      const click = i >= 0, on = click && F.sets[key].has(i);
+      const attrs = click ? ` data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(label)} ${pc(v)}, 조건 ${on ? '빼기' : '추가'}"` : '';
+      const tick = base && b > 0 ? `<b style="left:${Math.min(100, b / mx * 100)}%" title="전체 ${pc(b)}"></b>` : '';
+      return `<div class="dr${click ? ' click' : ''}${on ? ' on' : ''}${i === shown[0] ? ' peak' : ''}"${attrs}><span class="l" title="${esc(label)} · ${fmt(v * tot)}건${base ? ' · 전체 ' + pc(b) : ''}">${esc(label)}</span><span class="t"><i style="width:${Math.min(100, v / mx * 100)}%"></i>${tick}</span><span class="v">${pc(v)}</span></div>`;
     };
-    let h = shown.map((i) => row(labels[i], counts[i], i, !!key)).join('');
-    if (rest.length) h += row(`그 외 ${rest.length}개`, rest.reduce((a, i) => a + counts[i], 0), -1, false);
+    let h = shown.map((i) => row(labels[i], share(i), bshare(i), i)).join('');
+    const rv = rest.reduce((a, i) => a + share(i), 0), rb = rest.reduce((a, i) => a + bshare(i), 0);
+    if (rest.length && (rv >= 5e-4 || rb >= 5e-4)) {
+      h += `<p class="sub">그 외 ${rest.length}개 합계 <b>${pc(rv)}</b>${base ? ` · 전체 ${pc(rb)}` : ''}</p>`;
+    }
     return h || '<p class="sub">해당 주문이 없습니다.</p>';
   }
-  const card = (title, body, sub) => `<div class="card2"><div class="ph"><h2>${title}</h2>${sub ? `<small>${sub}</small>` : ''}</div>${body}</div>`;
+
   function renderDist() {
-    const c = S.cnt, dl = c.dl, dlv = dl[0] + dl[1] + dl[2] + dl[3], late = dl[1] + dl[2] + dl[3];
-    const deliv = (dlv ? `<div class="sb"><i class="k0" style="width:${dl[0] / dlv * 100}%"></i><i class="k1" style="width:${late / dlv * 100}%"></i></div>` +
-      `<div class="sbl"><span><b class="k0"></b>정시 도착 <strong>${pc(dl[0] / dlv)}</strong><small>${fmt(dl[0])}건</small></span><span><b class="k1"></b>늦게 도착 <strong>${pc(late / dlv)}</strong><small>${fmt(late)}건</small></span></div>` : '') +
-      `<p class="sub">도착한 주문의 평균 배송 기간 <b>${S.ddn ? (S.dd / S.ddn).toFixed(1) + '일' : '–'}</b></p>` +
-      `<div class="dist">${rows('dl', dims.dl, dl)}</div>`;
-    const oc = `<div class="dist">${rows(null, ['1회', '2회', '3회', '4회 이상'], S.oc)}</div><p class="sub">주문 기준 (같은 고객의 두 번째 이후 주문 = 재주문)</p><div class="dist">${rows('sq', FK.sq.labels, c.sq)}</div>`;
-    $('dists').innerHTML = [
-      card('주문 상태', `<div class="dist">${rows('st', dims.st, c.st)}</div>`, fmt(S.n) + '건'),
-      card('배송', deliv),
-      card('리뷰 별점', `<div class="dist">${rows('rs', RS, c.rs, { order: [5, 4, 3, 2, 1, 0] })}</div><p class="sub">평균 <b>${S.rev ? (S.rsum / S.rev).toFixed(2) + '점' : '–'}</b></p>`),
-      card('결제 수단', `<div class="dist">${rows('pt', dims.pt, c.pt)}</div>`),
-      card('결제 금액', `<div class="dist">${rows('pb', PB, c.pb)}</div><p class="sub">주문당 평균 <b>R$ ${S.n ? fmt(S.pv / S.n) : '–'}</b></p>`),
-      card('고객별 주문 횟수', oc, fmt(S.cu) + '명'),
-      card('카테고리', `<div class="dist">${rows('c', dims.c, c.c, { sort: 1, top: 10 })}</div>`, '첫 번째 상품 기준'),
-      card('고객 지역 (주)', `<div class="dist">${rows('s', dims.sKo, c.s, { sort: 1, top: 10 })}</div>`),
-    ].join('');
+    if (!DALL) DALL = distStats(() => true);
+    const D2 = S.n < ALL.n ? distStats(passOf()) : DALL, sub = D2 !== DALL;
+    const vs = (cur, all, f, unit, k) => {   // 전체 대비 차이. k: 표시 배율(비율이면 100 → %p)
+      const d = (cur - all) * k, t = Math.abs(d) < .05 ? '전체와 비슷' : (d > 0 ? '▲' : '▼') + Math.abs(d).toFixed(1) + unit;
+      return `전체 <b>${f(all)}</b> · ${t}`;
+    };
+    const lr = D2.dlv ? D2.late / D2.dlv : NaN, ng = D2.rev ? D2.neg / D2.rev : NaN;
+    const k = [
+      ['늦게 도착한 비율', pc(lr), '', sub ? vs(lr, DALL.late / DALL.dlv, pc, '%p', 100) : `도착 ${fmt(D2.dlv)}건 중 ${fmt(D2.late)}건`, true],
+      ['배송 소요일 중앙값', isFinite(D2.ddm) ? D2.ddm : '–', '일', sub ? vs(D2.ddm, DALL.ddm, (x) => x + '일', '일', 1) : '주문 → 도착, 절반이 이 안에 도착'],
+      ['부정 리뷰 (★1~2)', pc(ng), '', sub ? vs(ng, DALL.neg / DALL.rev, pc, '%p', 100) : `리뷰 ${fmt(D2.rev)}건 기준`],
+      ['재주문 비율', pc(D2.n ? D2.re / D2.n : NaN), '', sub ? vs(D2.n ? D2.re / D2.n : 0, DALL.re / DALL.n, pc, '%p', 100) : '같은 고객의 두 번째 이후 주문'],
+    ];
+    $('dKpi').innerHTML = k.map((x) => `<div class="kpi${x[4] ? ' hot' : ''}"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></div>`).join('');
+    document.querySelectorAll('#p2 .lgd .bl').forEach((e) => { e.hidden = !sub; });
+
+    // 배송 소요일
+    const dTot = DALL.dh.reduce((a, x) => a + x[0] + x[1], 0);
+    $('dqD').innerHTML = D2.ddn
+      ? `절반은 <b>${D2.ddm}일</b> 안에 도착. 지연 비율: 20일 이내 <b>${pc(D2.e20n ? D2.e20 / D2.e20n : NaN)}</b> → 20일 초과 <b class="a">${pc(D2.l20n ? D2.l20 / D2.l20n : NaN)}</b>.`
+      : '도착한 주문이 없습니다.';
+    hist($('dhD'), D2.dh, {
+      base: sub ? DALL.dh.map((x) => (x[0] + x[1]) / dTot) : null,
+      med: (D2.ddm + .5) / 2, medLabel: `중앙값 ${D2.ddm}일`,
+      ticks: [[0, '0일'], [5, '10'], [10, '20'], [15, '30'], [20, '40'], [25, '50'], [30, '60+']],
+      tip: (k, x, tot) => `<b>${k === 30 ? '60일 이상' : `${k * 2}~${k * 2 + 1}일`}</b> · ${pc((x[0] + x[1]) / tot)} · 정시 ${fmt(x[0])} / 지연 ${fmt(x[1])}건`,
+    });
+
+    // 별점: 정시 vs 지연
+    const n0 = D2.sr[0].reduce((a, b) => a + b, 0), n1 = D2.sr[1].reduce((a, b) => a + b, 0);
+    const g0 = n0 ? (D2.sr[0][1] + D2.sr[0][2]) / n0 : NaN, g1 = n1 ? (D2.sr[1][1] + D2.sr[1][2]) / n1 : NaN;
+    $('dqR').innerHTML = n0 && n1
+      ? `★1~2 비율: 정시 <b>${pc(g0)}</b> → 지연 <b class="a">${pc(g1)}</b>${g0 > 0 ? ` (<b class="a">${(g1 / g0).toFixed(1)}배</b>)` : ''}. 각 그룹 안에서의 비율입니다.`
+      : '정시·지연 두 그룹에 모두 리뷰가 있어야 비교할 수 있습니다.';
+    starChart($('dhR'), D2.sr);
+
+    // 결제 금액
+    const pTot = DALL.ph.reduce((a, b) => a + b, 0);
+    $('dqP').innerHTML = `주문 절반이 <b>R$ ${fmt(D2.pvm)}</b> 이하. 로그 축이라 오른쪽 긴 꼬리(고액 주문)까지 한 화면에 보입니다.`;
+    hist($('dhP'), D2.ph.map((v) => [v]), {
+      base: sub ? DALL.ph.map((v) => v / pTot) : null,
+      med: pPos(D2.pvm), medLabel: `중앙값 R$ ${fmt(D2.pvm)}`,
+      ticks: [[1, 'R$ 10'], [7, 'R$ 100'], [13, 'R$ 1,000']],
+      tip: (k, x, tot) => `<b>${k === 0 ? 'R$ 10 미만' : k === 16 ? 'R$ ' + fmt(pEdge(16)) + ' 이상' : `R$ ${fmt(pEdge(k))} ~ ${fmt(pEdge(k + 1))}`}</b> · ${pc(x[0] / tot)} (${fmt(x[0])}건)`,
+    });
+
+    // 범주형
+    const pt = S.cnt.pt, ptT = pt.reduce((a, b) => a + b, 0) || 1;
+    $('dqT').innerHTML = `신용카드 <b>${pc(pt[0] / ptT)}</b>, 볼레토(현금) <b>${pc(pt[1] / ptT)}</b>. 두 가지가 대부분입니다.`;
+    $('drT').innerHTML = rows('pt', dims.pt, pt, { top: 4 });
+    $('drC').innerHTML = rows('c', dims.c, S.cnt.c, { top: 8 });
+    $('drS').innerHTML = rows('s', dims.sKo, S.cnt.s, { top: 8 });
   }
 
   /* ---------- 2. 월별 추이 ---------- */
