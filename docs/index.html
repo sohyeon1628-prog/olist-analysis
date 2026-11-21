@@ -136,8 +136,8 @@ h1 b { font-weight: 700; }
 .tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
 /* 리뷰 */
-#p3 { display: flex; flex-direction: column; padding-bottom: 0; }
-#p3[hidden] { display: none; }
+#p4 { display: flex; flex-direction: column; padding-bottom: 0; }
+#p4[hidden] { display: none; }
 .rvtools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 12px; }
 .rvtools input[type=search] { flex: 1 1 240px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 13.5px; }
 .rvtools label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); cursor: pointer; }
@@ -148,7 +148,8 @@ input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focu
 .rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
 .rv { padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .rv .tp { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; font-size: 12px; color: var(--mute); }
-.rvbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.rvbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 14px; margin-top: 14px; }
+.rvctrls { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--paper); }
 .seg button { padding: 8px 16px; border: 0; background: transparent; font-size: 13.5px; cursor: pointer; white-space: nowrap; }
 .seg button + button { border-left: 1px solid var(--line); }
@@ -157,7 +158,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focu
 .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; font-weight: 600; }
 .seg button[aria-pressed="true"] small { color: rgba(255,255,255,.7); }
 .sortl { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--mute); }
-.sortl select { width: auto; padding: 7px 10px; }
+.sortl select { width: auto; min-width: 130px; padding: 7px 10px; }
 .rv .tp { align-items: center; }
 .rv .score { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; background: var(--soft); font-size: 12.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
 .rv .score b { color: var(--acc); font-weight: 400; }
@@ -233,7 +234,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   .menu .card, .menu .made { display: none; }
   .toolbar { flex-wrap: wrap; padding: 10px 16px; }
   .panel { overflow: visible; }
-  #p3 { display: block; }
+  #p4 { display: block; }
   .rvscroll { overflow: visible; margin: 10px 0 0; padding: 0 0 24px; }
   .kpis { grid-template-columns: 1fr 1fr; }
 }
@@ -278,10 +279,10 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 <div class="app">
   <nav class="menu" id="menu" role="tablist" aria-label="메뉴" aria-orientation="vertical">
     <button role="tab" aria-selected="true" aria-controls="p0" data-t="0">홈</button>
-    <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">분포</button>
-    <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">월별 추이</button>
-    <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">리뷰 원문<i id="rvN"></i></button>
-    <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">주문 흐름</button>
+    <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">주문 흐름</button>
+    <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">분포</button>
+    <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">월별 추이</button>
+    <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">리뷰 원문<i id="rvN"></i></button>
     <a class="card" href="story.html"><b>분석 이야기 →</b><span>AI와 함께 해 본 분석 예시</span></a>
     <p class="made">AI(Claude)와 함께 만든 프로젝트입니다.</p>
   </nav>
@@ -302,23 +303,33 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     </section>
 
     <section class="panel" id="p1" role="tabpanel" hidden>
+      <div class="ph"><h2>주문 흐름</h2></div>
+      <p class="desc">생키 다이어그램 · 주문이 배송 결과와 리뷰 별점으로 어떻게 나뉘는지 보여 줍니다. 띠 두께가 주문 수입니다. 칸을 누르면 그 주문만 조건으로 골라집니다.</p>
+      <div class="fsel" id="fSel"></div>
+      <div class="fsvg" id="fSvg"></div>
+      <p class="note" id="fNote"></p>
+    </section>
+
+    <section class="panel" id="p2" role="tabpanel" hidden>
       <div class="grid3" id="dists"></div>
       <p class="note">막대를 누르면 그 항목이 조건으로 추가됩니다. 같은 막대를 다시 누르면 빠집니다.</p>
     </section>
 
-    <section class="panel" id="p2" role="tabpanel" hidden>
+    <section class="panel" id="p3" role="tabpanel" hidden>
       <div class="ph"><h2>월별 추이</h2><div class="tabs" id="mtabs" role="group" aria-label="지표 선택"></div></div>
       <div class="svgbox" id="lineBox"><div class="tip"></div></div>
     </section>
 
-    <section class="panel" id="p3" role="tabpanel" hidden>
+    <section class="panel" id="p4" role="tabpanel" hidden>
       <div class="ph"><h2>리뷰 원문</h2></div>
       <p class="desc">글이 있는 리뷰를 조건에 맞게 모아 봅니다. 원문은 포르투갈어이고, 일부 리뷰에는 AI(Claude)가 옮긴 한국어 번역이 붙어 있습니다. 한국어와 포르투갈어 모두 검색됩니다.</p>
       <div class="rvbar">
-        <div class="seg" id="rvStars" role="group" aria-label="별점 고르기"></div>
-        <label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
-          <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
-        </select></label>
+        <div class="rvctrls">
+          <label class="sortl">별점 <select id="rvStar" aria-label="별점 선택"><option value="0">전체</option></select></label>
+          <label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
+            <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
+          </select></label>
+        </div>
       </div>
       <div class="rvtools">
         <input type="search" id="rvq" placeholder="리뷰 검색 (예: 배송, 환불, recebi)" aria-label="리뷰 검색">
@@ -326,14 +337,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       </div>
       <div class="rvcount" id="rvcount"></div>
       <div class="rvscroll"><div class="rvlist" id="rvlist"></div><button class="more" id="rvmore" hidden>더 보기</button></div>
-    </section>
-
-    <section class="panel" id="p4" role="tabpanel" hidden>
-      <div class="ph"><h2>주문 흐름</h2></div>
-      <p class="desc">생키 다이어그램 · 주문이 배송 결과와 리뷰 별점으로 어떻게 나뉘는지 보여 줍니다. 띠 두께가 주문 수입니다. 칸을 누르면 그 주문만 조건으로 골라집니다.</p>
-      <div class="fsel" id="fSel"></div>
-      <div class="fsvg" id="fSvg"></div>
-      <p class="note" id="fNote"></p>
     </section>
   </main>
 </div>
@@ -626,7 +629,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   /* ---------- 3. 리뷰 원문 ---------- */
   const RV = { star: 0, sort: 'new', q: '', ko: false, shown: 30, loaded: false, loading: false, list: [] };   // star 0 = 전체
   const norm = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
-  $('rvStars').onclick = (e) => {
+  if ($('rvStar')) $('rvStar').onchange = (e) => { RV.star = +e.target.value; RV.shown = 30; renderReviews(); };
+  if ($('rvStars')) $('rvStars').onclick = (e) => {
     const b = e.target.closest('[data-star]'); if (!b) return;
     RV.star = +b.dataset.star; RV.shown = 30; renderReviews();
   };
@@ -647,7 +651,15 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const pass = passOf();
     const base = RV.list.filter((r) => pass(r[0]) && (!RV.ko || r[3]) && (!RV.q || r.nx.includes(RV.q)));
     const sc = [base.length, 0, 0, 0, 0, 0]; base.forEach((r) => { sc[r[1]]++; });
-    $('rvStars').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => `<button data-star="${n}" aria-pressed="${RV.star === n}">${n ? n + '점' : '전체'}<small>${fmt(sc[n])}</small></button>`).join('');
+    if ($('rvStar')) {
+      $('rvStar').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => {
+        const label = n ? `★ ${n}점` : '전체';
+        return `<option value="${n}"${RV.star === n ? ' selected' : ''}>${label} (${fmt(sc[n])}건)</option>`;
+      }).join('');
+    }
+    if ($('rvStars')) {
+      $('rvStars').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => `<button data-star="${n}" aria-pressed="${RV.star === n}">${n ? n + '점' : '전체'}<small>${fmt(sc[n])}</small></button>`).join('');
+    }
     const list = RV.star ? base.filter((r) => r[1] === RV.star) : base.slice();
     const by = { new: (a, b) => b[0] - a[0], old: (a, b) => a[0] - b[0], hi: (a, b) => b[1] - a[1] || b[0] - a[0], lo: (a, b) => a[1] - b[1] || b[0] - a[0] }[RV.sort];
     list.sort(by);
@@ -734,12 +746,12 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 
   /* ---------- 메뉴 ---------- */
   let TAB = 0;
-  const RENDER = [renderHome, renderDist, renderTrend, renderReviews, renderFlow];
+  const RENDER = [renderHome, renderFlow, renderDist, renderTrend, renderReviews];
   function showTab(t) {
     TAB = t;
     document.querySelectorAll('#menu [role=tab]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.t === t));
     document.querySelectorAll('.panel').forEach((p, i) => { p.hidden = i !== t; });
-    if (S.n || t === 3) RENDER[t]();
+    if (S.n || t === 4) RENDER[t]();
   }
   $('menu').addEventListener('click', (e) => { const b = e.target.closest('[role=tab]'); if (b) { showTab(+b.dataset.t); writeHash(); } });
   $('menu').addEventListener('keydown', (e) => {
@@ -754,7 +766,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     syncFilters();
     document.querySelectorAll('.panel').forEach((p) => { p.style.opacity = S.n ? '' : .4; });
     if (!S.n) $('kpis').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 주문이 없습니다. 조건을 줄여 보세요.</div>';
-    if (RV.loaded && TAB !== 3) renderReviews();
+    if (RV.loaded && TAB !== 4) renderReviews();
     showTab(TAB);
     writeHash();
   }
