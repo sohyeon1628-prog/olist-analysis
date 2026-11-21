@@ -39,18 +39,7 @@ button, input, select { font: inherit; color: inherit; }
 .info .pop .ai { margin-top: 14px; padding: 12px 14px; background: var(--soft); border-radius: 4px; }
 
 /* ===== 배치 ===== */
-.app { display: grid; grid-template-columns: 208px 1fr; height: calc(100vh - var(--top)); height: calc(100dvh - var(--top)); }
-.menu { display: flex; flex-direction: column; gap: 2px; padding: 18px 12px; border-right: 1px solid var(--line); background: var(--paper); overflow-y: auto; }
-.menu button { width: 100%; text-align: left; padding: 10px 14px; border: 0; border-radius: 6px; background: none; font-size: 14.5px; color: var(--text); cursor: pointer; }
-.menu button:hover { background: var(--soft); color: var(--ink); }
-.menu button[aria-selected="true"] { background: var(--ink); color: #fff; font-weight: 600; }
-.menu button i { margin-left: 6px; font-style: normal; font-size: 11.5px; color: var(--mute); }
-.menu button[aria-selected="true"] i { color: rgba(255,255,255,.7); }
-.menu .card { margin-top: auto; display: block; padding: 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); text-decoration: none; }
-.menu .card:hover { border-color: var(--ink); }
-.menu .card b { display: block; font-size: 13.5px; }
-.menu .card span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.5; color: var(--mute); }
-.menu .made { margin-top: 10px; padding: 0 4px; font-size: 11.5px; line-height: 1.5; color: var(--mute); }
+.app { display: grid; grid-template-columns: 1fr; height: calc(100vh - var(--top)); height: calc(100dvh - var(--top)); }
 
 .work { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .toolbar { flex: none; display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 10px 26px; border-bottom: 1px solid var(--line); }
@@ -85,30 +74,59 @@ h1 b { font-weight: 700; }
 .card2 .ph h2 { font-size: 15px; }
 .card2 .ph small { font-size: 12.5px; color: var(--mute); }
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; align-items: start; }
 
 /* 지표 */
-.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
-.kpi { padding: 18px 20px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
-.kpi small { display: block; font-size: 13px; color: var(--text); }
-.kpi strong { display: block; margin-top: 6px; font-size: 34px; font-weight: 300; letter-spacing: -1.2px; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.kpi strong em { margin-left: 3px; font-style: normal; font-size: 14px; color: var(--mute); }
-.kpi span { display: block; margin-top: 6px; font-size: 12.5px; color: var(--mute); }
 .scale { margin-top: 10px; font-size: 13px; color: var(--mute); }
 .scale b { color: var(--ink); font-weight: 600; }
 
-/* 분포 */
-.dkpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
-.dkpi .kpi strong { font-size: 30px; }
-.dkpi .kpi span b { color: var(--ink); font-weight: 600; }
-.dkpi .kpi.hot strong { color: var(--acc); }
+/* 분포: 고객 여정 */
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.flow button { position: relative; padding: 14px 18px 13px; border: 0; border-left: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.flow button:first-child { border-left: 0; }
+.flow button:hover { background: var(--soft); }
+.flow button:not(:last-child)::after { content: ''; position: absolute; z-index: 1; right: -7px; top: 50%; width: 12px; height: 12px; background: var(--paper); border-top: 1px solid var(--line); border-right: 1px solid var(--line); transform: translateY(-50%) rotate(45deg); }
+.flow button:hover::after { background: var(--soft); }
+.flow button[aria-selected="true"], .flow button[aria-selected="true"]::after { background: #FBEDE7; }
+.flow button[aria-selected="true"] { box-shadow: inset 0 -3px 0 var(--acc); }
+.flow button[aria-selected="true"] strong { font-weight: 600; }
+.flow small { display: block; font-size: 12px; font-weight: 700; color: var(--acc); }
+.flow strong { display: block; margin-top: 4px; font-size: 24px; font-weight: 300; letter-spacing: -.8px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.flow strong em { margin-left: 2px; font-style: normal; font-size: 13px; color: var(--mute); }
+.flow span { display: block; margin-top: 3px; font-size: 12.5px; color: var(--mute); }
+.flow span b { color: var(--ink); font-weight: 600; }
+.stg { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.stg > section { grid-column: 1 / -1; margin-top: 22px; }
+.stg > section[hidden] { display: none; }
+.stg h3 { display: flex; align-items: baseline; gap: 8px; font-size: 15px; font-weight: 700; }
+.stg h3 i { font-style: normal; color: var(--acc); }
+.stg h3 small { font-size: 12.5px; font-weight: 400; color: var(--mute); }
+.stg .g2, .stg .trc { margin-top: 10px; }
+.stg .g3 { grid-template-columns: repeat(3, 1fr); align-items: start; }
+.stg > section > .trc + .card2 { margin-top: 16px; }
+.trc .tabs:has(button:only-child) { display: none; }
+.stg .col { display: flex; flex-direction: column; gap: 16px; }
+.stg > section > .card2 { margin-top: 10px; }
 .cd { display: flex; flex-direction: column; }
 .cd .q { margin-top: 4px; font-size: 13px; line-height: 1.55; color: var(--text); }
 .cd .q b { font-weight: 700; }
-.cd .q .a { color: var(--acc); }
 .lgd { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--text); }
 .lgd i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
 .lgd i.ln2 { width: 14px; height: 0; border-top: 2px dashed var(--ink); border-radius: 0; vertical-align: 3px; }
+.sk { position: relative; margin-top: 8px; }
+.sk svg { display: block; width: 100%; overflow: visible; }
+.sk text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 12px; fill: var(--mute); }
+.sk text.hd { font-size: 12px; font-weight: 600; fill: var(--ink); }
+.sk text.l1 { font-size: 13px; font-weight: 600; fill: var(--ink); }
+.sk .rb { opacity: .5; cursor: pointer; transition: opacity .2s; }
+.sk .rb:hover { opacity: .85; }
+.sk .rb.dim { opacity: .12; }
+.sk .rb.on { opacity: .9; }
+.sk .r0 { fill: var(--bar); } .sk .r1 { fill: #B9B4A8; } .sk .r2 { fill: var(--acc); } .sk .r3 { fill: #D6D1C6; }
+.sk g.nd { cursor: pointer; outline: none; }
+.sk g.nd rect.b { fill: var(--ink); }
+.sk g.nd.on rect.b { fill: var(--acc); }
+.sk g.nd.dim { opacity: .4; }
+.sk g.nd:hover rect.b, .sk g.nd:focus-visible rect.b { stroke: var(--ink); stroke-width: 2px; }
 .svgbox .h0 { fill: var(--bar); }
 .svgbox .h1 { fill: var(--acc); }
 .svgbox .hb { fill: var(--ink); opacity: .78; }
@@ -117,10 +135,8 @@ h1 b { font-weight: 700; }
 .svgbox .base { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .svgbox .medl { stroke: var(--ink); stroke-width: 1.5; }
 .svgbox text.medt { fill: var(--ink); font-weight: 700; }
-.svgbox text.vl { fill: var(--text); font-size: 11px; font-weight: 600; }
-.svgbox text.vl.a { fill: var(--acc); }
 .dist { margin-top: 8px; }
-.dr { display: grid; grid-template-columns: minmax(0, 1fr) 1.3fr 54px; gap: 10px; align-items: center; margin: 0 -8px; padding: 5px 8px; border-radius: 3px; font-size: 13.5px; }
+.dr { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr) 54px; gap: 10px; align-items: center; margin: 0 -8px; padding: 5px 8px; border-radius: 3px; font-size: 13.5px; }
 .dr .l { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dr .t { position: relative; height: 12px; background: var(--soft); border-radius: 2px; }
 .dr .t i { display: block; height: 100%; min-width: 2px; background: #B9B4A8; border-radius: 0 2px 2px 0; transition: width .4s var(--e); }
@@ -137,11 +153,16 @@ h1 b { font-weight: 700; }
 /* 차트 */
 .svgbox { position: relative; margin-top: 12px; }
 .svgbox svg { display: block; width: 100%; overflow: visible; }
-.svgbox text, .fsvg text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 12px; fill: var(--mute); }
+.svgbox text { font-family: Inter, 'Noto Sans KR', sans-serif; font-size: 12px; fill: var(--mute); }
 .gl { stroke: var(--line); stroke-width: 1; }
 .mbar { fill: var(--ink); opacity: .85; }
 .mbar:hover { fill: var(--acc); opacity: 1; }
 .ln { fill: none; stroke: var(--acc); stroke-width: 2; }
+.ln.gap { stroke-width: 1.5; stroke-dasharray: 4 4; opacity: .55; }
+.pt.low { fill: var(--paper); stroke: var(--mute); stroke-width: 1.5; }
+.ptx { fill: var(--mute); }
+.tnote { margin-top: 4px; font-size: 12px; color: var(--mute); }
+.tnote i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border: 1.5px solid var(--mute); border-radius: 50%; vertical-align: 0; }
 .pt { fill: var(--bg); stroke: var(--acc); stroke-width: 2; }
 .tip { position: absolute; z-index: 5; pointer-events: none; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 13px; line-height: 1.5; border-radius: 3px; white-space: nowrap; opacity: 0; transform: translate(-50%, -115%); transition: opacity .15s; }
 .tip.on { opacity: 1; }
@@ -151,15 +172,14 @@ h1 b { font-weight: 700; }
 .tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
 /* 리뷰 */
-#p4 { display: flex; flex-direction: column; padding-bottom: 0; }
-#p4[hidden] { display: none; }
 .rvtools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 12px; }
 .rvtools input[type=search] { flex: 1 1 240px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 13.5px; }
 .rvtools label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); cursor: pointer; }
 input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
 .rvcount { margin-top: 10px; font-size: 13px; color: var(--mute); }
 .rvcount b { color: var(--ink); }
-.rvscroll { flex: 1; min-height: 0; overflow-y: auto; margin: 10px -26px 0; padding: 0 26px 24px; }
+.rvcard .rvlist { margin-top: 10px; }
+.stg > section > .card2 + .card2, .stg > section > .g2 + .card2 { margin-top: 16px; }
 .rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
 .rv { padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .rv .tp { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; font-size: 12px; color: var(--mute); }
@@ -188,22 +208,6 @@ input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focu
 /* 흐름 */
 .fsel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 10px; min-height: 26px; font-size: 13px; color: var(--text); }
 .fsel b { font-weight: 700; }
-.fsvg { position: relative; overflow-x: auto; margin-top: 6px; }
-.fsvg svg { display: block; max-width: none; overflow: visible; }
-.fsvg .hd1 { font-size: 12px; font-weight: 600; fill: var(--ink); }
-.fsvg .hd2 { font-size: 13px; fill: var(--text); }
-.fsvg .lb1 { font-size: 13px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
-.fsvg .lb2 { font-size: 12px; fill: var(--text); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
-.rb { fill: var(--bar); opacity: .32; transition: opacity .2s; }
-.rb:hover { opacity: .55; }
-.fsvg.sel .rb { opacity: .16; }
-.rs { fill: var(--acc); opacity: .85; }
-.nd { fill: var(--ink); }
-.hit { fill: transparent; }
-.fsvg g[data-g] { cursor: pointer; outline: none; transition: opacity .2s; }
-.fsvg g[data-g].dim { opacity: .4; }
-.fsvg g[data-g]:hover .nd, .fsvg g[data-g]:focus-visible .nd { stroke: var(--ink); stroke-width: 2px; }
-.fsvg g[data-g].on .nd { fill: var(--acc); stroke: var(--ink); stroke-width: 2px; }
 
 /* ===== 조건 패널 ===== */
 .filters { position: fixed; top: var(--top); left: 0; bottom: 0; z-index: 40; width: min(340px, 100vw); overflow-y: auto; padding: 18px 20px 28px; background: var(--paper); border-right: 1px solid var(--line); box-shadow: 16px 0 40px rgba(0,0,0,.12); transform: translateX(-100%); visibility: hidden; transition: transform .3s var(--e), visibility 0s linear .3s; }
@@ -241,18 +245,12 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 .loading { font-size: 13.5px; color: var(--mute); }
 
 @media (prefers-reduced-motion: reduce) { .filters, .filters.open, .dr .t i { transition: none; } }
-@media (max-width: 1200px) { .g3 { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 800px) { .g2, .g3 { grid-template-columns: 1fr; } .dkpi { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1100px) { .stg .g3 { grid-template-columns: 1fr 1fr; } .flow { grid-template-columns: repeat(3, 1fr); } .flow button:nth-child(3)::after { display: none; } .flow button:nth-child(n+4) { border-top: 1px solid var(--line); } .flow button:nth-child(4) { border-left: 0; } }
+@media (max-width: 800px) { .g2, .stg, .stg .g3 { grid-template-columns: 1fr; } .flow { grid-template-columns: 1fr 1fr; } .flow button::after { display: none; } .flow button { border-left: 0; border-top: 1px solid var(--line); } .flow button:nth-child(-n+2) { border-top: 0; } .flow button:nth-child(even) { border-left: 1px solid var(--line); } .flow button:last-child { grid-column: 1 / -1; } }
 @media (max-width: 1000px) {
   .app { display: block; height: auto; }
-  .menu { flex-direction: row; position: sticky; top: 0; z-index: 5; padding: 8px; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
-  .menu button { width: auto; flex: none; padding: 8px 12px; font-size: 13.5px; }
-  .menu .card, .menu .made { display: none; }
   .toolbar { flex-wrap: wrap; padding: 10px 16px; }
   .panel { overflow: visible; }
-  #p4 { display: block; }
-  .rvscroll { overflow: visible; margin: 10px 0 0; padding: 0 0 24px; }
-  .kpis { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
   .top { gap: 10px; padding: 0 12px; }
@@ -263,9 +261,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   .info .pop { width: min(340px, calc(100vw - 24px)); }
   .panel { padding: 18px 16px 24px; }
   h1 { font-size: 21px; }
-  .kpi { padding: 14px; }
-  .kpi strong { font-size: 26px; }
-  .dkpi .kpi strong { font-size: 24px; }
+  .flow strong { font-size: 21px; }
   .tn { width: 100%; }
   .rvlist { grid-template-columns: 1fr; }
 }
@@ -292,15 +288,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 </header>
 
 <div class="app">
-  <nav class="menu" id="menu" role="tablist" aria-label="메뉴" aria-orientation="vertical">
-    <button role="tab" aria-selected="true" aria-controls="p0" data-t="0">홈</button>
-    <button role="tab" aria-selected="false" aria-controls="p1" data-t="1">주문 흐름</button>
-    <button role="tab" aria-selected="false" aria-controls="p2" data-t="2">분포</button>
-    <button role="tab" aria-selected="false" aria-controls="p3" data-t="3">월별 추이</button>
-    <button role="tab" aria-selected="false" aria-controls="p4" data-t="4">리뷰 원문<i id="rvN"></i></button>
-    <a class="card" href="story.html"><b>분석 이야기 →</b><span>AI와 함께 해 본 분석 예시</span></a>
-    <p class="made">AI(Claude)와 함께 만든 프로젝트입니다.</p>
-  </nav>
 
   <main class="work">
     <div class="toolbar">
@@ -309,64 +296,58 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       <div class="tn" id="tN"></div>
     </div>
 
-    <section class="panel" id="p0" role="tabpanel">
-      <h1>Olist 주문·고객 데이터 <b>탐색</b></h1>
-      <p class="desc">브라질 이커머스 Olist의 주문과 고객 기록을 있는 그대로 보여 줍니다. 위의 <b>조건</b>으로 기간, 주문 상태, 카테고리, 지역, 결제, 배송, 리뷰를 골라 검색하고, 왼쪽 메뉴에서 자세한 통계를 볼 수 있어요.</p>
+    <section class="panel" id="p2">
+      <h1>Olist 주문 데이터 <b>탐색</b></h1>
       <p class="scale" id="scale"></p>
-      <div class="kpis" id="kpis"></div>
-      <div class="card2" style="margin-top:16px"><div class="ph"><h2>월별 주문 수</h2></div><div class="svgbox" id="homeChart"><div class="tip"></div></div></div>
-    </section>
-
-    <section class="panel" id="p1" role="tabpanel" hidden>
-      <div class="ph"><h2>주문 흐름</h2></div>
-      <p class="desc">생키 다이어그램 · 주문이 배송 결과와 리뷰 별점으로 어떻게 나뉘는지 보여 줍니다. 띠 두께가 주문 수입니다. 칸을 누르면 그 주문만 조건으로 골라집니다.</p>
-      <div class="fsel" id="fSel"></div>
-      <div class="fsvg" id="fSvg"></div>
-      <p class="note" id="fNote"></p>
-    </section>
-
-    <section class="panel" id="p2" role="tabpanel" hidden>
-      <div class="ph"><h2>분포</h2></div>
-      <p class="desc">배송이 얼마나 걸리고, 늦으면 별점이 어떻게 달라지고, 얼마를 결제하는지 봅니다. 조건을 걸면 <b>점선·검은 눈금</b>이 전체 주문 기준입니다.</p>
-      <div class="dkpi" id="dKpi"></div>
-      <div class="g2">
-        <div class="card2 cd"><div class="ph"><h2>배송 소요일</h2><div class="lgd"><span><i style="background:var(--bar)"></i>정시</span><span><i style="background:var(--acc)"></i>늦게 도착</span><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqD"></p><div class="svgbox" id="dhD"><div class="tip"></div></div></div>
-        <div class="card2 cd"><div class="ph"><h2>별점 분포 · 정시 vs 지연</h2><div class="lgd"><span><i style="background:var(--bar)"></i>정시</span><span><i style="background:var(--acc)"></i>늦게 도착</span></div></div><p class="q" id="dqR"></p><div class="svgbox" id="dhR"><div class="tip"></div></div></div>
-      </div>
-      <div class="g2">
-        <div class="card2 cd"><div class="ph"><h2>결제 금액</h2><div class="lgd"><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqP"></p><div class="svgbox" id="dhP"><div class="tip"></div></div></div>
-        <div class="card2 cd"><div class="ph"><h2>결제 수단</h2></div><p class="q" id="dqT"></p><div class="dist" id="drT"></div></div>
-      </div>
-      <div class="g2">
-        <div class="card2 cd"><div class="ph"><h2>카테고리 상위 8</h2><small>첫 번째 상품 기준</small></div><div class="dist" id="drC"></div></div>
-        <div class="card2 cd"><div class="ph"><h2>고객 지역 상위 8</h2></div><div class="dist" id="drS"></div></div>
-      </div>
-      <p class="note">결제 수단·카테고리·지역 막대를 누르면 그 항목이 조건으로 추가되고, 위 차트가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
-    </section>
-
-    <section class="panel" id="p3" role="tabpanel" hidden>
-      <div class="ph"><h2>월별 추이</h2><div class="tabs" id="mtabs" role="group" aria-label="지표 선택"></div></div>
-      <div class="svgbox" id="lineBox"><div class="tip"></div></div>
-    </section>
-
-    <section class="panel" id="p4" role="tabpanel" hidden>
-      <div class="ph"><h2>리뷰 원문</h2></div>
-      <p class="desc">글이 있는 리뷰를 조건에 맞게 모아 봅니다. 원문은 포르투갈어이고, 일부 리뷰에는 AI(Claude)가 옮긴 한국어 번역이 붙어 있습니다. 한국어와 포르투갈어 모두 검색됩니다.</p>
-      <div class="rvbar">
-        <div class="rvctrls">
-          <label class="sortl">별점 <select id="rvStar" aria-label="별점 선택"><option value="0">전체</option></select></label>
-          <label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
+      <p class="desc">단계를 고르면 월별 추이와 분포를 봅니다. 막대를 누르면 조건으로 추가됩니다. 조건을 걸면 <b>점선·검은 눈금</b>이 전체 주문 기준입니다.</p>
+      <div class="flow" id="dFlow" role="tablist" aria-label="분포 단계"></div>
+      <div class="stg">
+        <section id="st1" role="tabpanel"><h3><i>①</i>구매<small>무엇을, 어디서 샀나</small></h3>
+          <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt1" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb1"><div class="tip"></div></div></div>
+          <div class="g2 g3">
+            <div class="card2 cd"><div class="ph"><h2>주문 상태</h2></div><div class="dist" id="drSt"></div></div>
+            <div class="card2 cd"><div class="ph"><h2>카테고리 상위 8</h2><small>첫 번째 상품 기준</small></div><div class="dist" id="drC"></div></div>
+            <div class="card2 cd"><div class="ph"><h2>고객 지역 상위 8</h2></div><div class="dist" id="drS"></div></div>
+          </div></section>
+        <section id="st2" role="tabpanel"><h3><i>②</i>결제<small>얼마를, 어떻게 냈나</small></h3>
+          <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt2" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb2"><div class="tip"></div></div></div>
+          <div class="g2">
+            <div class="card2 cd"><div class="ph"><h2>결제 금액</h2><div class="lgd"><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqP"></p><div class="svgbox" id="dhP"><div class="tip"></div></div></div>
+            <div class="col">
+              <div class="card2 cd"><div class="ph"><h2>결제 수단</h2></div><div class="dist" id="drT"></div></div>
+              <div class="card2 cd"><div class="ph"><h2>주문당 상품 수</h2></div><div class="dist" id="drN"></div></div>
+            </div>
+          </div></section>
+        <section id="st3" role="tabpanel"><h3><i>③</i>배송<small>얼마나 걸렸고, 예정일을 지켰나</small></h3>
+          <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt3" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb3"><div class="tip"></div></div></div>
+          <div class="g2">
+            <div class="card2 cd"><div class="ph"><h2>배송 소요일</h2><div class="lgd"><span><i style="background:var(--bar)"></i>정시</span><span><i style="background:var(--acc)"></i>늦게 도착</span><span class="bl"><i class="ln2"></i>전체</span></div></div><p class="q" id="dqD"></p><div class="svgbox" id="dhD"><div class="tip"></div></div></div>
+            <div class="card2 cd"><div class="ph"><h2>배송 결과</h2><small>예정일 대비</small></div><div class="dist" id="drD"></div></div>
+          </div></section>
+        <section id="st4" role="tabpanel"><h3><i>④</i>리뷰<small>어떻게 평가했고, 무엇을 썼나</small></h3>
+          <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt4" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb4"><div class="tip"></div></div></div>
+          <div class="g2">
+            <div class="card2 cd"><div class="ph"><h2>배송 결과 → 리뷰 별점</h2><small>띠를 누르면 그 주문만</small></div><div class="sk" id="sk"><div class="tip"></div></div></div>
+            <div class="card2 cd"><div class="ph"><h2>리뷰 별점</h2></div><div class="dist" id="drR"></div><p class="sub" id="dqR"></p></div>
+          </div>
+          <div class="card2 cd rvcard"><div class="ph"><h2>리뷰 원문</h2><label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
             <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
-          </select></label>
-        </div>
+          </select></label></div>
+            <p class="q">글이 있는 리뷰를 위 조건대로 모아 봅니다. 별점 막대를 누르면 그 별점의 리뷰만 남습니다. 원문은 포르투갈어이고, 일부 리뷰에는 AI(Claude)가 옮긴 한국어 번역이 붙어 있습니다. 한국어·포르투갈어 모두 검색됩니다.</p>
+            <div class="rvtools">
+              <input type="search" id="rvq" placeholder="리뷰 검색 (예: 배송, 환불, recebi)" aria-label="리뷰 검색">
+              <label><input type="checkbox" id="rvKo"> 한국어 번역이 있는 리뷰만</label>
+            </div>
+            <div class="rvcount" id="rvcount"></div>
+            <div class="rvlist" id="rvlist"></div><button class="more" id="rvmore" hidden>더 보기</button>
+          </div></section>
+        <section id="st5" role="tabpanel"><h3><i>⑤</i>재구매<small>다시 샀나</small></h3>
+          <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt5" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb5"><div class="tip"></div></div></div>
+          <div class="card2 cd"><div class="ph"><h2>고객별 주문 횟수</h2><small id="dqCu"></small></div><div class="dist" id="drO"></div><p class="sub">주문 기준</p><div class="dist" id="drQ"></div></div></section>
       </div>
-      <div class="rvtools">
-        <input type="search" id="rvq" placeholder="리뷰 검색 (예: 배송, 환불, recebi)" aria-label="리뷰 검색">
-        <label><input type="checkbox" id="rvKo"> 한국어 번역이 있는 리뷰만</label>
-      </div>
-      <div class="rvcount" id="rvcount"></div>
-      <div class="rvscroll"><div class="rvlist" id="rvlist"></div><button class="more" id="rvmore" hidden>더 보기</button></div>
+      <p class="note">주문 상태·결제 수단·카테고리·지역·배송 결과·별점·주문 구분 막대를 누르면 그 항목이 조건으로 추가되고, 화면 전체가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
     </section>
+
   </main>
 </div>
 
@@ -432,14 +413,14 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   function compute(skip) {
     const pass = passOf(skip); gen++;
     const R = { n: 0, cu: 0, se: 0, pv: 0, rev: 0, rsum: 0, done: 0, dlv: 0, late: 0, can: 0, dd: 0, ddn: 0, items: 0,
-      M: Array.from({ length: NM }, () => ({ n: 0, pv: 0, rev: 0, rsum: 0, dlv: 0, late: 0, can: 0 })),
+      M: Array.from({ length: NM }, () => ({ n: 0, pv: 0, rev: 0, rsum: 0, dlv: 0, late: 0, can: 0, re: 0 })),
       cnt: {}, fl: [0, 1, 2].map(() => [0, 0, 0, 0]), oc: [0, 0, 0, 0] };
     FD.forEach((f) => { R.cnt[f.k] = new Array(f.labels.length).fill(0); });
     const seen = [];
     for (let i = 0; i < N; i++) {
       if (!pass(i)) continue;
       const cu = C.cu[i], se = C.se[i], rs = C.rs[i], dl = C.dl[i], st = C.st[i], mo = R.M[C.m[i]];
-      R.n++; mo.n++;
+      R.n++; mo.n++; if (C.sq[i]) mo.re++;
       if (cuStamp[cu] !== gen) { cuStamp[cu] = gen; cuCnt[cu] = 0; R.cu++; seen.push(cu); }
       cuCnt[cu]++;
       if (se >= 0 && seStamp[se] !== gen) { seStamp[se] = gen; R.se++; }
@@ -566,28 +547,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     return s;
   }
 
-  /* ---------- 0. 홈 ---------- */
-  function renderHome() {
-    $('scale').innerHTML = `기간 <b>${mlabel(F.m0)} ~ ${mlabel(F.m1)}</b> · 판매자 <b>${fmt(S.se)}</b>명 · 상품 <b>${fmt(S.items)}</b>개 · 카테고리 <b>${S.cnt.c.filter((v) => v > 0).length}</b>개`;
-    const multi = S.oc[1] + S.oc[2] + S.oc[3];
-    const k = [
-      ['주문', fmt(S.n), '건', '배송 완료 ' + pc(S.done / S.n)],
-      ['고객', fmt(S.cu), '명', '2회 이상 주문 ' + pc(multi / S.cu)],
-      ['결제 금액', 'R$ ' + man(S.pv), '', '주문당 평균 R$ ' + fmt(S.pv / S.n)],
-      ['평균 리뷰 점수', S.rev ? (S.rsum / S.rev).toFixed(2) : '–', '점', '리뷰 ' + fmt(S.rev) + '건 · 작성 ' + pc(S.rev / S.n)],
-    ];
-    $('kpis').innerHTML = k.map((x) => `<div class="kpi"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></div>`).join('');
-    const box = $('homeChart'), W = box.clientWidth || 800, H = wide() ? Math.max(220, Math.min(380, room(box, 220, 260))) : 240;
-    const L = 52, R = 10, T = 16, B = 26, pts = [];
-    for (let i = F.m0; i <= F.m1; i++) pts.push({ i, v: S.M[i].n });
-    const mx = niceMax(Math.max(4, Math.max(...pts.map((p) => p.v)) * 1.05)), bw = (W - L - R) / pts.length;
-    const y = (v) => T + (H - T - B) * (1 - v / mx), xc = (k) => L + k * bw + bw / 2;
-    let s = axisY(L, R, W, y, mx, (v) => fmt(v));
-    pts.forEach((p, k) => { s += `<rect class="mbar" x="${(L + k * bw + bw * .15).toFixed(1)}" y="${y(p.v).toFixed(1)}" width="${(bw * .7).toFixed(1)}" height="${(y(0) - y(p.v)).toFixed(1)}" data-k="${k}"/>`; });
-    s += axisX(pts.length, xc, H, (k) => pts[k].i);
-    const svg = svgEl(box, W, H, s);
-    bindTip(box, svg, W, (k) => `<b>${dims.m[pts[k].i]}</b> · 주문 ${fmt(pts[k].v)}건`, (k) => [xc(k), y(pts[k].v)]);
-  }
 
   /* ---------- 1. 분포 ---------- */
   const PBIN = 17;   // 0: R$10 미만, 1~15: 로그 구간(1/6 decade), 16: R$3,162 이상
@@ -596,18 +555,13 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   const pPos = (v) => (v < 10 ? .5 : Math.min(16.5, 1 + 6 * (Math.log10(v) - 1)));
   const median = (a) => { if (!a.length) return NaN; a.sort(); return a[a.length >> 1]; };
   function distStats(pass) {
-    const R = { n: 0, dlv: 0, late: 0, rev: 0, neg: 0, re: 0, l20: 0, l20n: 0, e20: 0, e20n: 0, dh: Array.from({ length: 31 }, () => [0, 0]), ph: new Array(PBIN).fill(0), sr: [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]] };
+    const R = { n: 0, dh: Array.from({ length: 31 }, () => [0, 0]), ph: new Array(PBIN).fill(0), it: [0, 0, 0, 0, 0] };
     const dd = [], pv = [];
     for (let i = 0; i < N; i++) {
       if (!pass(i)) continue;
-      const dl = C.dl[i], rs = C.rs[i];
-      R.n++; if (C.sq[i]) R.re++;
-      if (rs > 0) { R.rev++; if (rs <= 2) R.neg++; }
-      if (dl < 4) {
-        const L = dl > 0 ? 1 : 0; R.dlv++; R.late += L;
-        const d = C.dd[i]; if (d >= 0) { R.dh[Math.min(30, d >> 1)][L]++; dd.push(d); if (d > 20) { R.l20n++; R.l20 += L; } else { R.e20n++; R.e20 += L; } }
-        if (rs > 0) R.sr[L][rs]++;
-      }
+      const dl = C.dl[i], d = C.dd[i];
+      R.n++; R.it[Math.min(4, C.n[i])]++;
+      if (dl < 4 && d >= 0) { R.dh[Math.min(30, d >> 1)][dl > 0 ? 1 : 0]++; dd.push(d); }
       pv.push(C.pv[i]); R.ph[pBin(C.pv[i])]++;
     }
     R.ddm = median(Float64Array.from(dd)); R.pvm = median(Float64Array.from(pv)); R.ddn = dd.length;
@@ -645,143 +599,215 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     bindTip(box, svg, W, (k) => o.tip(k, bins[k], tot), (k) => [X(k + .5), y(sh[k])]);
   }
 
-  function starChart(box, sr) {
-    const W = box.clientWidth || 520, H = 210, L = 40, R = 6, T = 22, B = 24;
-    const t0 = sr[0].reduce((a, b) => a + b, 0) || 1, t1 = sr[1].reduce((a, b) => a + b, 0) || 1;
-    const v = [1, 2, 3, 4, 5].map((r) => [sr[0][r] / t0, sr[1][r] / t1]);
-    const mx = niceMax(Math.max(.01, ...v.flat()) * 1.12), gw = (W - L - R) / 5, bw = Math.min(34, gw * .32);
-    const y = (x) => T + (H - T - B) * (1 - x / mx);
-    let s = axisY(L, R, W, y, mx, (x) => Math.round(x * 100) + '%');
-    v.forEach((p, k) => {
-      const cx = L + gw * k + gw / 2;
-      p.forEach((x, j) => {
-        const bx = cx + (j ? 2 : -bw - 2);
-        s += `<rect class="h${j}" x="${bx}" y="${y(x)}" width="${bw}" height="${y(0) - y(x)}"/>`;
-        s += `<text class="vl${j ? ' a' : ''}" x="${bx + bw / 2}" y="${y(x) - 5}" text-anchor="middle">${Math.round(x * 100)}%</text>`;
-      });
-      s += `<text x="${cx}" y="${H - 6}" text-anchor="middle">★${k + 1}</text>`;
-      s += `<rect class="hit" x="${L + gw * k}" y="${T}" width="${gw}" height="${H - T - B}" data-k="${k}"/>`;
-    });
-    const svg = svgEl(box, W, H, s);
-    bindTip(box, svg, W, (k) => `<b>★${k + 1}</b> · 정시 ${pc(v[k][0])} (${fmt(sr[0][k + 1])}건) · 지연 ${pc(v[k][1])} (${fmt(sr[1][k + 1])}건)`, (k) => [L + gw * k + gw / 2, y(Math.max(...v[k]))]);
-  }
-
   function rows(key, labels, counts, o = {}) {
     // 막대 길이 = 비율. 조건이 걸려 있으면 검은 눈금 = 전체 주문에서의 비율
-    const base = S.n < ALL.n ? ALL.cnt[key] : null, btot = base ? base.reduce((a, b) => a + b, 0) : 1;
-    let idx = counts.map((_, i) => i).filter((i) => counts[i] > 0 || (base && base[i] > 0 && F.sets[key].has(i)));
-    idx.sort((a, b) => counts[b] - counts[a]);
+    // o.order: 고정 순서(없으면 많은 순) · o.top: 위에서 몇 개 · o.base: 전체 기준 개수(기본은 ALL.cnt[key])
+    const sub = S.n < ALL.n, base = sub ? (o.base || (key && ALL.cnt[key])) : null, btot = base ? base.reduce((a, b) => a + b, 0) : 1;
+    const has = (i) => counts[i] > 0 || (key && F.sets[key].has(i));
+    let idx = o.order ? o.order.filter(has) : counts.map((_, i) => i).filter(has).sort((a, b) => counts[b] - counts[a]);
     const tot = counts.reduce((a, b) => a + b, 0) || 1, shown = idx.slice(0, o.top || idx.length), rest = idx.slice(o.top || idx.length);
     const share = (i) => counts[i] / tot, bshare = (i) => (base ? base[i] / btot : 0);
     const mx = Math.max(1e-9, ...shown.map((i) => Math.max(share(i), bshare(i))));
+    const peak = shown.reduce((a, i) => (counts[i] > counts[a] ? i : a), shown[0]);
     const row = (label, v, b, i) => {
-      const click = i >= 0, on = click && F.sets[key].has(i);
+      const click = !!key, on = click && F.sets[key].has(i);
       const attrs = click ? ` data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(label)} ${pc(v)}, 조건 ${on ? '빼기' : '추가'}"` : '';
       const tick = base && b > 0 ? `<b style="left:${Math.min(100, b / mx * 100)}%" title="전체 ${pc(b)}"></b>` : '';
-      return `<div class="dr${click ? ' click' : ''}${on ? ' on' : ''}${i === shown[0] ? ' peak' : ''}"${attrs}><span class="l" title="${esc(label)} · ${fmt(v * tot)}건${base ? ' · 전체 ' + pc(b) : ''}">${esc(label)}</span><span class="t"><i style="width:${Math.min(100, v / mx * 100)}%"></i>${tick}</span><span class="v">${pc(v)}</span></div>`;
+      return `<div class="dr${click ? ' click' : ''}${on ? ' on' : ''}${i === peak ? ' peak' : ''}"${attrs}><span class="l" title="${esc(label)} · ${fmt(v * tot)}건${base ? ' · 전체 ' + pc(b) : ''}">${esc(label)}</span><span class="t"><i style="width:${Math.min(100, v / mx * 100)}%"></i>${tick}</span><span class="v">${pc(v)}</span></div>`;
     };
     let h = shown.map((i) => row(labels[i], share(i), bshare(i), i)).join('');
     const rv = rest.reduce((a, i) => a + share(i), 0), rb = rest.reduce((a, i) => a + bshare(i), 0);
-    if (rest.length && (rv >= 5e-4 || rb >= 5e-4)) {
-      h += `<p class="sub">그 외 ${rest.length}개 합계 <b>${pc(rv)}</b>${base ? ` · 전체 ${pc(rb)}` : ''}</p>`;
-    }
+    if (rest.length && (rv >= 5e-4 || rb >= 5e-4)) h += `<p class="sub">그 외 ${rest.length}개 합계 <b>${pc(rv)}</b>${base ? ` · 전체 ${pc(rb)}` : ''}</p>`;
     return h || '<p class="sub">해당 주문이 없습니다.</p>';
   }
 
+  const IT = ['상품 정보 없음', '1개', '2개', '3개', '4개 이상'];
+  let DST = 1;   // 분포 탭에서 보고 있는 단계 (1 구매 ~ 5 재구매)
   function renderDist() {
     if (!DALL) DALL = distStats(() => true);
-    const D2 = S.n < ALL.n ? distStats(passOf()) : DALL, sub = D2 !== DALL;
-    const vs = (cur, all, f, unit, k) => {   // 전체 대비 차이. k: 표시 배율(비율이면 100 → %p)
-      const d = (cur - all) * k, t = Math.abs(d) < .05 ? '전체와 비슷' : (d > 0 ? '▲' : '▼') + Math.abs(d).toFixed(1) + unit;
-      return `전체 <b>${f(all)}</b> · ${t}`;
-    };
-    const lr = D2.dlv ? D2.late / D2.dlv : NaN, ng = D2.rev ? D2.neg / D2.rev : NaN;
-    const k = [
-      ['늦게 도착한 비율', pc(lr), '', sub ? vs(lr, DALL.late / DALL.dlv, pc, '%p', 100) : `도착 ${fmt(D2.dlv)}건 중 ${fmt(D2.late)}건`, true],
-      ['배송 소요일 중앙값', isFinite(D2.ddm) ? D2.ddm : '–', '일', sub ? vs(D2.ddm, DALL.ddm, (x) => x + '일', '일', 1) : '주문 → 도착, 절반이 이 안에 도착'],
-      ['부정 리뷰 (★1~2)', pc(ng), '', sub ? vs(ng, DALL.neg / DALL.rev, pc, '%p', 100) : `리뷰 ${fmt(D2.rev)}건 기준`],
-      ['재주문 비율', pc(D2.n ? D2.re / D2.n : NaN), '', sub ? vs(D2.n ? D2.re / D2.n : 0, DALL.re / DALL.n, pc, '%p', 100) : '같은 고객의 두 번째 이후 주문'],
+    const sub = S.n < ALL.n, D2 = sub ? distStats(passOf()) : DALL;
+    const c = S.cnt, A = ALL.cnt;
+    const lateOf = (x) => { const d = x[0] + x[1] + x[2] + x[3]; return d ? (x[1] + x[2] + x[3]) / d : NaN; };
+    const multi = (oc, cu) => (cu ? (oc[1] + oc[2] + oc[3]) / cu : NaN);
+    const avgR = (x) => (x.rev ? (x.rsum / x.rev).toFixed(2) : '–');
+    const all = (t) => (sub ? `</span><span>전체 <b>${t}</b>` : '');
+    const steps = [
+      ['① 구매', fmt(S.n), '건', `고객 ${fmt(S.cu)}명${all(fmt(ALL.n) + '건')}`],
+      ['② 결제', 'R$ ' + fmt(D2.pvm), '', `결제 금액 중앙값${all('R$ ' + fmt(DALL.pvm))}`],
+      ['③ 배송', isFinite(D2.ddm) ? D2.ddm : '–', '일', `소요일 중앙값 · 늦게 도착 ${pc(lateOf(c.dl))}${all(pc(lateOf(A.dl)))}`],
+      ['④ 리뷰', avgR(S), '점', `평균 별점 · 원문 보기${all(avgR(ALL) + '점')}`],
+      ['⑤ 재구매', pc(multi(S.oc, S.cu)), '', `2회 이상 주문한 고객${all(pc(multi(ALL.oc, ALL.cu)))}`],
     ];
-    $('dKpi').innerHTML = k.map((x) => `<div class="kpi${x[4] ? ' hot' : ''}"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></div>`).join('');
+    $('scale').innerHTML = `기간 <b>${mlabel(F.m0)} ~ ${mlabel(F.m1)}</b> · 판매자 <b>${fmt(S.se)}</b>명 · 상품 <b>${fmt(S.items)}</b>개 · 카테고리 <b>${c.c.filter((v) => v > 0).length}</b>개`;
+    $('dFlow').innerHTML = steps.map((x, k) => `<button role="tab" data-st="${k + 1}" aria-selected="${DST === k + 1}" aria-controls="st${k + 1}"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></button>`).join('');
+    for (let k = 1; k <= 5; k++) $('st' + k).hidden = k !== DST;   // 보이는 단계만 그림 크기가 맞음
+    renderTrend(DST);
     document.querySelectorAll('#p2 .lgd .bl').forEach((e) => { e.hidden = !sub; });
 
-    // 배송 소요일
-    const dTot = DALL.dh.reduce((a, x) => a + x[0] + x[1], 0);
-    $('dqD').innerHTML = D2.ddn
-      ? `절반은 <b>${D2.ddm}일</b> 안에 도착. 지연 비율: 20일 이내 <b>${pc(D2.e20n ? D2.e20 / D2.e20n : NaN)}</b> → 20일 초과 <b class="a">${pc(D2.l20n ? D2.l20 / D2.l20n : NaN)}</b>.`
-      : '도착한 주문이 없습니다.';
-    hist($('dhD'), D2.dh, {
-      base: sub ? DALL.dh.map((x) => (x[0] + x[1]) / dTot) : null,
-      med: (D2.ddm + .5) / 2, medLabel: `중앙값 ${D2.ddm}일`,
-      ticks: [[0, '0일'], [5, '10'], [10, '20'], [15, '30'], [20, '40'], [25, '50'], [30, '60+']],
-      tip: (k, x, tot) => `<b>${k === 30 ? '60일 이상' : `${k * 2}~${k * 2 + 1}일`}</b> · ${pc((x[0] + x[1]) / tot)} · 정시 ${fmt(x[0])} / 지연 ${fmt(x[1])}건`,
-    });
+    // ① 구매
+    $('drSt').innerHTML = rows('st', dims.st, c.st, { order: [0, 1, 2, 3, 4, 5, 6, 7] });
+    $('drC').innerHTML = rows('c', dims.c, c.c, { top: 8 });
+    $('drS').innerHTML = rows('s', dims.sKo, c.s, { top: 8 });
 
-    // 별점: 정시 vs 지연
-    const n0 = D2.sr[0].reduce((a, b) => a + b, 0), n1 = D2.sr[1].reduce((a, b) => a + b, 0);
-    const g0 = n0 ? (D2.sr[0][1] + D2.sr[0][2]) / n0 : NaN, g1 = n1 ? (D2.sr[1][1] + D2.sr[1][2]) / n1 : NaN;
-    $('dqR').innerHTML = n0 && n1
-      ? `★1~2 비율: 정시 <b>${pc(g0)}</b> → 지연 <b class="a">${pc(g1)}</b>${g0 > 0 ? ` (<b class="a">${(g1 / g0).toFixed(1)}배</b>)` : ''}. 각 그룹 안에서의 비율입니다.`
-      : '정시·지연 두 그룹에 모두 리뷰가 있어야 비교할 수 있습니다.';
-    starChart($('dhR'), D2.sr);
-
-    // 결제 금액
+    // ② 결제
     const pTot = DALL.ph.reduce((a, b) => a + b, 0);
-    $('dqP').innerHTML = `주문 절반이 <b>R$ ${fmt(D2.pvm)}</b> 이하. 로그 축이라 오른쪽 긴 꼬리(고액 주문)까지 한 화면에 보입니다.`;
+    $('dqP').innerHTML = `중앙값 <b>R$ ${fmt(D2.pvm)}</b> · 주문당 평균 <b>R$ ${S.n ? fmt(S.pv / S.n) : '–'}</b> · 로그 축`;
     hist($('dhP'), D2.ph.map((v) => [v]), {
       base: sub ? DALL.ph.map((v) => v / pTot) : null,
       med: pPos(D2.pvm), medLabel: `중앙값 R$ ${fmt(D2.pvm)}`,
       ticks: [[1, 'R$ 10'], [7, 'R$ 100'], [13, 'R$ 1,000']],
       tip: (k, x, tot) => `<b>${k === 0 ? 'R$ 10 미만' : k === 16 ? 'R$ ' + fmt(pEdge(16)) + ' 이상' : `R$ ${fmt(pEdge(k))} ~ ${fmt(pEdge(k + 1))}`}</b> · ${pc(x[0] / tot)} (${fmt(x[0])}건)`,
     });
+    $('drT').innerHTML = rows('pt', dims.pt, c.pt, { top: 4 });
+    $('drN').innerHTML = rows(null, IT, D2.it, { order: [1, 2, 3, 4, 0], base: DALL.it });
 
-    // 범주형
-    const pt = S.cnt.pt, ptT = pt.reduce((a, b) => a + b, 0) || 1;
-    $('dqT').innerHTML = `신용카드 <b>${pc(pt[0] / ptT)}</b>, 볼레토(현금) <b>${pc(pt[1] / ptT)}</b>. 두 가지가 대부분입니다.`;
-    $('drT').innerHTML = rows('pt', dims.pt, pt, { top: 4 });
-    $('drC').innerHTML = rows('c', dims.c, S.cnt.c, { top: 8 });
-    $('drS').innerHTML = rows('s', dims.sKo, S.cnt.s, { top: 8 });
+    // ③ 배송
+    const dTot = DALL.dh.reduce((a, x) => a + x[0] + x[1], 0);
+    $('dqD').innerHTML = D2.ddn ? `도착한 주문 ${fmt(D2.ddn)}건 · 중앙값 <b>${D2.ddm}일</b>` : '도착한 주문이 없습니다.';
+    hist($('dhD'), D2.dh, {
+      base: sub ? DALL.dh.map((x) => (x[0] + x[1]) / dTot) : null,
+      med: (D2.ddm + .5) / 2, medLabel: `중앙값 ${D2.ddm}일`,
+      ticks: [[0, '0일'], [5, '10'], [10, '20'], [15, '30'], [20, '40'], [25, '50'], [30, '60+']],
+      tip: (k, x, tot) => `<b>${k === 30 ? '60일 이상' : `${k * 2}~${k * 2 + 1}일`}</b> · ${pc((x[0] + x[1]) / tot)} · 정시 ${fmt(x[0])} / 늦게 ${fmt(x[1])}건`,
+    });
+    $('drD').innerHTML = rows('dl', dims.dl, c.dl, { order: [0, 1, 2, 3, 4] });
+
+    // ④ 리뷰
+    $('drR').innerHTML = rows('rs', RS, c.rs, { order: [5, 4, 3, 2, 1, 0] });
+    $('dqR').innerHTML = `평균 <b>${avgR(S)}점</b> · 리뷰 ${fmt(S.rev)}건`;
+    if (DST === 4) { renderSankey(); renderReviews(); }
+
+    // ⑤ 재구매
+    $('dqCu').textContent = `고객 ${fmt(S.cu)}명`;
+    $('drO').innerHTML = rows(null, ['1회', '2회', '3회', '4회 이상'], S.oc, { order: [0, 1, 2, 3], base: ALL.oc });
+    $('drQ').innerHTML = rows('sq', FK.sq.labels, c.sq, { order: [0, 1] });
+  }
+  $('dFlow').onclick = (e) => { const b = e.target.closest('[data-st]'); if (b && S.n) { DST = +b.dataset.st; renderDist(); writeHash(); $('dFlow').querySelector(`[data-st="${DST}"]`).focus(); } };
+
+  /* ---------- 배송 결과 → 리뷰 별점 (생키, ④ 리뷰) ---------- */
+  const DGN = ['정시 도착', '늦게 도착', '도착 기록 없음'], RGN = ['★4~5', '★3', '★1~2', '리뷰 없음'];
+  const DGS = [[0], [1, 2, 3], [4]], RGS = [[4, 5], [3], [1, 2], [0]];
+  const isOn = (k, arr) => F.sets[k].size === arr.length && arr.every((x) => F.sets[k].has(x));
+  function pickSk(d, r) {   // d: 배송 묶음, r: 별점 묶음 (-1 = 고르지 않음). 이미 골라져 있으면 해제
+    const off = (d < 0 || isOn('dl', DGS[d])) && (r < 0 || isOn('rs', RGS[r]));
+    if (d >= 0) F.sets.dl = off ? new Set() : new Set(DGS[d]);
+    if (r >= 0) F.sets.rs = off ? new Set() : new Set(RGS[r]);
+    update();
+  }
+  $('sk').addEventListener('click', (e) => { const t = e.target.closest('[data-d]'); if (t) pickSk(+t.dataset.d, +t.dataset.r); });
+  $('sk').addEventListener('keydown', (e) => { const t = e.target.closest('g[data-d]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickSk(+t.dataset.d, +t.dataset.r); } });
+  function renderSankey() {
+    const box = $('sk'), f = compute(['dl', 'rs']).fl;   // 배송·별점 조건은 빼고 세서, 고른 칸을 강조만 함
+    const dv = f.map((row) => row.reduce((a, b) => a + b, 0)), rv = [0, 1, 2, 3].map((r) => f.reduce((a, row) => a + row[r], 0)), tot = dv.reduce((a, b) => a + b, 0);
+    if (!tot) { box.querySelector('svg')?.remove(); return; }
+    const W = box.clientWidth || 600, H = 250, T = 26, NW = 12, G = 14, MINH = 26, LZ = 118, RZ = 118;
+    const X0 = LZ, X1 = W - RZ - NW;
+    const place = (vals) => {   // 칸 높이: 주문 수에 비례하되 최소 높이 보장
+      let k = (H - G * (vals.length - 1)) / tot;
+      for (let it = 0; it < 4; it++) {
+        const small = vals.filter((v) => v * k < MINH), big = vals.filter((v) => v * k >= MINH).reduce((a, b) => a + b, 0);
+        k = (H - G * (vals.length - 1) - small.length * MINH) / Math.max(1, big);
+      }
+      let y = T; return vals.map((v) => { const h = Math.max(MINH, v * k); const n = { v, y, h }; y += h + G; return n; });
+    };
+    const L = place(dv), R = place(rv);
+    const anyD = F.sets.dl.size > 0, anyR = F.sets.rs.size > 0;
+    const dOn = DGS.map((g) => isOn('dl', g)), rOn = RGS.map((g) => isOn('rs', g));
+    // 띠 두께: 양 끝 칸 안에서의 비율 → 작은 칸에서 나가는 띠도 읽을 수 있음
+    const lOff = L.map(() => 0), rOff = R.map(() => 0);
+    let s = `<text class="hd" x="${X0 - 8}" y="12" text-anchor="end">배송 결과</text><text class="hd" x="${X1 + NW + 8}" y="12">리뷰 별점</text>`;
+    const ribs = [];
+    f.forEach((row, d) => row.forEach((v, r) => {
+      if (!v) return;
+      const t0 = v / dv[d] * L[d].h, t1 = v / rv[r] * R[r].h;
+      ribs.push({ d, r, v, y0: L[d].y + lOff[d], t0, y1: R[r].y + rOff[r], t1 }); lOff[d] += t0; rOff[r] += t1;
+    }));
+    const xa = X0 + NW, xb = X1, xm = (xa + xb) / 2, F1 = (n) => n.toFixed(1);
+    ribs.forEach((b) => {
+      const on = (anyD || anyR) && (!anyD || dOn[b.d]) && (!anyR || rOn[b.r]), dim = (anyD || anyR) && !on;
+      const tip = `${DGN[b.d]} → ${RGN[b.r]}: ${fmt(b.v)}건 (${DGN[b.d]}의 ${pc(b.v / dv[b.d])})`;
+      s += `<path class="rb r${b.r}${on ? ' on' : ''}${dim ? ' dim' : ''}" data-d="${b.d}" data-r="${b.r}" data-tip="${esc(tip)}" d="M${xa},${F1(b.y0)}C${F1(xm)},${F1(b.y0)} ${F1(xm)},${F1(b.y1)} ${xb},${F1(b.y1)}L${xb},${F1(b.y1 + b.t1)}C${F1(xm)},${F1(b.y1 + b.t1)} ${F1(xm)},${F1(b.y0 + b.t0)} ${xa},${F1(b.y0 + b.t0)}Z"/>`;
+    });
+    const node = (n, x, label, side, d, r, on, dim) => {
+      const cy = n.y + n.h / 2, lx = side ? x + NW + 8 : x - 8, anc = side ? 'start' : 'end';
+      const tip = `${label} · ${fmt(n.v)}건 · ${pc(n.v / tot)}`;
+      return `<g class="nd${on ? ' on' : ''}${dim ? ' dim' : ''}" data-d="${d}" data-r="${r}" data-tip="${esc(tip)}" tabindex="0" role="button" aria-pressed="${on}" aria-label="${esc(tip)}">` +
+        `<rect class="b" x="${x}" y="${F1(n.y)}" width="${NW}" height="${F1(n.h)}" rx="1"/>` +
+        `<text class="l1" x="${lx}" y="${F1(cy - 2)}" text-anchor="${anc}">${label}</text><text x="${lx}" y="${F1(cy + 13)}" text-anchor="${anc}">${fmt(n.v)} · ${pc(n.v / tot)}</text></g>`;
+    };
+    L.forEach((n, d) => { s += node(n, X0, DGN[d], 0, d, -1, dOn[d], anyD && !dOn[d]); });
+    R.forEach((n, r) => { s += node(n, X1, RGN[r], 1, -1, r, rOn[r], anyR && !rOn[r]); });
+    const svg = svgEl(box, W, H + T + 4, s), tip = box.querySelector('.tip');
+    svg.onmousemove = (e) => {
+      const t = e.target.closest('[data-tip]'); if (!t) return tip.classList.remove('on');
+      const rc = box.getBoundingClientRect();
+      tip.textContent = t.dataset.tip; tip.style.left = e.clientX - rc.left + 'px'; tip.style.top = e.clientY - rc.top + 'px'; tip.classList.add('on');
+    };
+    svg.onmouseleave = () => tip.classList.remove('on');
   }
 
-  /* ---------- 2. 월별 추이 ---------- */
+  /* ---------- 월별 추이 (분포·추이 탭의 단계마다) ---------- */
   const METRICS = [
-    { l: '주문 수', f: (m) => m.n, v: (x) => fmt(x) + '건', ax: (x) => fmt(x) },
-    { l: '결제 금액', f: (m) => m.pv, v: (x) => 'R$ ' + fmt(x), ax: (x) => man(x) },
+    { l: '주문 수', f: (m) => m.n, v: (x) => fmt(x) + '건', ax: (x) => fmt(x), count: true },
+    { l: '결제 금액', f: (m) => m.pv, v: (x) => 'R$ ' + fmt(x), ax: (x) => man(x), count: true },
     { l: '평균 리뷰 점수', f: (m) => (m.rev ? m.rsum / m.rev : NaN), v: (x) => x.toFixed(2) + '점', ax: (x) => x.toFixed(2).replace(/\.?0+$/, ''), fixed: 5 },
     { l: '늦게 도착한 비율', f: (m) => (m.dlv ? m.late / m.dlv : NaN), v: (x) => pc(x), ax: (x) => +(x * 100).toFixed(1) + '%' },
     { l: '취소·상품 없음 비율', f: (m) => (m.n ? m.can / m.n : NaN), v: (x) => pc(x, 2), ax: (x) => +(x * 100).toFixed(2) + '%' },
+    { l: '재주문 비율', f: (m) => (m.n ? m.re / m.n : NaN), v: (x) => pc(x), ax: (x) => +(x * 100).toFixed(1) + '%' },
   ];
-  let MET = 0;
-  $('mtabs').innerHTML = METRICS.map((m, i) => `<button aria-pressed="${i === 0}" data-i="${i}">${m.l}</button>`).join('');
-  $('mtabs').onclick = (e) => {
-    const b = e.target.closest('button'); if (!b) return;
-    MET = +b.dataset.i; $('mtabs').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); renderTrend();
-  };
-  function renderTrend() {
-    const box = $('lineBox'), W = box.clientWidth || 800, H = Math.min(460, room(box, 240, 280)), M = METRICS[MET];
-    const L = 60, R = 20, T = 20, B = 28, pts = [];
-    for (let i = F.m0; i <= F.m1; i++) { const m = S.M[i]; pts.push({ i, v: m.n ? M.f(m) : NaN, n: m.n }); }
-    const vals = pts.map((p) => p.v).filter(isFinite);
-    const mx = M.fixed || niceMax(Math.max(1e-6, (vals.length ? Math.max(...vals) : 1) * 1.1));
-    const x = (k) => L + (pts.length === 1 ? (W - L - R) / 2 : k * (W - L - R) / (pts.length - 1)), y = (v) => T + (H - T - B) * (1 - v / mx);
-    let s = axisY(L, R, W, y, mx, M.ax) + axisX(pts.length, x, H, (k) => pts[k].i), d = '', on = false;
-    pts.forEach((p, k) => { if (isFinite(p.v)) { d += (on ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(p.v).toFixed(1); on = true; } else on = false; });
-    s += `<path class="ln" d="${d}"/>`;
-    pts.forEach((p) => { if (isFinite(p.v)) s += `<circle class="pt" r="3.5" cx="${x(pts.indexOf(p))}" cy="${y(p.v)}"/>`; });
+  const ST_MET = { 1: [0, 4], 2: [1], 3: [3], 4: [2], 5: [5] };   // 단계별로 보여 줄 지표
+  const SMET = { 1: 0, 2: 1, 3: 3, 4: 2, 5: 5 };                  // 단계별로 고른 지표
+  function renderTrend(k) {
+    $('tt' + k).innerHTML = ST_MET[k].map((i) => `<button aria-pressed="${SMET[k] === i}" data-i="${i}">${METRICS[i].l}</button>`).join('');
+    $('tt' + k).onclick = (e) => { const b = e.target.closest('button'); if (b) { SMET[k] = +b.dataset.i; renderTrend(k); } };
+    const box = $('tb' + k), W = box.clientWidth || 800, H = 180, M = METRICS[SMET[k]];
+    const L = 60, R = 20, T = 16, B = 26, pts = [], MIN = 30;   // 비율: 주문 30건 미만인 달은 흐리게, 선·축에서 제외
+    for (let i = F.m0; i <= F.m1; i++) {
+      const m = S.M[i], v = m.n || M.count ? M.f(m) : NaN;
+      pts.push({ i, v, n: m.n, low: !M.count && m.n > 0 && m.n < MIN && isFinite(v) });
+    }
+    const main = pts.filter((p) => !p.low && isFinite(p.v)).map((p) => p.v);
+    let lo = 0, hi;
+    if (M.fixed && main.length) {   // 평균 별점: 값 범위에 맞춰 축을 좁힘
+      lo = Math.max(1, Math.floor((Math.min(...main) - .15) * 4) / 4);
+      hi = Math.min(5, Math.ceil((Math.max(...main) + .15) * 4) / 4);
+    } else hi = niceMax(Math.max(1e-6, (main.length ? Math.max(...main) : 1) * 1.1));
+    const x = (j) => L + (pts.length === 1 ? (W - L - R) / 2 : j * (W - L - R) / (pts.length - 1));
+    const y = (v) => T + (H - T - B) * (1 - (Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo));
     const cw = (W - L - R) / Math.max(1, pts.length - 1);
-    pts.forEach((p, k) => { s += `<rect x="${x(k) - cw / 2}" y="${T}" width="${cw}" height="${H - T - B}" fill="transparent" data-k="${k}"/>`; });
+    let s = '';
+    const ticks = M.fixed ? Array.from({ length: Math.round((hi - lo) / .25) + 1 }, (_, g) => lo + g * .25) : [0, 1, 2, 3, 4].map((g) => lo + (hi - lo) * g / 4);
+    for (const v of ticks) { s += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${M.ax(v)}</text>`; }
+    s += axisX(pts.length, x, H, (j) => pts[j].i);
+    let d = '', gap = '', prev = -1;   // 이어진 달은 실선, 빈 달·적은 달을 건너뛰면 점선
+    pts.forEach((p, j) => {
+      if (p.low || !isFinite(p.v)) return;
+      const xy = x(j).toFixed(1) + ' ' + y(p.v).toFixed(1);
+      if (prev >= 0 && j === prev + 1) d += 'L' + xy;
+      else { if (prev >= 0) gap += 'M' + x(prev).toFixed(1) + ' ' + y(pts[prev].v).toFixed(1) + 'L' + xy; d += 'M' + xy; }
+      prev = j;
+    });
+    s += `<path class="ln gap" d="${gap}"/><path class="ln" d="${d}"/>`;
+    pts.forEach((p, j) => {
+      if (!isFinite(p.v)) return;
+      if (!p.low) { s += `<circle class="pt" r="3" cx="${x(j)}" cy="${y(p.v)}"/>`; return; }
+      const cx = x(j), yt = y(hi), yb = y(lo);   // 축 밖의 값은 위 ▲ / 아래 ▼
+      s += p.v > hi ? `<path class="ptx" d="M${cx - 5} ${yt + 8}L${cx + 5} ${yt + 8}L${cx} ${yt}Z"/>`
+        : p.v < lo ? `<path class="ptx" d="M${cx - 5} ${yb - 8}L${cx + 5} ${yb - 8}L${cx} ${yb}Z"/>`
+        : `<circle class="pt low" r="3.5" cx="${cx}" cy="${y(p.v)}"/>`;
+    });
+    pts.forEach((p, j) => { s += `<rect x="${x(j) - cw / 2}" y="${T}" width="${cw}" height="${H - T - B}" fill="transparent" data-k="${j}"/>`; });
+    let note = box.parentElement.querySelector('.tnote');
+    if (!note) { note = document.createElement('p'); note.className = 'tnote'; box.after(note); }
+    const lows = pts.filter((p) => p.low).length;
+    note.innerHTML = lows ? `<i></i>회색 점 = 주문 ${MIN}건 미만인 달 (${lows}개) · 값이 크게 흔들려 선과 축 계산에서 뺐습니다. ▲▼는 축 밖의 값입니다.` : '';
     const svg = svgEl(box, W, H, s);
-    bindTip(box, svg, W, (k) => `<b>${dims.m[pts[k].i]}</b> · ${isFinite(pts[k].v) ? M.v(pts[k].v) : '주문 없음'}${MET ? ` <span style="opacity:.7">(주문 ${fmt(pts[k].n)}건)</span>` : ''}`, (k) => [x(k), isFinite(pts[k].v) ? y(pts[k].v) : y(0)]);
+    bindTip(box, svg, W, (j) => `<b>${dims.m[pts[j].i]}</b> · ${isFinite(pts[j].v) ? M.v(pts[j].v) : '주문 없음'}${SMET[k] ? ` <span style="opacity:.7">(주문 ${fmt(pts[j].n)}건${pts[j].low ? ' · 표본 적음' : ''})</span>` : ''}`, (j) => [x(j), isFinite(pts[j].v) ? y(pts[j].v) : y(0)]);
   }
 
   /* ---------- 3. 리뷰 원문 ---------- */
-  const RV = { star: 0, sort: 'new', q: '', ko: false, shown: 30, loaded: false, loading: false, list: [] };   // star 0 = 전체
+  const RV = { sort: 'new', q: '', ko: false, shown: 30, loaded: false, loading: false, list: [] };
   const norm = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
-  if ($('rvStar')) $('rvStar').onchange = (e) => { RV.star = +e.target.value; RV.shown = 30; renderReviews(); };
-  if ($('rvStars')) $('rvStars').onclick = (e) => {
-    const b = e.target.closest('[data-star]'); if (!b) return;
-    RV.star = +b.dataset.star; RV.shown = 30; renderReviews();
-  };
   $('rvSort').onchange = (e) => { RV.sort = e.target.value; RV.shown = 30; renderReviews(); };
   let qT; $('rvq').oninput = (e) => { clearTimeout(qT); qT = setTimeout(() => { RV.q = norm(e.target.value.trim()); RV.shown = 30; renderReviews(); }, 150); };
   $('rvKo').onchange = (e) => { RV.ko = e.target.checked; RV.shown = 30; renderReviews(); };
@@ -798,20 +824,9 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     if (!RV.loaded) { loadReviews(); return; }
     const pass = passOf();
     const base = RV.list.filter((r) => pass(r[0]) && (!RV.ko || r[3]) && (!RV.q || r.nx.includes(RV.q)));
-    const sc = [base.length, 0, 0, 0, 0, 0]; base.forEach((r) => { sc[r[1]]++; });
-    if ($('rvStar')) {
-      $('rvStar').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => {
-        const label = n ? `★ ${n}점` : '전체';
-        return `<option value="${n}"${RV.star === n ? ' selected' : ''}>${label} (${fmt(sc[n])}건)</option>`;
-      }).join('');
-    }
-    if ($('rvStars')) {
-      $('rvStars').innerHTML = [0, 5, 4, 3, 2, 1].map((n) => `<button data-star="${n}" aria-pressed="${RV.star === n}">${n ? n + '점' : '전체'}<small>${fmt(sc[n])}</small></button>`).join('');
-    }
-    const list = RV.star ? base.filter((r) => r[1] === RV.star) : base.slice();
+    const list = base;
     const by = { new: (a, b) => b[0] - a[0], old: (a, b) => a[0] - b[0], hi: (a, b) => b[1] - a[1] || b[0] - a[0], lo: (a, b) => a[1] - b[1] || b[0] - a[0] }[RV.sort];
     list.sort(by);
-    $('rvN').textContent = fmt(list.length);
     $('rvcount').innerHTML = `<b>${fmt(list.length)}</b>건 · 그중 한국어 번역 ${fmt(list.filter((r) => r[3]).length)}건`;
     const hl = (s) => {
       if (!RV.q || !s) return esc(s);
@@ -827,116 +842,35 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     $('rvmore').hidden = list.length <= RV.shown;
   }
 
-  /* ---------- 4. 주문 흐름 (생키) ---------- */
-  const DGN = ['정시 도착', '늦게 도착', '도착 기록 없음'], RGN = ['★4~5', '★3', '★1~2', '리뷰 없음'];
-  const DGS = [[0], [1, 2, 3], [4]], RGS = [[4, 5], [3], [1, 2], [0]];
-  const isOn = (k, arr) => F.sets[k].size === arr.length && arr.every((x) => F.sets[k].has(x));
-  let refocus = null;
-  function pickNode(col, i) {
-    const k = col === 1 ? 'dl' : 'rs', arr = (col === 1 ? DGS : RGS)[i];
-    F.sets[k] = isOn(k, arr) ? new Set() : new Set(arr);
-    refocus = [col, i]; update();
-  }
-  $('fSvg').addEventListener('click', (e) => { const g = e.target.closest('[data-g]'); if (g) pickNode(+g.dataset.g, +g.dataset.i); });
-  $('fSvg').addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    const g = e.target.closest('[data-g]'); if (g) { e.preventDefault(); pickNode(+g.dataset.g, +g.dataset.i); }
-  });
-  function renderFlow() {
-    const box = $('fSvg'), B = compute(['dl', 'rs']), f = B.fl, sel = F.sets.dl.size || F.sets.rs.size, fs = S.fl;
-    const dv = [0, 0, 0], rv = [0, 0, 0, 0]; let tot = 0;
-    f.forEach((row, d) => row.forEach((v, r) => { dv[d] += v; rv[r] += v; tot += v; }));
-    $('fSel').innerHTML = sel ? `고른 주문 <b>${fmt(S.n)}</b>건 (흐름 전체의 ${pc(S.n / Math.max(1, tot))})` : '<span style="color:var(--mute)">배송이나 리뷰 칸을 누르면 그 주문만 골라집니다. 고른 조건은 다른 메뉴에도 적용돼요.</span>';
-    $('fNote').textContent = '띠 두께는 주문 수에 비례합니다. 아주 얇은 띠는 보이도록 최소 두께를 줬습니다.';
-    if (!tot) { box.innerHTML = '<div class="empty">조건에 맞는 주문이 없습니다.</div>'; return; }
-    const W = Math.max(box.clientWidth || 760, 680), H = Math.max(240, Math.min(460, room(box, 300, 320) - 70));
-    const TOP = 48, LZ = 120, RZ = 170, NW = 12, G = 24, MINH = 4, k = (H - G * 3 - 8) / tot;
-    const X = [LZ, LZ + (W - LZ - RZ - NW) / 2, W - RZ - NW];
-    const nodes = [[tot], dv, rv].map((vals) => {
-      const hs = vals.map((v) => Math.max(MINH, v * k));
-      let y = Math.max(0, (H - (hs.reduce((a, b) => a + b, 0) + G * (vals.length - 1))) / 2);
-      return vals.map((v, i) => { const n = { v, h: hs[i], y, oc: 0, ic: 0 }; y += hs[i] + G; return n; });
-    });
-    const links = [];
-    [0, 1, 2].forEach((d) => links.push({ c: 0, a: 0, b: d, v: dv[d], s: sel ? fs[d].reduce((x, y) => x + y, 0) : 0 }));
-    [0, 1, 2].forEach((d) => [0, 1, 2, 3].forEach((r) => links.push({ c: 1, a: d, b: r, v: f[d][r], s: sel ? fs[d][r] : 0 })));
-    links.forEach((l) => { const n = nodes[l.c][l.a]; l.sy = n.y + n.oc; n.oc += l.v * k; });
-    links.slice().sort((p, q) => p.c - q.c || p.b - q.b || p.a - q.a).forEach((l) => { const n = nodes[l.c + 1][l.b]; l.ty = n.y + n.ic; n.ic += l.v * k; });
-    const Y = (v) => +(v + TOP).toFixed(1), Rd = (v) => +v.toFixed(1);
-    const rib = (x0, y0, x1, y1, t) => { const xm = (x0 + x1) / 2; return `M${Rd(x0)},${y0}C${Rd(xm)},${y0} ${Rd(xm)},${y1} ${Rd(x1)},${y1}L${Rd(x1)},${Rd(y1 + t)}C${Rd(xm)},${Rd(y1 + t)} ${Rd(xm)},${Rd(y0 + t)} ${Rd(x0)},${Rd(y0 + t)}Z`; };
-    const NMS = [['주문'], DGN, RGN];
-    const tipOf = (l) => `${NMS[l.c][l.a]} → ${NMS[l.c + 1][l.b]}: ${fmt(l.v)}건 (${NMS[l.c][l.a]} 주문의 ${pc(l.v / nodes[l.c][l.a].v)})` + (sel ? ` · 고른 주문 ${fmt(l.s)}건` : '');
-    let s = '';
-    [['주문', fmt(tot) + '건'], ['배송 결과', '정시 도착 ' + pc(dv[0] / tot)], ['리뷰 별점', '★4~5 ' + pc(rv[0] / tot)]].forEach((h, c) => {
-      const x = c ? X[c] : 0; s += `<text class="hd1" x="${x}" y="14">${h[0]}</text><text class="hd2" x="${x}" y="33">${h[1]}</text>`;
-    });
-    links.forEach((l) => { if (l.v > 0) s += `<path class="rb" d="${rib(X[l.c] + NW, Y(l.sy), X[l.c + 1], Y(l.ty), Math.max(1.2, l.v * k))}" data-tip="${esc(tipOf(l))}"/>`; });
-    if (sel) links.forEach((l) => { if (l.s > 0) s += `<path class="rs" d="${rib(X[l.c] + NW, Y(l.sy), X[l.c + 1], Y(l.ty), Math.max(1.2, l.s * k))}" data-tip="${esc(tipOf(l))}"/>`; });
-    nodes.forEach((col, c) => col.forEach((n, i) => {
-      const l1 = c === 0 ? '전체 주문' : NMS[c][i], l2 = fmt(n.v) + '건 · ' + pc(n.v / tot);
-      const cy = Y(n.y + n.h / 2), x = X[c], lx = c === 0 ? x - 8 : x + NW + 8, anc = c === 0 ? 'end' : 'start';
-      const body = `<rect class="nd" x="${Rd(x)}" y="${Y(n.y)}" width="${NW}" height="${Rd(n.h)}" rx="1"/><text class="lb1" x="${Rd(lx)}" y="${Rd(cy - 2)}" text-anchor="${anc}">${esc(l1)}</text><text class="lb2" x="${Rd(lx)}" y="${Rd(cy + 13)}" text-anchor="${anc}">${esc(l2)}</text>`;
-      if (c === 0) { s += `<g data-tip="${esc(l1 + ' · ' + l2)}">${body}</g>`; return; }
-      const k2 = c === 1 ? 'dl' : 'rs', on = isOn(k2, (c === 1 ? DGS : RGS)[i]), dim = F.sets[k2].size && !on, hh = Math.max(n.h + 8, 20);
-      s += `<g class="${on ? 'on' : ''}${dim ? ' dim' : ''}" data-g="${c}" data-i="${i}" data-tip="${esc(l1 + ' · ' + l2)}" tabindex="0" role="button" aria-pressed="${on}" aria-label="${esc(l1 + ', ' + l2)}"><rect class="hit" x="${Rd(x - 4)}" y="${Rd(cy - hh / 2)}" width="${NW + 8}" height="${Rd(hh)}"/>${body}</g>`;
-    }));
-    box.className = 'fsvg' + (sel ? ' sel' : '');
-    box.innerHTML = `<svg width="${W}" height="${H + TOP + 20}" viewBox="0 0 ${W} ${H + TOP + 20}" role="group" aria-label="주문의 배송 결과와 리뷰 별점 흐름">${s}</svg><div class="tip"></div>`;
-    const tip = box.querySelector('.tip'), svg = box.querySelector('svg');
-    svg.onmousemove = (e) => {
-      const t = e.target.closest('[data-tip]'); if (!t) return tip.classList.remove('on');
-      const r = box.getBoundingClientRect();
-      tip.textContent = t.dataset.tip; tip.style.left = e.clientX - r.left + box.scrollLeft + 'px'; tip.style.top = e.clientY - r.top + 'px'; tip.classList.add('on');
-    };
-    svg.onmouseleave = () => tip.classList.remove('on');
-    if (refocus) { const g = box.querySelector(`[data-g="${refocus[0]}"][data-i="${refocus[1]}"]`); refocus = null; if (g) g.focus(); }
-  }
-
-  /* ---------- 메뉴 ---------- */
-  let TAB = 0;
-  const RENDER = [renderHome, renderFlow, renderDist, renderTrend, renderReviews];
-  function showTab(t) {
-    TAB = t;
-    document.querySelectorAll('#menu [role=tab]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.t === t));
-    document.querySelectorAll('.panel').forEach((p, i) => { p.hidden = i !== t; });
-    if (S.n || t === 4) RENDER[t]();
-  }
-  $('menu').addEventListener('click', (e) => { const b = e.target.closest('[role=tab]'); if (b) { showTab(+b.dataset.t); writeHash(); } });
-  $('menu').addEventListener('keydown', (e) => {
-    const fw = e.key === 'ArrowDown' || e.key === 'ArrowRight', bw = e.key === 'ArrowUp' || e.key === 'ArrowLeft';
-    if (!fw && !bw) return; e.preventDefault();
-    const t = (TAB + (fw ? 1 : 4)) % 5; showTab(t); writeHash(); document.querySelector(`#menu [data-t="${t}"]`).focus();
-  });
-
   /* ---------- 갱신 · 주소 ---------- */
   function update() {
     S = compute();
     syncFilters();
     document.querySelectorAll('.panel').forEach((p) => { p.style.opacity = S.n ? '' : .4; });
-    if (!S.n) $('kpis').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 주문이 없습니다. 조건을 줄여 보세요.</div>';
-    if (RV.loaded && TAB !== 4) renderReviews();
-    showTab(TAB);
+    if (S.n) renderDist();
+    else $('dFlow').innerHTML = '<div class="empty" style="grid-column:1/-1">조건에 맞는 주문이 없습니다. 조건을 줄여 보세요.</div>';
     writeHash();
   }
   function writeHash() {
     const q = [];
     if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
     FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
-    if (TAB) q.push('t=' + TAB);
+    if (DST > 1) q.push('d=' + DST);   // 보고 있는 단계
     const h = q.length ? '#' + q.join('&') : '';
     if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
   }
   function readHash() {
-    clearKey('m'); FD.forEach((f) => clearKey(f.k)); TAB = 0;
+    clearKey('m'); FD.forEach((f) => clearKey(f.k)); DST = 1;
     location.hash.slice(1).split('&').forEach((kv) => {
       const [k, v = ''] = kv.split('=');
-      if (k === 't') { const t = +v; if (t >= 0 && t < 5) TAB = t; }
+      if (k === 'd') { const d = +v; if (d >= 1 && d <= 5) DST = d; }
+      else if (k === 't') { if (v === '4') DST = 4; }   // 예전 주소: 리뷰 원문 탭 → ④ 리뷰
       else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
       else if (FK[k]) v.split(',').forEach((x) => { const i = +x; if (x !== '' && i >= 0 && i < FK[k].labels.length) F.sets[k].add(i); });
     });
   }
   window.addEventListener('hashchange', () => { readHash(); update(); });
-  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => showTab(TAB), 120); });
+  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.n) renderDist(); }, 120); });
   readHash();
   update();
 })();
