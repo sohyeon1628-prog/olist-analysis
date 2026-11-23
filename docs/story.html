@@ -32,26 +32,13 @@ a { color: inherit; }
 #side nav a:hover { background: #E3DFD5; color: #111; }
 #side nav a.on { border-left-color: var(--g); background: var(--g-soft); color: #111; font-weight: 800; }
 #side nav a.on .n { color: var(--g); }
-#side nav a .sub-pages { display: inline-flex; align-items: center; gap: 2px; padding: 1px 6px; border-radius: 999px; background: rgba(0,0,0,.06); font-size: 10.5px; font-weight: 800; color: #777; font-variant-numeric: tabular-nums; margin-left: auto; }
-#side nav a.on .sub-pages { background: rgba(224,74,31,.18); color: var(--g); }
-#side nav a .sub-pages .sp-n { padding: 0 4px; border-radius: 3px; cursor: pointer; transition: all .15s; }
-#side nav a .sub-pages .sp-n.on { background: var(--g); color: #fff; font-weight: 900; }
-#side nav a .sub-pages .sp-sep { opacity: .4; font-size: 9px; }
-
-/* 사이드바 하단 페이지 번호 위젯 */
-.side-pager { margin-top: auto; margin-bottom: 14px; padding: 12px 14px; background: #E3DFD5; border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; gap: 7px; }
-.side-pager .sp-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
-.side-pager .sp-sec { font-size: 11.5px; font-weight: 800; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.side-pager .sp-badge { display: inline-flex; align-items: center; padding: 2px 7px; background: #fff; border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--g); border: 1px solid rgba(224, 74, 31, .3); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.side-pager .sp-sub-nav { display: flex; gap: 5px; margin: 1px 0 2px; }
-.side-pager .sp-btn { flex: 1; padding: 4px 0; border: 1px solid #D6D1C6; border-radius: 5px; background: #FAF9F6; font-size: 11px; font-weight: 700; color: #555; cursor: pointer; text-align: center; transition: all .15s; font-variant-numeric: tabular-nums; }
-.side-pager .sp-btn:hover { background: #fff; border-color: #bbb; color: #111; }
-.side-pager .sp-btn.on { background: var(--g); border-color: var(--g); color: #fff; font-weight: 900; box-shadow: 0 1px 3px rgba(224, 74, 31, .25); }
-.side-pager .sp-prog { height: 4px; background: rgba(0,0,0,.08); border-radius: 999px; overflow: hidden; }
-.side-pager .sp-fill { height: 100%; background: var(--g); border-radius: 999px; transition: width .25s var(--e); }
-.side-pager .sp-foot { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--mute); }
-.side-pager .sp-foot strong { color: #111; font-weight: 800; }
-.side-pager .sp-hint { font-size: 10.5px; font-weight: 700; color: var(--g); }
+/* 사이드바 서브페이지 미니멀 표시 (| 01) */
+.sub-nav { display: flex; align-items: center; gap: 8px; margin: 2px 0 4px 26px; }
+.sub-link { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 600; color: var(--mute); text-decoration: none; font-variant-numeric: tabular-nums; padding: 1px 4px; border-radius: 3px; transition: color .15s; }
+.sub-link .pip { color: #C4C0B5; font-weight: 300; font-size: 11px; }
+.sub-link:hover { color: #111; }
+.sub-link.on { color: var(--g); font-weight: 800; }
+.sub-link.on .pip { color: var(--g); font-weight: 900; }
 #side .ft { font-size: 11px; line-height: 1.7; color: var(--mute); }
 #side .ft a { font-weight: 700; color: #111; }
 
@@ -354,29 +341,24 @@ footer a { color: #111; font-weight: 700; }
     <a href="#rules"><span class="n">02</span><span class="txt">데이터와 규칙</span></a>
     <a href="#results"><span class="n">03</span><span class="txt">계획한 질문의 결과</span></a>
     <a href="#explore"><span class="n">04</span><span class="txt">평점이 깎이는 지점</span></a>
-    <a href="#sentiment"><span class="n">05</span><span class="txt">리뷰 글 감성</span><span class="sub-pages" data-subsec="sentiment"><span class="sp-n" data-pg="sentiment">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="sentiment-2">2</span></span></a>
+    <a href="#sentiment"><span class="n">05</span><span class="txt">리뷰 글 감성</span></a>
+    <div class="sub-nav">
+      <a href="#sentiment" class="sub-link" data-pg="sentiment"><span class="pip">|</span> 01</a>
+      <a href="#sentiment-2" class="sub-link" data-pg="sentiment-2"><span class="pip">|</span> 02</a>
+    </div>
     <a href="#seller"><span class="n">06</span><span class="txt">판매자 지속</span></a>
     <a href="#rating"><span class="n">07</span><span class="txt">평점과 판매</span></a>
-    <a href="#recs"><span class="n">08</span><span class="txt">제안과 다음 단계</span><span class="sub-pages" data-subsec="recs"><span class="sp-n" data-pg="recs">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="recs-2">2</span></span></a>
-    <a href="#limits"><span class="n">09</span><span class="txt">한계</span><span class="sub-pages" data-subsec="limits"><span class="sp-n" data-pg="limits">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="limits-2">2</span></span></a>
+    <a href="#recs"><span class="n">08</span><span class="txt">제안과 다음 단계</span></a>
+    <div class="sub-nav">
+      <a href="#recs" class="sub-link" data-pg="recs"><span class="pip">|</span> 01</a>
+      <a href="#recs-2" class="sub-link" data-pg="recs-2"><span class="pip">|</span> 02</a>
+    </div>
+    <a href="#limits"><span class="n">09</span><span class="txt">한계</span></a>
+    <div class="sub-nav">
+      <a href="#limits" class="sub-link" data-pg="limits"><span class="pip">|</span> 01</a>
+      <a href="#limits-2" class="sub-link" data-pg="limits-2"><span class="pip">|</span> 02</a>
+    </div>
   </nav>
-  <div class="side-pager" id="sidePager" aria-label="사이드바 페이지 상태">
-    <div class="sp-top">
-      <span class="sp-sec" id="spSec">00 · 요약</span>
-      <span class="sp-badge" id="spBadge">1 / 1장</span>
-    </div>
-    <div class="sp-sub-nav" id="spSubNav" style="display:none">
-      <button type="button" class="sp-btn" id="spBtn1" data-sub="1">1장</button>
-      <button type="button" class="sp-btn" id="spBtn2" data-sub="2">2장</button>
-    </div>
-    <div class="sp-prog">
-      <div class="sp-fill" id="spFill" style="width: 7.7%;"></div>
-    </div>
-    <div class="sp-foot">
-      <span>슬라이드 <strong id="spPage">1</strong> / <span id="spTotPage">13</span></span>
-      <span class="sp-hint" id="spHint">단일 슬라이드</span>
-    </div>
-  </div>
   <div class="ft"><a href="index.html">← 직접 조회해 보기</a><br><a href="https://github.com/sohyeon1628-prog/olist-analysis">분석 코드 보기 ↗</a><br>박소현</div>
 </aside>
 
@@ -641,29 +623,6 @@ footer a { color: #111; font-weight: 700; }
   var mq = window.matchMedia('(min-width: 1001px)');
   var cur = -1, MIN = 0.6;
 
-  var secTitles = {
-    'summary': '00 · 요약',
-    'question': '01 · 질문 재정의',
-    'rules': '02 · 데이터와 규칙',
-    'results': '03 · 계획한 질문의 결과',
-    'explore': '04 · 평점이 깎이는 지점',
-    'sentiment': '05 · 리뷰 글 감성',
-    'seller': '06 · 판매자 지속',
-    'rating': '07 · 평점과 판매',
-    'recs': '08 · 제안과 다음 단계',
-    'limits': '09 · 한계'
-  };
-
-  var spSec = document.getElementById('spSec');
-  var spBadge = document.getElementById('spBadge');
-  var spFill = document.getElementById('spFill');
-  var spPage = document.getElementById('spPage');
-  var spTotPage = document.getElementById('spTotPage');
-  var spHint = document.getElementById('spHint');
-  var spSubNav = document.getElementById('spSubNav');
-  var spBtn1 = document.getElementById('spBtn1');
-  var spBtn2 = document.getElementById('spBtn2');
-
   function fit(pg) {
     var inner = pg.querySelector('.pg-in');
     inner.style.zoom = ''; inner.style.maxWidth = ''; pg.classList.remove('scroll');
@@ -685,45 +644,15 @@ footer a { color: #111; font-weight: 700; }
 
     var curPg = pages[i];
     var secKey = curPg.getAttribute('data-sec') || curPg.id;
-    var secPages = pages.filter(function (p) { return p.getAttribute('data-sec') === secKey; });
-    var subTotal = secPages.length;
-    var subIdx = secPages.indexOf(curPg) + 1;
 
+    // 사이드바 메인 메뉴 활성화
     Object.keys(links).forEach(function (k) { links[k].classList.remove('on'); });
     var a = links[secKey]; if (a) a.classList.add('on');
 
-    // 사이드바 메뉴 내 서브페이지 번호 하이라이트
-    document.querySelectorAll('.sp-n').forEach(function (sp) {
-      sp.classList.toggle('on', sp.getAttribute('data-pg') === curPg.id);
+    // 사이드바 서브페이지 링크 (| 01, | 02) 활성화
+    document.querySelectorAll('.sub-link').forEach(function (sl) {
+      sl.classList.toggle('on', sl.getAttribute('data-pg') === curPg.id);
     });
-
-    // 사이드바 하단 페이지 번호 위젯 업데이트
-    if (spSec) spSec.textContent = secTitles[secKey] || secKey;
-    if (spBadge) {
-      spBadge.textContent = subTotal > 1 ? (subIdx + ' / ' + subTotal + '장') : '1 / 1장';
-      spBadge.style.color = subTotal > 1 ? 'var(--g)' : 'var(--mute)';
-      spBadge.style.borderColor = subTotal > 1 ? 'rgba(224, 74, 31, .35)' : 'rgba(0,0,0,.1)';
-      spBadge.style.background = subTotal > 1 ? '#FFF4F0' : '#fff';
-    }
-    if (spSubNav) {
-      if (subTotal > 1) {
-        spSubNav.style.display = 'flex';
-        if (spBtn1) {
-          spBtn1.classList.toggle('on', subIdx === 1);
-          spBtn1.onclick = function () { var idx = keys.indexOf(secPages[0].id); if (idx >= 0) show(idx); };
-        }
-        if (spBtn2) {
-          spBtn2.classList.toggle('on', subIdx === 2);
-          spBtn2.onclick = function () { var idx = keys.indexOf(secPages[1].id); if (idx >= 0) show(idx); };
-        }
-      } else {
-        spSubNav.style.display = 'none';
-      }
-    }
-    if (spFill) spFill.style.width = (((i + 1) / pages.length) * 100).toFixed(1) + '%';
-    if (spPage) spPage.textContent = (i + 1);
-    if (spTotPage) spTotPage.textContent = pages.length;
-    if (spHint) spHint.textContent = subTotal > 1 ? (subTotal + '장 중 ' + subIdx + '번째 장') : '단일 슬라이드';
 
     // 메인 하단 페이저 업데이트
     var pgN = document.getElementById('pgN');
@@ -736,12 +665,11 @@ footer a { color: #111; font-weight: 700; }
     if (!noHash) { try { history.replaceState(null, '', '#' + keys[i]); } catch (e) {} }
   }
 
-  // 서브페이지 번호 클릭 이벤트 바인딩
-  document.querySelectorAll('.sp-n').forEach(function (sp) {
-    sp.addEventListener('click', function (e) {
+  // 서브페이지 링크 (| 01, | 02) 클릭 시 해당 슬라이드로 이동
+  document.querySelectorAll('.sub-link').forEach(function (sl) {
+    sl.addEventListener('click', function (e) {
       e.preventDefault();
-      e.stopPropagation();
-      var targetId = sp.getAttribute('data-pg');
+      var targetId = sl.getAttribute('data-pg');
       var targetIdx = keys.indexOf(targetId);
       if (targetIdx >= 0) show(targetIdx);
     });
