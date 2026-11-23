@@ -160,11 +160,41 @@ h1 b { font-weight: 700; }
 .dr .t i.sev1 { background: #F0B39C; }
 .dr .t i.sev2 { background: #E9835E; }
 .dr .t i.mid { background: #CFCAC0; }
-.bm { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 16px 0 4px; }
-.bm span { margin-right: 4px; font-size: 12.5px; font-weight: 700; color: var(--mute); }
-.bm button { padding: 5px 13px; border: 1.5px solid var(--ink); border-radius: 999px; background: transparent; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink); cursor: pointer; }
-.bm button:hover { background: var(--soft); }
-.bm button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+.kpi .k { padding: 14px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.kpi small { font-size: 12px; font-weight: 700; color: var(--mute); }
+.kpi b { display: block; margin-top: 2px; font-size: 30px; font-weight: 700; letter-spacing: -1px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.kpi b em { font-style: normal; font-size: 14px; font-weight: 400; color: var(--mute); margin-left: 3px; }
+.kpi span { font-size: 12.5px; color: var(--mute); }
+.kpi .up { color: var(--acc); font-weight: 700; } .kpi .dn { color: var(--good); font-weight: 700; }
+.cmp { display: block; margin-top: 16px; padding: 18px 22px 14px; }
+.cmp .ph { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.segtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; }
+.segtabs button { padding: 6px 14px; border: 1.5px solid var(--ink); border-radius: 999px; background: transparent; font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); cursor: pointer; }
+.segtabs button:hover { background: var(--soft); }
+.segtabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
+.segwrap { overflow-x: auto; }
+table.sg { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+table.sg th { padding: 8px 10px; border-bottom: 1.5px solid var(--ink); font-size: 12px; font-weight: 700; color: var(--mute); text-align: right; white-space: nowrap; user-select: none; }
+table.sg th[data-s] { cursor: pointer; } table.sg th[data-s]:hover, table.sg th.cur { color: var(--ink); }
+table.sg th:first-child, table.sg td:first-child { text-align: left; }
+table.sg td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+table.sg td:first-child { font-weight: 700; white-space: normal; min-width: 130px; }
+table.sg tr.row { cursor: pointer; } table.sg tr.row:hover td { background: var(--soft); }
+table.sg tr.on td { background: var(--soft); } table.sg tr.on td:first-child { box-shadow: inset 3px 0 0 var(--ink); }
+table.sg tr.lo td { color: #9B978D; } table.sg tr.lo .nbar i { opacity: .35; }
+table.sg .sh { color: var(--mute); font-size: 12px; margin-left: 4px; font-weight: 400; }
+.nbar { display: inline-block; position: relative; width: 150px; height: 14px; margin-right: 10px; vertical-align: middle; background: var(--soft); text-align: left; }
+.nbar i { position: absolute; left: 0; top: 0; bottom: 0; background: #B9B4A8; } .nbar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); }
+.nbar.up i { background: var(--acc); } .nbar.dn i { background: var(--good); }
+.nv { display: inline-block; min-width: 50px; font-weight: 700; }
+.dlt { display: inline-block; min-width: 62px; font-size: 12px; font-weight: 700; color: var(--mute); }
+.dlt.up { color: var(--acc); } .dlt.dn { color: var(--good); }
+.late.up { color: var(--acc); font-weight: 700; } .late.dn { color: var(--good); font-weight: 700; }
+.segnote { margin: 10px 0 2px; font-size: 12px; color: var(--mute); }
+.segnote button { margin-left: 8px; padding: 3px 10px; border: 1px solid var(--ink); border-radius: 999px; background: none; font: inherit; font-size: 12px; cursor: pointer; }
+.flowh { margin: 34px 0 0; font-size: 18px; font-weight: 700; } .flowh small { margin-left: 8px; font-size: 13px; font-weight: 400; color: var(--mute); }
+@media (max-width: 800px) { .kpi { grid-template-columns: 1fr 1fr; } .nbar { width: 70px; } }
 .stbl td.hot { color: var(--acc); font-weight: 700; }
 .tscroll2 { overflow-x: auto; }
 .sub b { color: var(--ink); font-weight: 600; }
@@ -320,21 +350,18 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     <section class="panel" id="p2">
       <h1>Olist 주문 데이터 <b>탐색</b></h1>
       <p class="scale" id="scale"></p>
-      <p class="desc">단계를 고르면 월별 추이와 분포를 봅니다. 막대를 누르면 조건으로 추가됩니다. 조건을 걸면 <b>점선·검은 눈금</b>이 전체 주문 기준입니다.</p>
+      <div class="kpi" id="kpi"></div>
+      <section class="cmp card2" id="seg" aria-label="세그먼트 비교">
+        <div class="ph"><h2>어디서 부정 리뷰가 많은가</h2><small>부정 리뷰 = 별점 1~2점 · 행을 누르면 그 집단만 조건으로 걸립니다</small></div>
+        <div class="segtabs" id="segTabs" role="tablist"></div>
+        <div class="segwrap" id="segBody"></div>
+      </section>
+      <h2 class="flowh">흐름으로 보기 <small>구매 → 결제 → 배송 → 리뷰 → 재구매</small></h2>
       <div class="flow" id="dFlow" role="tablist" aria-label="분포 단계"></div>
-      <div class="bm" id="bm" role="group" aria-label="막대로 볼 값"></div>
       <div class="stg">
         <section id="st1" role="tabpanel"><h3><i>①</i>구매<small>무엇을, 어디서 샀나</small></h3>
           <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt1" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb1"><div class="tip"></div></div></div>
-          <div class="g2 g3">
-            <div class="card2 cd"><div class="ph"><h2>주문 상태</h2></div><div class="dist" id="drSt"></div></div>
-            <div class="card2 cd"><div class="ph"><h2>카테고리 상위 8</h2><small>첫 번째 상품 기준</small></div><div class="dist" id="drC"></div></div>
-            <div class="card2 cd"><div class="ph"><h2>고객 지역 상위 8</h2></div><div class="dist" id="drS"></div></div>
-          </div>
-          <div class="g2">
-            <div class="card2 cd"><div class="ph"><h2>주문 구성</h2><small>한 주문에 담긴 상품</small></div><div class="dist" id="drOt"></div></div>
-            <div class="card2 cd"><div class="ph"><h2>판매자 규모</h2><small>판매자의 전체 주문 수</small></div><div class="dist" id="drSz"></div></div>
-          </div></section>
+</section>
         <section id="st2" role="tabpanel"><h3><i>②</i>결제<small>얼마를, 어떻게 냈나</small></h3>
           <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt2" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb2"><div class="tip"></div></div></div>
           <div class="g2">
@@ -356,10 +383,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
             <div class="card2 cd"><div class="ph"><h2>배송 결과 → 리뷰 별점</h2><small>띠를 누르면 그 주문만</small></div><div class="sk" id="sk"><div class="tip"></div></div></div>
             <div class="card2 cd"><div class="ph"><h2>리뷰 별점</h2></div><div class="dist" id="drR"></div><p class="sub" id="dqR"></p></div>
           </div>
-          <div class="g2">
-            <div class="card2 cd"><div class="ph"><h2>주문 구성별 부정 리뷰</h2><small>별점 1~2 비율</small></div><div class="dist" id="drOtR"></div><p class="sub" id="dqOtR"></p></div>
-            <div class="card2 cd"><div class="ph"><h2>판매자 규모별 부정 리뷰</h2><small>별점 1~2 비율</small></div><div class="dist" id="drSzR"></div><p class="sub" id="dqSzR"></p></div>
-          </div>
           <div class="card2 cd"><div class="ph"><h2>판매자별 부정 리뷰</h2><small>주문 20건 이상 · 비율 높은 10명</small></div><div class="tscroll2" id="sTbl"></div><p class="sub" id="dqSt"></p></div>
           <div class="card2 cd rvcard"><div class="ph"><h2>리뷰 원문</h2><label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
             <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
@@ -376,7 +399,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
           <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt5" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb5"><div class="tip"></div></div></div>
           <div class="card2 cd"><div class="ph"><h2>고객별 주문 횟수</h2><small id="dqCu"></small></div><div class="dist" id="drO"></div><p class="sub">주문 기준</p><div class="dist" id="drQ"></div></div></section>
       </div>
-      <p class="note">주문 상태·결제 수단·카테고리·지역·배송 결과·별점·주문 구분 막대를 누르면 그 항목이 조건으로 추가되고, 화면 전체가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
+      <p class="note">비교표의 행이나 별점·배송 결과 막대를 누르면 그 집단이 조건으로 추가되고, 화면 전체가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
     </section>
 
   </main>
@@ -635,7 +658,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   function rows(key, labels, counts, o = {}) {
     // 막대 길이 = 비율. 조건이 걸려 있으면 검은 눈금 = 전체 주문에서의 비율
     // o.order: 고정 순서(없으면 많은 순) · o.top: 위에서 몇 개 · o.base: 전체 기준 개수(기본은 ALL.cnt[key])
-    if (BM !== 'cnt' && key && !o.fixed) return metricRows(key, labels, o);
     const sub = S.n < ALL.n, base = sub ? (o.base || (key && ALL.cnt[key])) : null, btot = base ? base.reduce((a, b) => a + b, 0) : 1;
     const has = (i) => counts[i] > 0 || (key && F.sets[key].has(i));
     let idx = o.order ? o.order.filter(has) : counts.map((_, i) => i).filter(has).sort((a, b) => counts[b] - counts[a]);
@@ -701,6 +723,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   let DST = 1;   // 분포 탭에서 보고 있는 단계 (1 구매 ~ 5 재구매)
   function renderDist() {
     if (!DALL) DALL = distStats(() => true);
+    renderKpi(); renderSeg();
     const sub = S.n < ALL.n, D2 = sub ? distStats(passOf()) : DALL;
     const c = S.cnt, A = ALL.cnt;
     const lateOf = (x) => { const d = x[0] + x[1] + x[2] + x[3]; return d ? (x[1] + x[2] + x[3]) / d : NaN; };
@@ -715,18 +738,12 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       ['⑤ 재구매', pc(multi(S.oc, S.cu)), '', `2회 이상 주문한 고객${all(pc(multi(ALL.oc, ALL.cu)))}`],
     ];
     $('scale').innerHTML = `기간 <b>${mlabel(F.m0)} ~ ${mlabel(F.m1)}</b> · 판매자 <b>${fmt(S.se)}</b>명 · 상품 <b>${fmt(S.items)}</b>개 · 카테고리 <b>${c.c.filter((v) => v > 0).length}</b>개`;
-    bmSync();
     $('dFlow').innerHTML = steps.map((x, k) => `<button role="tab" data-st="${k + 1}" aria-selected="${DST === k + 1}" aria-controls="st${k + 1}"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></button>`).join('');
     for (let k = 1; k <= 5; k++) $('st' + k).hidden = k !== DST;   // 보이는 단계만 그림 크기가 맞음
     renderTrend(DST);
     document.querySelectorAll('#p2 .lgd .bl').forEach((e) => { e.hidden = !sub; });
 
     // ① 구매
-    $('drSt').innerHTML = rows('st', dims.st, c.st, { order: [0, 1, 2, 3, 4, 5, 6, 7], tone: { 0: 'good', 6: 'bad', 7: 'bad' } });
-    $('drOt').innerHTML = rows('ot', dims.ot, c.ot, { order: [0, 1, 2, 3, 4] });
-    $('drSz').innerHTML = rows('sz', dims.sz, c.sz, { order: [0, 1, 2, 3, 4, 5] });
-    $('drC').innerHTML = rows('c', dims.c, c.c, { top: 8 });
-    $('drS').innerHTML = rows('s', dims.sKo, c.s, { top: 8 });
 
     // ② 결제
     const pTot = DALL.ph.reduce((a, b) => a + b, 0);
@@ -737,7 +754,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       ticks: [[1, 'R$ 10'], [7, 'R$ 100'], [13, 'R$ 1,000']],
       tip: (k, x, tot) => `<b>${k === 0 ? 'R$ 10 미만' : k === 16 ? 'R$ ' + fmt(pEdge(16)) + ' 이상' : `R$ ${fmt(pEdge(k))} ~ ${fmt(pEdge(k + 1))}`}</b> · ${pc(x[0] / tot)} (${fmt(x[0])}건)`,
     });
-    $('drT').innerHTML = rows('pt', dims.pt, c.pt, { top: 4 });
     $('drN').innerHTML = rows(null, IT, D2.it, { order: [1, 2, 3, 4, 0], base: DALL.it });
 
     // ③ 배송
@@ -756,8 +772,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     $('dqR').innerHTML = `평균 <b>${avgR(S)}점</b> · 리뷰 ${fmt(S.rev)}건`;
     if (DST === 4) {
       renderSankey(); renderReviews();
-      const rs2 = rateStats(), a = rateRows('ot', dims.ot, rs2.ot, [0, 1, 2, 3, 4]), b2 = rateRows('sz', dims.sz, rs2.sz, [0, 1, 2, 3, 4, 5]), st = sellerTable();
-      $('drOtR').innerHTML = a[0]; $('dqOtR').textContent = a[1]; $('drSzR').innerHTML = b2[0]; $('dqSzR').textContent = b2[1];
+      const st = sellerTable();
       $('sTbl').innerHTML = st[0]; $('dqSt').textContent = st[1];
     }
 
@@ -767,38 +782,59 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     $('drQ').innerHTML = rows('sq', FK.sq.labels, c.sq, { order: [0, 1] });
   }
 
-  /* ---------- 막대로 볼 값 바꾸기: 비중(기본) / 부정 리뷰율 / 늦게 도착 비율 … ---------- */
-  const LMET = {
-    cnt: { l: '주문 비중', kind: 'n' },
-    neg: { l: '부정 리뷰율', kind: 'p', tone: 'bad', num: (i) => C.rs[i] >= 1 && C.rs[i] <= 2, den: (i) => C.rs[i] > 0, dn: '리뷰 있는 주문' },
-    late: { l: '늦게 도착 비율', kind: 'p', tone: 'bad', num: (i) => C.dl[i] >= 1 && C.dl[i] <= 3, den: (i) => C.dl[i] <= 3, dn: '도착 기록 있는 주문' },
-    rs: { l: '평균 별점', kind: 'm', d: 2, val: (i) => (C.rs[i] > 0 ? C.rs[i] : null), dn: '리뷰 있는 주문' },
-    dd: { l: '평균 배송일', kind: 'm', d: 1, val: (i) => (C.dd[i] >= 0 ? C.dd[i] : null), dn: '배송 완료 주문' },
-    pv: { l: '평균 결제 금액', kind: 'm', d: 0, val: (i) => C.pv[i], dn: '전체 주문' },
-  };
-  let BM = 'cnt';
-  const bmSync = () => { $('bm').innerHTML = '<span>막대로 볼 값</span>' + Object.keys(LMET).map((k) => `<button data-b="${k}" aria-pressed="${BM === k}">${LMET[k].l}</button>`).join(''); };
-  $('bm').onclick = (e) => { const b = e.target.closest('[data-b]'); if (!b) return; BM = b.dataset.b; renderDist(); writeHash(); };
-  const lAdd = (o, M, i) => { o.n++; if (M.kind === 'p') { if (M.den(i)) { o.b++; if (M.num(i)) o.a++; } } else if (M.kind === 'm') { const x = M.val(i); if (x !== null) { o.b++; o.s += x; } } };
-  const lVal = (o, M) => (!o.b ? NaN : M.kind === 'p' ? o.a / o.b : o.s / o.b);
-  const lTxt = (v, M) => (!isFinite(v) ? '–' : M.kind === 'p' ? (v * 100).toFixed(1) + '%' : v.toFixed(M.d));
-  function metricRows(key, labels, o) {   // 자기 자신의 조건만 빼고 나머지 조건은 적용 → 선택한 막대도 다른 막대와 비교할 수 있음
-    const M = LMET[BM], pass = passOf([key]), f = FK[key], G = {}, T = { n: 0, a: 0, b: 0, s: 0 };
-    for (let i = 0; i < N; i++) { if (!pass(i)) continue; const g = f.get(i); lAdd(G[g] || (G[g] = { n: 0, a: 0, b: 0, s: 0 }), M, i); lAdd(T, M, i); }
-    const ov = lVal(T, M), cn = (g) => (G[g] ? G[g].n : 0);
-    let idx = (o.order ? o.order : labels.map((_, i) => i)).filter((i) => cn(i) > 0 || F.sets[key].has(i));
-    if (!o.order) idx.sort((a, b) => cn(b) - cn(a));
-    idx = idx.slice(0, o.top || idx.length);
-    const vals = idx.map((i) => (G[i] ? lVal(G[i], M) : NaN)).filter(isFinite);
-    const mx = Math.max(1e-9, (isFinite(ov) ? ov : 0), ...vals) * (M.kind === 'p' ? 1.08 : 1.1);
-    const h = idx.map((i) => {
-      const x = G[i] || { n: 0, a: 0, b: 0, s: 0 }, v = lVal(x, M), on = F.sets[key].has(i), low = x.b < 30;
-      const tick = isFinite(ov) ? `<b style="left:${Math.min(100, ov / mx * 100)}%" title="이 막대들의 전체 ${lTxt(ov, M)}"></b>` : '';
-      return `<div class="dr click${on ? ' on' : ''}${low ? ' low' : ''}" data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(labels[i])} ${M.l} ${lTxt(v, M)}, 조건 ${on ? '빼기' : '추가'}">` +
-        `<span class="l" title="${esc(labels[i])} · 주문 ${fmt(x.n)}건">${esc(labels[i])}<small>${fmt(x.n)}</small></span><span class="t"><i class="${M.tone || ''}" style="width:${isFinite(v) ? v / mx * 100 : 0}%"></i>${tick}</span><span class="v">${lTxt(v, M)}</span></div>`;
-    }).join('');
-    return (h || '<p class="sub">해당 주문이 없습니다.</p>') + `<p class="sub">${M.l} · 검은 눈금 = 전체 ${lTxt(ov, M)} · 이름 옆 숫자 = 주문 수${idx.some((i) => (G[i] ? G[i].b : 0) < 30) ? ' · 연한 막대 = ' + M.dn + ' 30건 미만' : ''}</p>`;
+
+  /* ---------- 핵심 지표 + 세그먼트 비교표 ---------- */
+  const SEG = [['ot', '주문 구성'], ['sz', '판매자 규모'], ['dl', '배송'], ['c', '카테고리'], ['s', '고객 지역'], ['pt', '결제 수단'], ['pb', '결제 금액'], ['m', '월']];
+  const SEGO = { ot: 1, sz: 1, dl: 1, pb: 1, m: 1 }, SEGMIN = 30;
+  const seg = { k: 'ot', sort: '', dir: -1, all: false };
+  const rateOf = (X) => { const d = X.cnt.dl, dn = d[0] + d[1] + d[2] + d[3]; return { late: dn ? (d[1] + d[2] + d[3]) / dn : NaN, neg: X.rev ? (X.cnt.rs[1] + X.cnt.rs[2]) / X.rev : NaN, avg: X.rev ? X.rsum / X.rev : NaN }; };
+  function renderKpi() {
+    const a = rateOf(S), b = rateOf(ALL), sub = S.n < ALL.n;
+    const dlt = (x, y, pct, good) => { if (!sub || !isFinite(x) || !isFinite(y)) return ''; const d = pct ? (x - y) * 100 : x - y, big = pct ? Math.abs(d) >= .5 : Math.abs(d) >= .03; return ` · <span class="${!big ? '' : (d > 0) === !!good ? 'dn' : 'up'}">${d > 0 ? '+' : ''}${pct ? d.toFixed(1) + '%p' : d.toFixed(2)}</span>`; };
+    const card = (l, v, u, base, extra) => `<div class="k"><small>${l}</small><b>${v}<em>${u}</em></b><span>${sub ? '전체 ' + base : '전체 주문 기준'}${extra || ''}</span></div>`;
+    $('kpi').innerHTML = card('주문', fmt(S.n), '건', fmt(ALL.n) + '건', ` · 고객 ${fmt(S.cu)}명`) +
+      card('늦게 도착', pc(a.late), '', pc(b.late), dlt(a.late, b.late, true)) +
+      card('부정 리뷰 (★1~2)', pc(a.neg), '', pc(b.neg), dlt(a.neg, b.neg, true)) +
+      card('평균 별점', isFinite(a.avg) ? a.avg.toFixed(2) : '–', '점', b.avg.toFixed(2) + '점', dlt(a.avg, b.avg, false, true));
   }
+  function renderSeg() {
+    const k = seg.k, isM = k === 'm', labels = isM ? dims.m : k === 's' ? dims.sKo : FK[k].labels, get = isM ? (i) => C.m[i] : FK[k].get, pass = isM ? passOf() : passOf([k]);
+    $('segTabs').innerHTML = SEG.map((x) => `<button role="tab" data-t="${x[0]}" aria-selected="${seg.k === x[0]}">${x[1]}</button>`).join('');
+    const mk = () => ({ n: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0 }), G = {}, T = mk();
+    const add = (o, i) => { o.n++; const dl = C.dl[i]; if (dl < 4) { o.dn++; if (dl > 0) o.late++; } const rs = C.rs[i]; if (rs > 0) { o.rev++; o.sum += rs; if (rs <= 2) o.neg++; } };
+    for (let i = 0; i < N; i++) { if (!pass(i)) continue; const g = get(i); add(G[g] || (G[g] = mk()), i); add(T, i); }
+    const sel = (g) => (isM ? F.m0 === g && F.m1 === g : F.sets[k].has(g));
+    const rows = Object.keys(G).map(Number).map((g) => { const o = G[g]; return { g, o, n: o.n, late: o.dn ? o.late / o.dn : NaN, neg: o.rev ? o.neg / o.rev : NaN, avg: o.rev ? o.sum / o.rev : NaN, lo: o.rev < SEGMIN }; });
+    if (!isM) labels.forEach((_, g) => { if (!G[g] && F.sets[k].has(g)) rows.push({ g, o: mk(), n: 0, late: NaN, neg: NaN, avg: NaN, lo: true }); });
+    const base = { late: T.dn ? T.late / T.dn : NaN, neg: T.rev ? T.neg / T.rev : NaN, avg: T.rev ? T.sum / T.rev : NaN };
+    const col = seg.sort || (SEGO[k] ? '' : 'neg'), dir = seg.sort ? seg.dir : -1;
+    rows.sort((a, b) => { if (!col) return a.g - b.g; if (col !== 'n' && a.lo !== b.lo) return a.lo ? 1 : -1; const f = (x) => (isFinite(x) ? x : -1e9); return (f(a[col]) - f(b[col])) * dir; });
+    const LIM = 12, cut = !SEGO[k] && !seg.all && rows.length > LIM, shown = cut ? rows.slice(0, LIM) : rows;
+    const mx = Math.max(1e-9, base.neg || 0, ...shown.map((r) => (isFinite(r.neg) ? r.neg : 0))) * 1.08;
+    const tone = (v, b) => (!isFinite(v) || !isFinite(b) ? '' : v - b >= .03 ? 'up' : b - v >= .03 ? 'dn' : '');
+    const th = (c, t, tip) => `<th${c ? ` data-s="${c}"` : ''} class="${col === c && c ? 'cur' : ''}" title="${tip || ''}">${t}${col === c && c ? (dir > 0 ? ' ▲' : ' ▼') : ''}</th>`;
+    let h = `<table class="sg"><thead><tr>${th('', '구분')}${th('n', '주문 수')}${th('late', '늦게 도착', '도착 기록 있는 주문 중 예정일보다 늦은 비율')}${th('neg', '부정 리뷰 (★1~2)', '리뷰 있는 주문 중 별점 1~2점 비율 · 검은 눈금은 이 표 전체')}<th>전체 대비</th>${th('avg', '평균 별점')}</tr></thead><tbody>`;
+    shown.forEach((r) => {
+      const tn = r.lo ? '' : tone(r.neg, base.neg), tl = r.o.dn < SEGMIN ? '' : tone(r.late, base.late), d = (r.neg - base.neg) * 100;
+      h += `<tr class="row${sel(r.g) ? ' on' : ''}${r.lo ? ' lo' : ''}" data-g="${r.g}" tabindex="0" role="button" aria-pressed="${sel(r.g)}"><td>${esc(labels[r.g])}</td>` +
+        `<td>${fmt(r.n)}<span class="sh">${pc(r.n / (T.n || 1))}</span></td><td><span class="late ${tl}">${pc(r.late)}</span></td>` +
+        `<td><span class="nbar ${tn}"><i style="width:${isFinite(r.neg) ? r.neg / mx * 100 : 0}%"></i>${isFinite(base.neg) ? `<u style="left:${base.neg / mx * 100}%"></u>` : ''}</span><span class="nv">${pc(r.neg)}</span></td>` +
+        `<td><span class="dlt ${tn}">${isFinite(d) ? (d > 0 ? '+' : '') + d.toFixed(1) + '%p' : ''}</span></td><td>${isFinite(r.avg) ? r.avg.toFixed(2) : '–'}</td></tr>`;
+    });
+    $('segBody').innerHTML = h + '</tbody></table><p class="segnote">검은 눈금 = 이 표 전체 부정 리뷰율 ' + pc(base.neg) + ' · 주황 = 전체보다 3%p 이상 높음, 파랑 = 3%p 이상 낮음 · 회색 행 = 리뷰 ' + SEGMIN + '건 미만이라 해석 주의' + (cut ? `<button id="segAll">전체 ${rows.length}개 보기</button>` : seg.all && !SEGO[k] ? '<button id="segAll">상위만 보기</button>' : '') + '</p>';
+  }
+  $('segTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; seg.k = b.dataset.t; seg.sort = ''; seg.dir = -1; seg.all = false; renderSeg(); });
+  $('segBody').addEventListener('click', (e) => {
+    const t = e.target.closest('th[data-s]');
+    if (t) { const c = t.dataset.s; if (seg.sort === c) seg.dir = -seg.dir; else { seg.sort = c; seg.dir = c === 'avg' ? 1 : -1; } renderSeg(); return; }
+    if (e.target.id === 'segAll') { seg.all = !seg.all; renderSeg(); return; }
+    const r = e.target.closest('tr.row'); if (!r) return;
+    const g = +r.dataset.g, k = seg.k;
+    if (k === 'm') { const on = F.m0 === g && F.m1 === g; F.m0 = on ? 0 : g; F.m1 = on ? NM - 1 : g; $('m0').value = F.m0; $('m1').value = F.m1; }
+    else if (F.sets[k].has(g)) F.sets[k].delete(g); else F.sets[k].add(g);
+    update();
+  });
+  $('segBody').addEventListener('keydown', (e) => { const r = e.target.closest('tr.row'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); r.click(); } });
   $('dFlow').onclick = (e) => { const b = e.target.closest('[data-st]'); if (b && S.n) { DST = +b.dataset.st; renderDist(); writeHash(); $('dFlow').querySelector(`[data-st="${DST}"]`).focus(); } };
 
   /* ---------- 배송 결과 → 리뷰 별점 (생키, ④ 리뷰) ---------- */
@@ -976,16 +1012,14 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
     FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
     if (DST > 1) q.push('d=' + DST);   // 보고 있는 단계
-    if (BM !== 'cnt') q.push('b=' + BM);
     const h = q.length ? '#' + q.join('&') : '';
     if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
   }
   function readHash() {
-    clearKey('m'); FD.forEach((f) => clearKey(f.k)); DST = 1; BM = 'cnt';
+    clearKey('m'); FD.forEach((f) => clearKey(f.k)); DST = 1;
     location.hash.slice(1).split('&').forEach((kv) => {
       const [k, v = ''] = kv.split('=');
       if (k === 'd') { const d = +v; if (d >= 1 && d <= 5) DST = d; }
-      else if (k === 'b' && LMET[v]) BM = v;
       else if (k === 't') { if (v === '4') DST = 4; }   // 예전 주소: 리뷰 원문 탭 → ④ 리뷰
       else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
       else if (FK[k]) v.split(',').forEach((x) => { const i = +x; if (x !== '' && i >= 0 && i < FK[k].labels.length) F.sets[k].add(i); });
