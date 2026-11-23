@@ -162,7 +162,7 @@ h1 b { font-weight: 700; }
 .dr .t i.mid { background: #CFCAC0; }
 .cmp { display: block; margin-top: 16px; padding: 18px 22px 14px; }
 .cmp .ph { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.segtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; }
+.segtabs { position: sticky; top: 0; z-index: 8; display: flex; flex-wrap: wrap; gap: 6px; margin: 0 -22px 10px; padding: 10px 22px; background: var(--paper); border-bottom: 1px solid var(--line); }
 .segtabs button { padding: 6px 14px; border: 1.5px solid var(--ink); border-radius: 999px; background: transparent; font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); cursor: pointer; }
 .segtabs button:hover { background: var(--soft); }
 .segtabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
@@ -804,7 +804,15 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     { c: 'sq', t: '재주문 비율', f: (v) => pc(v), tip: '고객의 두 번째 이후 주문 비율', pct: 1 },
   ];
   const seg = { k: 'ot', sort: '', dir: -1, bar: 'n', all: false };
+  // 다시 그리는 동안 영역이 비면 .panel(스크롤 영역)이 줄어 맨 위로 밀리므로, 높이와 스크롤 위치를 붙잡아 둔다
   function renderSeg() {
+    const pn = $('seg').closest('.panel'), y = pn ? pn.scrollTop : 0, wy = window.scrollY, bodyH = $('segBody').offsetHeight, chH = $('segCharts').offsetHeight;
+    $('segBody').style.minHeight = bodyH + 'px'; $('segCharts').style.minHeight = chH + 'px';
+    renderSegInner();
+    $('segBody').style.minHeight = ''; $('segCharts').style.minHeight = '';
+    if (pn) pn.scrollTop = y; window.scrollTo(0, wy);
+  }
+  function renderSegInner() {
     const k = seg.k, isM = k === 'm', labels = isM ? dims.m : k === 's' ? dims.sKo : FK[k].labels, get = isM ? (i) => C.m[i] : FK[k].get, pass = isM ? passOf() : passOf([k]);
     $('segTabs').innerHTML = SEG.map((x) => `<button role="tab" data-t="${x[0]}" aria-selected="${seg.k === x[0]}">${x[1]}</button>`).join('');
     const mk = () => ({ n: 0, pvs: 0, dds: 0, ddn: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0, sq: 0, rc: [0, 0, 0, 0, 0, 0] }), G = {}, H = {}, T = mk(), plan = SEGPLAN[k] || ['stack'];
