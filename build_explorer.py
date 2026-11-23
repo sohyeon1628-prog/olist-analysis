@@ -5,7 +5,7 @@
 
 출력 (파일을 바로 열어도 동작하도록 JSON 대신 스크립트로 저장):
   docs/data/orders.js   window.OLIST = 주문 99,441건의 조건 값(열 단위 배열)과 이름표
-  docs/data/reviews.js  window.OLIST_REVIEWS = 글이 있는 리뷰 [주문 번호, 별점, 원문, 한국어 번역]
+  docs/data/reviews.js  window.OLIST_REVIEWS = 글이 있는 리뷰 [주문 번호, 별점, 원문, 한국어 번역, (기계 번역이면 1)]
 
 고객·주문·판매자의 원래 ID는 내보내지 않고, 0부터 새로 매긴 번호만 씁니다.
 """
@@ -18,7 +18,7 @@ import pandas as pd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(BASE, "data", "raw")
-OUT = os.path.join(BASE, "docs", "data")
+OUT = os.environ.get("EXPLORER_OUT") or os.path.join(BASE, "docs", "data")   # 시험용으로 다른 폴더에 만들 때만 EXPLORER_OUT 지정
 os.makedirs(OUT, exist_ok=True)
 rd = lambda f, **k: pd.read_csv(os.path.join(RAW, f), **k)  # noqa: E731
 
@@ -124,10 +124,23 @@ txt = o.order_id.map(r.review_comment_message).fillna("").astype(str).str.replac
 
 KO = os.path.join(BASE, "results", "review_ko.json")
 ko = json.load(open(KO, encoding="utf-8")) if os.path.exists(KO) else {}
+KM = os.environ.get("MACHINE_KO") or os.path.join(BASE, "results", "review_ko_machine.json")   # Azure 기계 번역 (translate_azure.py), Claude 번역이 없는 리뷰에만 사용
+km = json.load(open(KM, encoding="utf-8")) if os.path.exists(KM) else {}
 name_re = re.compile(r"(?<![A-Za-zÀ-ÿ])(" + "|".join(map(re.escape, NAMES)) + r")(?![A-Za-zÀ-ÿ])", re.IGNORECASE)
 mask = lambda x: name_re.sub("○○○", x)  # noqa: E731
 has = txt.ne("")
-reviews = [[int(i), int(rs[i]), mask(txt[i]), mask(ko.get(txt[i], ""))] for i in np.flatnonzero(has.values)]
+
+
+def review_row(i):
+    """[주문 번호, 별점, 원문, 한국어 번역, (기계 번역이면 1)] — Claude 번역을 우선하고, 없을 때만 기계 번역."""
+    t, c = txt[i], ko.get(txt[i], "")
+    if c:
+        return [int(i), int(rs[i]), mask(t), mask(c)]
+    m = km.get(mask(t), "")
+    return [int(i), int(rs[i]), mask(t), mask(m), 1] if m else [int(i), int(rs[i]), mask(t), ""]
+
+
+reviews = [review_row(i) for i in np.flatnonzero(has.values)]
 
 cols = {"cu": cu, "m": m, "st": st, "c": cat, "s": s, "se": se, "n": items, "pt": pt, "pv": pv, "dl": dl, "dd": dd, "rs": rs, "sq": sq, "ot": ot, "sz": sz}
 for k, v in cols.items():
@@ -147,6 +160,6 @@ with open(os.path.join(OUT, "reviews.js"), "w", encoding="utf-8") as fp:
 # 확인용 요약
 print(f"주문 {len(o):,}건 · 고객 {cu.nunique():,}명 · 판매자 {(se >= 0).groupby(se).size().shape[0] - (1 if (se < 0).any() else 0):,}명")
 print(f"기간 {months[0]} ~ {months[-1]} ({len(months)}개월) · 카테고리 {len(CATS)}개 · 결제 합계 R$ {pv.sum():,}")
-print(f"재주문 {sq.sum():,}건 · 리뷰 있는 주문 {(rs > 0).sum():,} · 글 있는 리뷰 {len(reviews):,} (번역 {sum(1 for x in reviews if x[3]):,})")
+print(f"재주문 {sq.sum():,}건 · 리뷰 있는 주문 {(rs > 0).sum():,} · 글 있는 리뷰 {len(reviews):,} (번역 {sum(1 for x in reviews if x[3]):,}, 그중 기계 번역 {sum(1 for x in reviews if len(x) > 4):,})")
 for f in ("orders.js", "reviews.js"):
     print(f, f"{os.path.getsize(os.path.join(OUT, f)) / 1024:,.0f} KB")
