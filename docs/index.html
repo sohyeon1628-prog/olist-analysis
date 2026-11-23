@@ -148,6 +148,14 @@ h1 b { font-weight: 700; }
 .dr.on .l { font-weight: 700; }
 .dr.on .t i { background: var(--acc); opacity: 1; }
 .sub { margin-top: 10px; font-size: 12.5px; color: var(--mute); }
+.dr .l small { margin-left: 6px; font-size: 11.5px; font-weight: 400; color: var(--mute); }
+.dr.low .t i { opacity: .45; }
+.stbl { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.stbl th { padding: 7px 8px; border-bottom: 1.5px solid var(--ink); font-size: 11.5px; font-weight: 600; color: var(--mute); text-align: right; white-space: nowrap; }
+.stbl td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+.stbl th:first-child, .stbl td:first-child { text-align: left; font-weight: 600; }
+.stbl td.hot { color: var(--acc); font-weight: 700; }
+.tscroll2 { overflow-x: auto; }
 .sub b { color: var(--ink); font-weight: 600; }
 
 /* 차트 */
@@ -278,6 +286,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       <b>데이터</b>브라질 이커머스 Olist 공개 데이터(Kaggle). 2016년 9월 ~ 2018년 10월 주문 99,441건, 고객 96,096명. 공개 데이터에는 주문 기록만 있어서, 가입만 하고 주문하지 않은 고객은 없습니다.
       <b>고객</b>같은 사람(고객 고유 번호)은 주문이 여러 건이어도 한 명으로 셉니다.
       <b>카테고리 · 판매자</b>주문에 담긴 첫 번째 상품 기준입니다.
+      <b>주문 구성</b>한 주문에 담긴 상품입니다. 판매자가 여러 명이면 '여러 판매자', 아니면 상품 종류와 개수로 나눕니다.
+      <b>판매자 규모</b>첫 번째 상품 판매자가 전체 기간에 받은 주문 수입니다. 판매자 이름은 내보내지 않고, 주문이 많은 순서로 번호만 붙입니다.
       <b>결제</b>금액은 주문의 결제 합계(헤알), 결제 수단은 가장 큰 결제 기준입니다.
       <b>배송</b>실제 도착일을 안내된 예정일과 비교합니다(날짜 기준). '도착 기록 없음'은 배송 중, 취소 등으로 도착일이 없는 주문입니다.
       <b>리뷰</b>주문마다 가장 늦게 답변된 리뷰 하나를 씁니다.
@@ -308,6 +318,10 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
             <div class="card2 cd"><div class="ph"><h2>주문 상태</h2></div><div class="dist" id="drSt"></div></div>
             <div class="card2 cd"><div class="ph"><h2>카테고리 상위 8</h2><small>첫 번째 상품 기준</small></div><div class="dist" id="drC"></div></div>
             <div class="card2 cd"><div class="ph"><h2>고객 지역 상위 8</h2></div><div class="dist" id="drS"></div></div>
+          </div>
+          <div class="g2">
+            <div class="card2 cd"><div class="ph"><h2>주문 구성</h2><small>한 주문에 담긴 상품</small></div><div class="dist" id="drOt"></div></div>
+            <div class="card2 cd"><div class="ph"><h2>판매자 규모</h2><small>판매자의 전체 주문 수</small></div><div class="dist" id="drSz"></div></div>
           </div></section>
         <section id="st2" role="tabpanel"><h3><i>②</i>결제<small>얼마를, 어떻게 냈나</small></h3>
           <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt2" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb2"><div class="tip"></div></div></div>
@@ -330,6 +344,11 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
             <div class="card2 cd"><div class="ph"><h2>배송 결과 → 리뷰 별점</h2><small>띠를 누르면 그 주문만</small></div><div class="sk" id="sk"><div class="tip"></div></div></div>
             <div class="card2 cd"><div class="ph"><h2>리뷰 별점</h2></div><div class="dist" id="drR"></div><p class="sub" id="dqR"></p></div>
           </div>
+          <div class="g2">
+            <div class="card2 cd"><div class="ph"><h2>주문 구성별 부정 리뷰</h2><small>별점 1~2 비율</small></div><div class="dist" id="drOtR"></div><p class="sub" id="dqOtR"></p></div>
+            <div class="card2 cd"><div class="ph"><h2>판매자 규모별 부정 리뷰</h2><small>별점 1~2 비율</small></div><div class="dist" id="drSzR"></div><p class="sub" id="dqSzR"></p></div>
+          </div>
+          <div class="card2 cd"><div class="ph"><h2>판매자별 부정 리뷰</h2><small>주문 20건 이상 · 비율 높은 10명</small></div><div class="tscroll2" id="sTbl"></div><p class="sub" id="dqSt"></p></div>
           <div class="card2 cd rvcard"><div class="ph"><h2>리뷰 원문</h2><label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
             <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
           </select></label></div>
@@ -389,6 +408,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     { k: 'pb', t: '결제 금액', labels: PB, get: (i) => pbOf[i] },
     { k: 'c', t: '카테고리', labels: dims.c, get: (i) => C.c[i], list: true, search: true },
     { k: 's', t: '고객 지역 (주)', labels: dims.sKo, small: dims.s, get: (i) => C.s[i], list: true },
+    { k: 'ot', t: '주문 구성', labels: dims.ot, get: (i) => C.ot[i] },
+    { k: 'sz', t: '판매자 규모', labels: dims.sz, get: (i) => C.sz[i] },
   ];
   const FK = {}; FD.forEach((f) => { FK[f.k] = f; });
   const F = { m0: 0, m1: NM - 1, sets: {} };
@@ -621,6 +642,47 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     return h || '<p class="sub">해당 주문이 없습니다.</p>';
   }
 
+  // 주문 구성·판매자 규모별 부정 리뷰 (자기 자신의 조건만 빼고 나머지 조건은 그대로 적용)
+  function rateStats() {
+    const pOt = passOf(['ot']), pSz = passOf(['sz']), mk = (n) => Array.from({ length: n }, () => ({ n: 0, rev: 0, neg: 0, sum: 0 }));
+    const ot = mk(dims.ot.length), sz = mk(dims.sz.length);
+    const add = (a, rs) => { a.n++; if (rs > 0) { a.rev++; a.sum += rs; if (rs <= 2) a.neg++; } };
+    for (let i = 0; i < N; i++) {
+      const rs = C.rs[i];
+      if (pOt(i)) add(ot[C.ot[i]], rs);
+      if (pSz(i)) add(sz[C.sz[i]], rs);
+    }
+    return { ot, sz };
+  }
+  function rateRows(key, labels, st, order) {
+    const tr = st.reduce((a, x) => a + x.rev, 0), tn = st.reduce((a, x) => a + x.neg, 0), base = tr ? tn / tr : NaN;
+    const idx = order.filter((i) => st[i].n > 0 || F.sets[key].has(i));
+    const mx = Math.max(1e-9, base || 0, ...idx.map((i) => (st[i].rev ? st[i].neg / st[i].rev : 0)));
+    const h = idx.map((i) => {
+      const x = st[i], r = x.rev ? x.neg / x.rev : NaN, on = F.sets[key].has(i);
+      const tick = isFinite(base) ? `<b style="left:${base / mx * 100}%" title="이 표 전체 ${pc(base)}"></b>` : '';
+      return `<div class="dr click${on ? ' on' : ''}${x.rev < 30 ? ' low' : ''}" data-k="${key}" data-i="${i}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(labels[i])} 부정 리뷰 ${pc(r)}, 조건 ${on ? '빼기' : '추가'}">` +
+        `<span class="l" title="${esc(labels[i])} · 리뷰 ${fmt(x.rev)}건">${esc(labels[i])}<small>${fmt(x.rev)}</small></span><span class="t"><i style="width:${isFinite(r) ? r / mx * 100 : 0}%"></i>${tick}</span><span class="v">${pc(r)}</span></div>`;
+    }).join('');
+    return [h || '<p class="sub">해당 주문이 없습니다.</p>', (isFinite(base) ? `검은 눈금 = 이 표의 전체 ${pc(base)} · 이름 옆 숫자 = 리뷰 수${idx.some((i) => st[i].rev < 30) ? ' · 연한 막대 = 리뷰 30건 미만' : ''}` : '')];
+  }
+  function sellerTable() {
+    const pass = passOf(), n = new Int32Array(NSE), rev = new Int32Array(NSE), neg = new Int32Array(NSE), dlv = new Int32Array(NSE), late = new Int32Array(NSE), sum = new Int32Array(NSE);
+    for (let i = 0; i < N; i++) {
+      if (!pass(i)) continue;
+      const sl = C.se[i]; if (sl < 0) continue;
+      n[sl]++; const rs = C.rs[i];
+      if (rs > 0) { rev[sl]++; sum[sl] += rs; if (rs <= 2) neg[sl]++; }
+      if (C.dl[i] < 4) { dlv[sl]++; if (C.dl[i] > 0) late[sl]++; }
+    }
+    const list = [];
+    for (let k = 0; k < NSE; k++) if (n[k] >= 20 && rev[k] > 0) list.push({ k, n: n[k], neg: neg[k] / rev[k], late: dlv[k] ? late[k] / dlv[k] : NaN, avg: sum[k] / rev[k] });
+    list.sort((a, b) => b.neg - a.neg || b.n - a.n);
+    const top = list.slice(0, 10);
+    const head = '<table class="stbl"><thead><tr><th>판매자</th><th>주문</th><th>부정 리뷰</th><th>늦게 도착</th><th>평균 별점</th></tr></thead><tbody>';
+    const body = top.map((x) => `<tr><td>#${x.k + 1}</td><td>${fmt(x.n)}</td><td class="hot">${pc(x.neg)}</td><td>${pc(x.late)}</td><td>${x.avg.toFixed(2)}</td></tr>`).join('');
+    return [top.length ? head + body + '</tbody></table>' : '<p class="sub">주문이 20건 이상인 판매자가 없습니다.</p>', `조건에 맞는 주문이 20건 이상인 판매자 ${fmt(list.length)}명 중. #번호는 주문이 많은 순서이고, 주문의 첫 번째 상품 판매자 기준입니다.`];
+  }
   const IT = ['상품 정보 없음', '1개', '2개', '3개', '4개 이상'];
   let DST = 1;   // 분포 탭에서 보고 있는 단계 (1 구매 ~ 5 재구매)
   function renderDist() {
@@ -646,6 +708,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
 
     // ① 구매
     $('drSt').innerHTML = rows('st', dims.st, c.st, { order: [0, 1, 2, 3, 4, 5, 6, 7] });
+    $('drOt').innerHTML = rows('ot', dims.ot, c.ot, { order: [0, 1, 2, 3, 4] });
+    $('drSz').innerHTML = rows('sz', dims.sz, c.sz, { order: [0, 1, 2, 3, 4, 5] });
     $('drC').innerHTML = rows('c', dims.c, c.c, { top: 8 });
     $('drS').innerHTML = rows('s', dims.sKo, c.s, { top: 8 });
 
@@ -675,7 +739,12 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     // ④ 리뷰
     $('drR').innerHTML = rows('rs', RS, c.rs, { order: [5, 4, 3, 2, 1, 0] });
     $('dqR').innerHTML = `평균 <b>${avgR(S)}점</b> · 리뷰 ${fmt(S.rev)}건`;
-    if (DST === 4) { renderSankey(); renderReviews(); }
+    if (DST === 4) {
+      renderSankey(); renderReviews();
+      const rs2 = rateStats(), a = rateRows('ot', dims.ot, rs2.ot, [0, 1, 2, 3, 4]), b2 = rateRows('sz', dims.sz, rs2.sz, [0, 1, 2, 3, 4, 5]), st = sellerTable();
+      $('drOtR').innerHTML = a[0]; $('dqOtR').textContent = a[1]; $('drSzR').innerHTML = b2[0]; $('dqSzR').textContent = b2[1];
+      $('sTbl').innerHTML = st[0]; $('dqSt').textContent = st[1];
+    }
 
     // ⑤ 재구매
     $('dqCu').textContent = `고객 ${fmt(S.cu)}명`;

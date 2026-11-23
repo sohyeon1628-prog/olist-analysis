@@ -43,6 +43,10 @@ a { color: inherit; }
 .side-pager .sp-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
 .side-pager .sp-sec { font-size: 11.5px; font-weight: 800; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .side-pager .sp-badge { display: inline-flex; align-items: center; padding: 2px 7px; background: #fff; border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--g); border: 1px solid rgba(224, 74, 31, .3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.side-pager .sp-sub-nav { display: flex; gap: 5px; margin: 1px 0 2px; }
+.side-pager .sp-btn { flex: 1; padding: 4px 0; border: 1px solid #D6D1C6; border-radius: 5px; background: #FAF9F6; font-size: 11px; font-weight: 700; color: #555; cursor: pointer; text-align: center; transition: all .15s; font-variant-numeric: tabular-nums; }
+.side-pager .sp-btn:hover { background: #fff; border-color: #bbb; color: #111; }
+.side-pager .sp-btn.on { background: var(--g); border-color: var(--g); color: #fff; font-weight: 900; box-shadow: 0 1px 3px rgba(224, 74, 31, .25); }
 .side-pager .sp-prog { height: 4px; background: rgba(0,0,0,.08); border-radius: 999px; overflow: hidden; }
 .side-pager .sp-fill { height: 100%; background: var(--g); border-radius: 999px; transition: width .25s var(--e); }
 .side-pager .sp-foot { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--mute); }
@@ -335,6 +339,7 @@ footer a { color: #111; font-weight: 700; }
 .xc li::before { content: ''; position: absolute; left: 1px; top: 15px; width: 5px; height: 5px; border-radius: 50%; background: var(--g); }
 .xc li b { color: #111; }
 .xc .cav { margin-top: 10px; font-size: 12px; line-height: 1.55; color: var(--mute); }
+.xc .cav a { font-weight: 700; color: var(--g); white-space: nowrap; }
 .pg code { font-size: 12px; }
 @media (max-width: 1000px) { .cards3 { grid-template-columns: 1fr; gap: 24px; } }
 </style>
@@ -344,17 +349,34 @@ footer a { color: #111; font-weight: 700; }
 <aside id="side">
   <div class="hd"><b>Olist</b><span>분석 이야기</span></div>
   <nav>
-    <a href="#summary"><span class="n">00</span>요약</a>
-    <a href="#question"><span class="n">01</span>질문 재정의</a>
-    <a href="#rules"><span class="n">02</span>데이터와 규칙</a>
-    <a href="#results"><span class="n">03</span>계획한 질문의 결과</a>
-    <a href="#explore"><span class="n">04</span>평점이 깎이는 지점</a>
-    <a href="#sentiment"><span class="n">05</span>리뷰 글 감성</a>
-    <a href="#seller"><span class="n">06</span>판매자 지속</a>
-    <a href="#rating"><span class="n">07</span>평점과 판매</a>
-    <a href="#recs"><span class="n">08</span>제안과 다음 단계</a>
-    <a href="#limits"><span class="n">09</span>한계</a>
+    <a href="#summary"><span class="n">00</span><span class="txt">요약</span></a>
+    <a href="#question"><span class="n">01</span><span class="txt">질문 재정의</span></a>
+    <a href="#rules"><span class="n">02</span><span class="txt">데이터와 규칙</span></a>
+    <a href="#results"><span class="n">03</span><span class="txt">계획한 질문의 결과</span></a>
+    <a href="#explore"><span class="n">04</span><span class="txt">평점이 깎이는 지점</span></a>
+    <a href="#sentiment"><span class="n">05</span><span class="txt">리뷰 글 감성</span><span class="sub-pages" data-subsec="sentiment"><span class="sp-n" data-pg="sentiment">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="sentiment-2">2</span></span></a>
+    <a href="#seller"><span class="n">06</span><span class="txt">판매자 지속</span></a>
+    <a href="#rating"><span class="n">07</span><span class="txt">평점과 판매</span></a>
+    <a href="#recs"><span class="n">08</span><span class="txt">제안과 다음 단계</span><span class="sub-pages" data-subsec="recs"><span class="sp-n" data-pg="recs">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="recs-2">2</span></span></a>
+    <a href="#limits"><span class="n">09</span><span class="txt">한계</span><span class="sub-pages" data-subsec="limits"><span class="sp-n" data-pg="limits">1</span><span class="sp-sep">/</span><span class="sp-n" data-pg="limits-2">2</span></span></a>
   </nav>
+  <div class="side-pager" id="sidePager" aria-label="사이드바 페이지 상태">
+    <div class="sp-top">
+      <span class="sp-sec" id="spSec">00 · 요약</span>
+      <span class="sp-badge" id="spBadge">1 / 1장</span>
+    </div>
+    <div class="sp-sub-nav" id="spSubNav" style="display:none">
+      <button type="button" class="sp-btn" id="spBtn1" data-sub="1">1장</button>
+      <button type="button" class="sp-btn" id="spBtn2" data-sub="2">2장</button>
+    </div>
+    <div class="sp-prog">
+      <div class="sp-fill" id="spFill" style="width: 7.7%;"></div>
+    </div>
+    <div class="sp-foot">
+      <span>슬라이드 <strong id="spPage">1</strong> / <span id="spTotPage">13</span></span>
+      <span class="sp-hint" id="spHint">단일 슬라이드</span>
+    </div>
+  </div>
   <div class="ft"><a href="index.html">← 직접 조회해 보기</a><br><a href="https://github.com/sohyeon1628-prog/olist-analysis">분석 코드 보기 ↗</a><br>박소현</div>
 </aside>
 
@@ -437,7 +459,7 @@ footer a { color: #111; font-weight: 700; }
     <ul><li>배송 완료 + 정시 도착만 봐도 <b>46.9%</b> (상품 1개 7.5%)</li>
     <li>부정 리뷰 글의 "일부 누락": 4.3% → <b>26.8~33.8%</b></li>
     <li>상품이 여러 개인 주문은 전체의 9.9%인데 부정 리뷰의 19.3%</li></ul>
-    <p class="cav">분할 배송 여부는 데이터에 없어서 "나뉘어 도착"은 가설입니다.</p></div>
+    <p class="cav">분할 배송 여부는 데이터에 없어서 "나뉘어 도착"은 가설입니다. <a href="index.html#ot=3&amp;d=4">탐색 화면에서 직접 보기 →</a></p></div>
   <div class="xc"><div class="lb">받기 전에 쓴 리뷰</div><strong>72.6<small>%</small></strong>
     <p class="sub2">지연 고객이 상품이 도착하기 전에 리뷰를 쓴 비율 (고객이 답한 시각 기준)</p>
     <ul><li>지연 고객의 부정 리뷰 비율: 받기 전 <b>82.1%</b> vs 받은 뒤 21.3%</li>
@@ -449,7 +471,7 @@ footer a { color: #111; font-weight: 700; }
     <ul><li>부정 리뷰: 12.0% → <b>20.1%</b></li>
     <li>2017-11, 2018-02·03의 지연율은 12~19%, 2018-04~06은 1~7%</li>
     <li>주문량이 비슷해도 지연이 달라 물량만으로는 설명되지 않음</li></ul>
-    <p class="cav">블랙프라이데이 한 번의 사례입니다.</p></div>
+    <p class="cav">블랙프라이데이 한 번의 사례입니다. <a href="index.html#m=14-14&amp;d=3">2017-11만 탐색 화면에서 보기 →</a></p></div>
 </div>
 <div class="res warn"><b>세 가지 모두 결과를 본 뒤 추가한 탐색이라 결론이 아니라 가설입니다.</b> 계산 코드와 상세 표는 저장소의 <code>results/8_posthoc_review_timing.md</code>, <code>9_multi_order_themes.md</code>, <code>10_structure_evidence.md</code>에 있습니다.</div>
 </div></div>

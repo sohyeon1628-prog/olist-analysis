@@ -55,6 +55,8 @@ ST = ["delivered", "shipped", "invoiced", "processing", "approved", "created", "
 ST_KO = ["배송 완료", "배송 중", "송장 발행", "처리 중", "결제 승인", "주문 생성", "취소", "상품 없음"]
 PT = ["credit_card", "boleto", "voucher", "debit_card", "not_defined"]
 PT_KO = ["신용카드", "볼레토(현금 결제)", "바우처", "체크카드", "미정", "결제 정보 없음"]
+OT_KO = ["상품 1개", "같은 상품 여러 개", "한 판매자 · 다른 상품", "여러 판매자", "상품 정보 없음"]
+SZ_KO = ["1~5건", "6~20건", "21~100건", "101~500건", "501건 이상", "판매자 정보 없음"]
 DL_KO = ["정시 도착", "1~3일 늦게 도착", "4~7일 늦게 도착", "8일 이상 늦게 도착", "도착 기록 없음"]
 # 공개 사이트에 실명이 나가지 않도록 리뷰 속 사람 이름을 가림 (번역 중 발견된 것)
 NAMES = ["Lourdes Marli Barichello Conceição", "Diego Machado Lopes", "Cyro Dias Braga", "Suzana Costa", "Hélder", "mateus"]
@@ -91,6 +93,15 @@ seller = o.order_id.map(fi.seller_id)
 se = seller.map({k: i for i, k in enumerate(seller.value_counts().index)}).fillna(-1).astype(int)
 items = o.order_id.map(it.groupby("order_id").size()).fillna(0).astype(int)
 
+# 주문 구성: 한 주문에 담긴 상품 (여러 판매자 > 상품 1개 > 같은 상품 여러 개 > 한 판매자의 다른 상품 여러 개)
+ag = it.groupby("order_id").agg(n_items=("order_item_id", "size"), n_products=("product_id", "nunique"), n_sellers=("seller_id", "nunique"))
+a_items, a_prod, a_sell = (o.order_id.map(ag[k]).fillna(0).astype(int) for k in ("n_items", "n_products", "n_sellers"))
+ot = np.select([a_items == 0, a_sell > 1, a_items == 1, a_prod == 1], [4, 3, 0, 1], 2)
+# 판매자 규모: 주문의 첫 상품 판매자가 전체 기간에 받은 주문 수 구간
+seller_orders = it.groupby("seller_id").order_id.nunique()
+so = seller.map(seller_orders)
+sz = np.select([so.isna(), so <= 5, so <= 20, so <= 100, so <= 500], [5, 0, 1, 2, 3], 4)
+
 # 지역
 STATES = o.customer_state.value_counts().index.tolist()
 s = o.customer_state.map({k: i for i, k in enumerate(STATES)})
@@ -118,13 +129,13 @@ mask = lambda x: name_re.sub("○○○", x)  # noqa: E731
 has = txt.ne("")
 reviews = [[int(i), int(rs[i]), mask(txt[i]), mask(ko.get(txt[i], ""))] for i in np.flatnonzero(has.values)]
 
-cols = {"cu": cu, "m": m, "st": st, "c": cat, "s": s, "se": se, "n": items, "pt": pt, "pv": pv, "dl": dl, "dd": dd, "rs": rs, "sq": sq}
+cols = {"cu": cu, "m": m, "st": st, "c": cat, "s": s, "se": se, "n": items, "pt": pt, "pv": pv, "dl": dl, "dd": dd, "rs": rs, "sq": sq, "ot": ot, "sz": sz}
 for k, v in cols.items():
     assert not pd.isna(pd.Series(v)).any(), k
 data = {
     "dims": {
         "m": [str(x) for x in months], "st": ST_KO, "c": CATS, "s": STATES, "sKo": [STATE_KO.get(x, x) for x in STATES],
-        "pt": PT_KO, "dl": DL_KO,
+        "pt": PT_KO, "dl": DL_KO, "ot": OT_KO, "sz": SZ_KO,
     },
     "cols": {k: [int(x) for x in v] for k, v in cols.items()},
 }
