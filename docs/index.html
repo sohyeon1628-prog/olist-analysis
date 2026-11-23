@@ -193,6 +193,13 @@ table.sg .sh { color: var(--mute); font-size: 12px; margin-left: 4px; font-weigh
 .views button[aria-selected="true"] { background: var(--ink); color: #fff; } .views button[aria-selected="true"] small { color: rgba(255,255,255,.7); }
 table.sg td.gr { color: #9B978D; }
 @media (max-width: 800px) { .nbar { width: 70px; } }
+.ctype { display: flex; flex-wrap: wrap; gap: 0; margin: 6px 0 10px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; width: fit-content; max-width: 100%; }
+.ctype button { padding: 7px 16px; border: 0; border-left: 1px solid var(--line); background: var(--paper); font: inherit; font-size: 13px; color: var(--text); cursor: pointer; }
+.ctype button:first-child { border-left: 0; } .ctype button:hover { background: var(--soft); }
+.ctype button[aria-selected="true"] { background: var(--ink); color: #fff; font-weight: 700; }
+.copt { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 0 0 8px; font-size: 12.5px; color: var(--mute); }
+.copt select { margin-left: 6px; padding: 5px 8px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--paper); font: inherit; font-size: 13px; color: var(--ink); }
+.segwrap .svgbox { margin-top: 4px; } .segwrap [data-g] { cursor: pointer; }
 .stbl td.hot { color: var(--acc); font-weight: 700; }
 .tscroll2 { overflow-x: auto; }
 .sub b { color: var(--ink); font-weight: 600; }
@@ -353,6 +360,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       <section class="cmp card2" id="seg" aria-label="세그먼트 비교">
         <div class="ph"><h2>집단별 비교</h2><small>열 제목을 누르면 그 값으로 정렬하고 막대로 보여 줍니다 · 행을 누르면 그 집단만 조건으로 걸립니다</small></div>
         <div class="segtabs" id="segTabs" role="tablist"></div>
+        <div class="ctype" id="cType" role="tablist" aria-label="그래프 종류"></div>
+        <div class="copt" id="cOpt"></div>
         <div class="segwrap" id="segBody"></div>
       </section>
       <div class="flow" id="dFlow" role="tablist" aria-label="분포 단계"></div>
@@ -798,9 +807,13 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   function renderSeg() {
     const k = seg.k, isM = k === 'm', labels = isM ? dims.m : k === 's' ? dims.sKo : FK[k].labels, get = isM ? (i) => C.m[i] : FK[k].get, pass = isM ? passOf() : passOf([k]);
     $('segTabs').innerHTML = SEG.map((x) => `<button role="tab" data-t="${x[0]}" aria-selected="${seg.k === x[0]}">${x[1]}</button>`).join('');
-    const mk = () => ({ n: 0, pvs: 0, dds: 0, ddn: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0, sq: 0 }), G = {}, T = mk();
-    const add = (o, i) => { o.n++; o.pvs += C.pv[i]; o.sq += C.sq[i]; const d = C.dd[i]; if (d >= 0) { o.ddn++; o.dds += d; } const dl = C.dl[i]; if (dl < 4) { o.dn++; if (dl > 0) o.late++; } const rs = C.rs[i]; if (rs > 0) { o.rev++; o.sum += rs; if (rs <= 2) o.neg++; } };
-    for (let i = 0; i < N; i++) { if (!pass(i)) continue; const g = get(i); add(G[g] || (G[g] = mk()), i); add(T, i); }
+    const mk = () => ({ n: 0, pvs: 0, dds: 0, ddn: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0, sq: 0, rc: [0, 0, 0, 0, 0, 0] }), G = {}, H = {}, T = mk(), ch = seg.chart;
+    const add = (o, i) => { o.n++; o.pvs += C.pv[i]; o.sq += C.sq[i]; const d = C.dd[i]; if (d >= 0) { o.ddn++; o.dds += d; } const dl = C.dl[i]; if (dl < 4) { o.dn++; if (dl > 0) o.late++; } const rs = C.rs[i]; o.rc[rs]++; if (rs > 0) { o.rev++; o.sum += rs; if (rs <= 2) o.neg++; } };
+    for (let i = 0; i < N; i++) {
+      if (!pass(i)) continue; const g = get(i), o = G[g] || (G[g] = mk()); add(o, i); add(T, i);
+      if (ch === 'box') { const L = o.L || (o.L = { dd: [], pv: [] }); L.pv.push(C.pv[i]); if (C.dd[i] >= 0) L.dd.push(C.dd[i]); }
+      if (ch === 'heat') add(H[g * 100 + C.m[i]] || (H[g * 100 + C.m[i]] = mk()), i);
+    }
     const val = (o) => ({ n: o.n, pv: o.n ? o.pvs / o.n : NaN, dd: o.ddn ? o.dds / o.ddn : NaN, late: o.dn ? o.late / o.dn : NaN, avg: o.rev ? o.sum / o.rev : NaN, neg: o.rev ? o.neg / o.rev : NaN, sq: o.n ? o.sq / o.n : NaN });
     const sel = (g) => (isM ? F.m0 === g && F.m1 === g : F.sets[k].has(g));
     const rows = Object.keys(G).map(Number).map((g) => ({ g, o: G[g], v: val(G[g]) }));
@@ -808,6 +821,9 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const base = val(T), col = seg.sort || (SEGO[k] ? '' : 'n'), dir = seg.sort ? seg.dir : -1, f = (x) => (isFinite(x) ? x : -1e9);
     rows.sort((a, b) => (!col ? a.g - b.g : (f(a.v[col]) - f(b.v[col])) * dir));
     const LIM = 12, cut = !SEGO[k] && !seg.all && rows.length > LIM, shown = cut ? rows.slice(0, LIM) : rows;
+    $('cType').innerHTML = CT.map((x) => `<button role="tab" data-c="${x[0]}" aria-selected="${seg.chart === x[0]}">${x[1]}</button>`).join('');
+    if (seg.chart !== 'table') { drawChart(seg.chart, { k, labels, rows, shown, base, T, H, val, mk, isM }); return; }
+    $('cOpt').innerHTML = '';
     const bc = COLS.find((x) => x.c === seg.bar), mx = Math.max(1e-9, ...shown.map((r) => (isFinite(r.v[seg.bar]) ? r.v[seg.bar] : 0))) * 1.05;
     const head = COLS.map((x) => `<th data-s="${x.c}" class="${seg.bar === x.c ? 'cur' : ''}" title="${x.tip}">${x.t}${(seg.sort || (col === 'n' && !SEGO[k])) && col === x.c ? (dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
     let h = `<table class="sg"><thead><tr><th>구분</th>${head}</tr></thead><tbody>`;
@@ -820,12 +836,104 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     });
     $('segBody').innerHTML = h + '</tbody></table><p class="segnote">막대로 보는 열: <b>' + bc.t + '</b>' + (seg.bar !== 'n' ? ' · 검은 눈금 = 이 표 전체 ' + (isFinite(base[seg.bar]) ? bc.f(base[seg.bar]) : '–') : '') + ' · 회색 숫자 = 그 열의 표본이 ' + SEGMIN + '건 미만이라 해석 주의' + (cut ? `<button id="segAll">전체 ${rows.length}개 보기</button>` : seg.all && !SEGO[k] ? '<button id="segAll">상위만 보기</button>' : '') + '</p>';
   }
-  $('segTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; seg.k = b.dataset.t; seg.sort = ''; seg.dir = -1; seg.all = false; renderSeg(); });
+
+  /* ---------- 실무 그래프: 산점도 · 파레토 · 박스플롯 · 별점 구성 · 월 히트맵 ---------- */
+  const CT = [['table', '표'], ['bubble', '산점도'], ['pareto', '파레토'], ['box', '분포(박스)'], ['stack', '별점 구성'], ['heat', '월 히트맵']];
+  Object.assign(seg, { chart: 'table', bx: 'pv', by: 'avg', bm: 'dd', hm: 'late' });
+  const colOf = (c) => COLS.find((x) => x.c === c), shortT = (t, n = 14) => (t.length > n ? t.slice(0, n - 1) + '…' : t);
+  const tks = (lo, hi, n) => { const span = hi - lo || 1, raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), st = [1, 2, 2.5, 5, 10].find((m) => m * p >= raw) * p, o = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + 1e-9; v += st) o.push(+v.toPrecision(10)); return o; };
+  const qt = (a, p) => a[Math.min(a.length - 1, Math.floor(p * (a.length - 1) + .5))];
+  const optSel = (id, label, items, cur) => `<label>${label}<select id="${id}">${items.map((x) => `<option value="${x[0]}"${x[0] === cur ? ' selected' : ''}>${x[1]}</option>`).join('')}</select></label>`;
+  function mountChart(note) { $('segBody').innerHTML = '<div class="svgbox" id="cBox"><div class="tip"></div></div><p class="segnote">' + note + '</p>'; return $('cBox'); }
+  function drawChart(type, d) {
+    const { k, labels, rows, shown, base, T, H, val, isM } = d, W = Math.max(560, $('segBody').clientWidth || 900), LW = 168;
+    const metricsAll = COLS.map((x) => [x.c, x.t]), metricsNo = COLS.filter((x) => x.c !== 'n').map((x) => [x.c, x.t]);
+    let opt = '';
+    if (type === 'bubble') opt = optSel('oBx', '가로축', metricsNo, seg.bx) + optSel('oBy', '세로축', metricsNo, seg.by);
+    if (type === 'box') opt = optSel('oBm', '값', [['dd', '배송 소요일'], ['pv', '결제 금액']], seg.bm);
+    if (type === 'heat') opt = optSel('oHm', '색으로 볼 값', metricsAll, seg.hm);
+    $('cOpt').innerHTML = opt;
+    const bind = (id, key) => { const e = $(id); if (e) e.onchange = () => { seg[key] = e.value; renderSeg(); }; };
+    bind('oBx', 'bx'); bind('oBy', 'by'); bind('oBm', 'bm'); bind('oHm', 'hm');
+    const selG = (g) => (isM ? F.m0 === g && F.m1 === g : F.sets[k].has(g));
+    if (type === 'bubble') {
+      const X = colOf(seg.bx), Y = colOf(seg.by), pts = rows.filter((r) => r.o.n >= SEGMIN && isFinite(r.v[X.c]) && isFinite(r.v[Y.c])).sort((a, b) => b.o.n - a.o.n).slice(0, 30);
+      const box = mountChart(`버블 크기 = 주문 수 · 주문 ${SEGMIN}건 미만 집단은 제외 · 상위 30개 · 점선 = 이 표 전체 · 버블을 누르면 그 집단이 조건으로 걸립니다`);
+      if (pts.length < 2) { box.innerHTML = '<p class="sub">비교할 집단이 부족합니다.</p>'; return; }
+      const H2 = 400, L = 64, R = 24, T0 = 16, B = 46, ext = (c) => { const v = pts.map((r) => r.v[c]).concat([base[c]]).filter(isFinite), lo = Math.min(...v), hi = Math.max(...v), pad = (hi - lo || Math.abs(hi) || 1) * .12; return [lo - pad, hi + pad]; };
+      const [x0, x1] = ext(X.c), [y0, y1] = ext(Y.c), px = (v) => L + (v - x0) / (x1 - x0) * (W - L - R), py = (v) => T0 + (H2 - T0 - B) * (1 - (v - y0) / (y1 - y0)), nm = Math.max(...pts.map((r) => r.o.n));
+      let b = '';
+      tks(x0, x1, 6).forEach((v) => { b += `<line class="gl" x1="${px(v)}" x2="${px(v)}" y1="${T0}" y2="${H2 - B}"/><text x="${px(v)}" y="${H2 - B + 16}" text-anchor="middle">${X.f(v)}</text>`; });
+      tks(y0, y1, 5).forEach((v) => { b += `<line class="gl" x1="${L}" x2="${W - R}" y1="${py(v)}" y2="${py(v)}"/><text x="${L - 8}" y="${py(v) + 4}" text-anchor="end">${Y.f(v)}</text>`; });
+      b += `<text x="${(L + W - R) / 2}" y="${H2 - 6}" text-anchor="middle" style="fill:var(--ink);font-weight:700">${X.t}</text><text transform="translate(14 ${(T0 + H2 - B) / 2}) rotate(-90)" text-anchor="middle" style="fill:var(--ink);font-weight:700">${Y.t}</text>`;
+      if (isFinite(base[X.c])) b += `<line x1="${px(base[X.c])}" x2="${px(base[X.c])}" y1="${T0}" y2="${H2 - B}" stroke="var(--ink)" stroke-dasharray="4 3" opacity=".5"/>`;
+      if (isFinite(base[Y.c])) b += `<line x1="${L}" x2="${W - R}" y1="${py(base[Y.c])}" y2="${py(base[Y.c])}" stroke="var(--ink)" stroke-dasharray="4 3" opacity=".5"/>`;
+      pts.forEach((r, i) => { const on = selG(r.g), rad = 5 + 22 * Math.sqrt(r.o.n / nm); b += `<circle data-k="${i}" data-g="${r.g}" cx="${px(r.v[X.c])}" cy="${py(r.v[Y.c])}" r="${rad}" fill="var(--good)" fill-opacity=".38" stroke="${on ? 'var(--ink)' : 'var(--good)'}" stroke-width="${on ? 3 : 1.2}"/>`; });
+      if (pts.length <= 16) pts.forEach((r) => { b += `<text x="${px(r.v[X.c])}" y="${py(r.v[Y.c]) - 8 - 22 * Math.sqrt(r.o.n / nm)}" text-anchor="middle" style="fill:var(--ink);font-size:11.5px">${esc(shortT(labels[r.g], 10))}</text>`; });
+      const svg = svgEl(box, W, H2, b);
+      bindTip(box, svg, W, (i) => { const r = pts[i]; return `<b>${esc(labels[r.g])}</b> · 주문 ${fmt(r.o.n)}건<br>${X.t} ${X.f(r.v[X.c])}<br>${Y.t} ${Y.f(r.v[Y.c])}`; }, (i) => [px(pts[i].v[X.c]), py(pts[i].v[Y.c]) - 24]);
+    } else if (type === 'pareto') {
+      const all = rows.slice().sort((a, b) => b.o.n - a.o.n), top = all.slice(0, 20), tot = T.n || 1;
+      let cum = 0; const cums = all.map((r) => (cum += r.o.n) / tot);
+      const box = mountChart('막대 = 주문 수(왼쪽 축) · 선 = 누적 비중(오른쪽 축) · 점선 = 80% · 상위 20개까지 표시 · 막대를 누르면 그 집단이 조건으로 걸립니다');
+      const H2 = 380, L = 64, R = 52, T0 = 14, B = 104, mx = Math.max(...top.map((r) => r.o.n)) * 1.08, y = (v) => T0 + (H2 - T0 - B) * (1 - v / mx), y2 = (v) => T0 + (H2 - T0 - B) * (1 - v), bw = (W - L - R) / top.length;
+      let b = '';
+      tks(0, mx, 4).forEach((v) => { b += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${fmt(v)}</text>`; });
+      [0, .25, .5, .75, 1].forEach((v) => { b += `<text x="${W - R + 8}" y="${y2(v) + 4}">${Math.round(v * 100)}%</text>`; });
+      b += `<line x1="${L}" x2="${W - R}" y1="${y2(.8)}" y2="${y2(.8)}" stroke="var(--acc)" stroke-dasharray="4 3"/>`;
+      top.forEach((r, i) => { const x = L + i * bw, on = selG(r.g); b += `<rect data-k="${i}" data-g="${r.g}" x="${x + bw * .12}" y="${y(r.o.n)}" width="${bw * .76}" height="${y(0) - y(r.o.n)}" fill="${on ? 'var(--ink)' : 'var(--bar)'}"/><text transform="translate(${x + bw / 2 + 4} ${H2 - B + 10}) rotate(-40)" text-anchor="end">${esc(shortT(labels[r.g], 12))}</text>`; });
+      let dpath = ''; top.forEach((r, i) => { dpath += (i ? 'L' : 'M') + (L + (i + .5) * bw).toFixed(1) + ' ' + y2(cums[i]).toFixed(1); });
+      b += `<path d="${dpath}" fill="none" stroke="var(--acc)" stroke-width="2.2"/>` + top.map((r, i) => `<circle cx="${L + (i + .5) * bw}" cy="${y2(cums[i])}" r="3.4" fill="var(--paper)" stroke="var(--acc)" stroke-width="2"/>`).join('');
+      const n80 = cums.findIndex((c) => c >= .8) + 1; if (n80) b += `<text x="${W - R - 4}" y="${y2(.8) + 16}" text-anchor="end" style="fill:var(--acc);font-weight:700">상위 ${n80}개 = 80%</text>`;
+      const svg = svgEl(box, W, H2, b);
+      bindTip(box, svg, W, (i) => `<b>${esc(labels[top[i].g])}</b><br>주문 ${fmt(top[i].o.n)}건 (${pc(top[i].o.n / tot)})<br>누적 ${pc(cums[i])}`, (i) => [L + (i + .5) * bw, y(top[i].o.n) - 8]);
+    } else if (type === 'box') {
+      const m = seg.bm, nmT = m === 'dd' ? '배송 소요일' : '결제 금액', f = m === 'dd' ? (v) => v.toFixed(0) + '일' : (v) => 'R$ ' + fmt(v);
+      const list = shown.filter((r) => r.o.L && r.o.L[m].length >= SEGMIN).map((r) => { const a = Float64Array.from(r.o.L[m]).sort(); return { r, a, p5: qt(a, .05), q1: qt(a, .25), md: qt(a, .5), q3: qt(a, .75), p95: qt(a, .95), mean: a.reduce((x, y) => x + y, 0) / a.length }; });
+      const box = mountChart(`상자 = 가운데 50%(Q1~Q3) · 굵은 선 = 중앙값 · 점 = 평균 · 수염 = 5~95 백분위 · 주문 ${SEGMIN}건 미만 집단 제외 · 행을 누르면 그 집단이 조건으로 걸립니다`);
+      if (!list.length) { box.innerHTML = '<p class="sub">표본이 부족합니다.</p>'; return; }
+      const RH = 34, H2 = list.length * RH + 36, R = 24, mx = Math.max(...list.map((x) => x.p95)) * 1.05, x = (v) => LW + v / mx * (W - LW - R);
+      let b = '';
+      tks(0, mx, 6).forEach((v) => { b += `<line class="gl" x1="${x(v)}" x2="${x(v)}" y1="6" y2="${H2 - 26}"/><text x="${x(v)}" y="${H2 - 8}" text-anchor="middle">${f(v)}</text>`; });
+      list.forEach((o, i) => { const cy = 18 + i * RH, on = selG(o.r.g); b += `<text x="${LW - 12}" y="${cy + 4}" text-anchor="end" style="fill:var(--ink);${on ? 'font-weight:700' : ''}">${esc(shortT(labels[o.r.g], 13))}</text><line x1="${x(o.p5)}" x2="${x(o.p95)}" y1="${cy}" y2="${cy}" stroke="var(--ink)"/><line x1="${x(o.p5)}" x2="${x(o.p5)}" y1="${cy - 5}" y2="${cy + 5}" stroke="var(--ink)"/><line x1="${x(o.p95)}" x2="${x(o.p95)}" y1="${cy - 5}" y2="${cy + 5}" stroke="var(--ink)"/><rect x="${x(o.q1)}" y="${cy - 10}" width="${Math.max(1, x(o.q3) - x(o.q1))}" height="20" fill="${on ? '#C9C4B8' : '#D9D5CA'}" stroke="var(--ink)"/><line x1="${x(o.md)}" x2="${x(o.md)}" y1="${cy - 10}" y2="${cy + 10}" stroke="var(--ink)" stroke-width="3"/><circle cx="${x(o.mean)}" cy="${cy}" r="3.5" fill="var(--acc)"/><rect data-k="${i}" data-g="${o.r.g}" x="${LW - 170}" y="${cy - 16}" width="${W - LW + 170}" height="32" fill="transparent"/>`; });
+      const svg = svgEl(box, W, H2, b);
+      bindTip(box, svg, W, (i) => { const o = list[i]; return `<b>${esc(labels[o.r.g])}</b> · ${fmt(o.a.length)}건<br>중앙값 ${f(o.md)} · 평균 ${f(o.mean)}<br>Q1~Q3 ${f(o.q1)} ~ ${f(o.q3)}<br>5~95% ${f(o.p5)} ~ ${f(o.p95)}`; }, (i) => [x(list[i].md), 18 + i * RH - 14]);
+    } else if (type === 'stack') {
+      const COL = ['', '#E04A1F', '#F0A88E', '#CFCAC0', '#8BB4C8', '#2C6E8F'], list = shown.filter((r) => r.o.rev >= SEGMIN);
+      const box = mountChart(`막대 하나 = 그 집단 리뷰의 별점 구성(100%) · 리뷰 ${SEGMIN}건 미만 집단 제외 · 행을 누르면 그 집단이 조건으로 걸립니다`);
+      if (!list.length) { box.innerHTML = '<p class="sub">표본이 부족합니다.</p>'; return; }
+      const RH = 32, H2 = list.length * RH + 54, R = 24, x = (v) => LW + v * (W - LW - R);
+      let b = [1, 2, 3, 4, 5].map((s, i) => `<rect x="${LW + i * 74}" y="6" width="12" height="12" fill="${COL[s]}"/><text x="${LW + i * 74 + 17}" y="16">★${s}</text>`).join('');
+      [0, .25, .5, .75, 1].forEach((v) => { b += `<line class="gl" x1="${x(v)}" x2="${x(v)}" y1="26" y2="${H2 - 22}"/><text x="${x(v)}" y="${H2 - 6}" text-anchor="middle">${Math.round(v * 100)}%</text>`; });
+      list.forEach((r, i) => { const cy = 30 + i * RH, on = selG(r.g); let acc = 0; b += `<text x="${LW - 12}" y="${cy + 17}" text-anchor="end" style="fill:var(--ink);${on ? 'font-weight:700' : ''}">${esc(shortT(labels[r.g], 13))}</text>`;
+        [1, 2, 3, 4, 5].forEach((s) => { const w = r.o.rc[s] / r.o.rev; b += `<rect x="${x(acc)}" y="${cy + 3}" width="${Math.max(0, x(acc + w) - x(acc))}" height="24" fill="${COL[s]}"/>`; if (w >= .07) b += `<text x="${(x(acc) + x(acc + w)) / 2}" y="${cy + 19}" text-anchor="middle" style="fill:${s === 1 || s === 5 ? '#fff' : 'var(--ink)'};font-size:11px;font-weight:700">${Math.round(w * 100)}%</text>`; acc += w; });
+        b += `<rect data-k="${i}" data-g="${r.g}" x="0" y="${cy}" width="${W}" height="${RH}" fill="transparent"/>`; });
+      const svg = svgEl(box, W, H2, b);
+      bindTip(box, svg, W, (i) => { const r = list[i]; return `<b>${esc(labels[r.g])}</b> · 리뷰 ${fmt(r.o.rev)}건<br>` + [5, 4, 3, 2, 1].map((s) => `★${s} ${pc(r.o.rc[s] / r.o.rev)}`).join(' · '); }, (i) => [x(.5), 30 + i * RH - 6]);
+    } else if (type === 'heat') {
+      if (isM) { mountChart('월 히트맵은 "월" 이외의 기준에서 볼 수 있습니다.'); return; }
+      const M = colOf(seg.hm), ms = []; for (let m = F.m0; m <= F.m1; m++) ms.push(m);
+      const cell = (g, m) => { const o = H[g * 100 + m]; return o ? { o, v: val(o)[M.c] } : null; };
+      const vs = []; shown.forEach((r) => ms.forEach((m) => { const c = cell(r.g, m); if (c && c.o.n >= SEGMIN && isFinite(c.v)) vs.push(c.v); }));
+      const box = mountChart(`칸 색이 진할수록 ${M.t}이(가) 큽니다 · 주문 ${SEGMIN}건 미만 칸은 비웁니다 · 행 이름을 누르면 그 집단이 조건으로 걸립니다`);
+      if (!vs.length) { box.innerHTML = '<p class="sub">표본이 부족합니다.</p>'; return; }
+      const lo = Math.min(...vs), hi = Math.max(...vs), RH = 28, H2 = shown.length * RH + 60, R = 20, cw = (W - LW - R) / ms.length;
+      let b = '';
+      shown.forEach((r, i) => { const cy = 8 + i * RH, on = selG(r.g); b += `<text data-g="${r.g}" x="${LW - 12}" y="${cy + 18}" text-anchor="end" style="fill:var(--ink);cursor:pointer;${on ? 'font-weight:700' : ''}">${esc(shortT(labels[r.g], 13))}</text>`;
+        ms.forEach((m, j) => { const c = cell(r.g, m); if (!c || c.o.n < SEGMIN || !isFinite(c.v)) { b += `<rect x="${LW + j * cw}" y="${cy}" width="${cw - 1}" height="${RH - 2}" fill="var(--soft)" opacity=".6"/>`; return; } const a = hi === lo ? .5 : (c.v - lo) / (hi - lo); b += `<rect data-k="${i * 100 + j}" x="${LW + j * cw}" y="${cy}" width="${cw - 1}" height="${RH - 2}" fill="rgba(44,110,143,${(.1 + a * .85).toFixed(2)})"/>`; }); });
+      ms.forEach((m, j) => { if (j % 2 === 0 || ms.length < 14) b += `<text x="${LW + (j + .5) * cw}" y="${H2 - 22}" text-anchor="middle">${dims.m[m].slice(2).replace('-', '.')}</text>`; });
+      b += `<text x="${LW}" y="${H2 - 4}">낮음 ${M.f(lo)}</text><rect x="${LW + 90}" y="${H2 - 14}" width="120" height="10" fill="url(#hg)"/><text x="${LW + 218}" y="${H2 - 4}">높음 ${M.f(hi)}</text><defs><linearGradient id="hg"><stop offset="0" stop-color="rgba(44,110,143,.1)"/><stop offset="1" stop-color="rgba(44,110,143,.95)"/></linearGradient></defs>`;
+      const svg = svgEl(box, W, H2, b);
+      bindTip(box, svg, W, (kk) => { const i = Math.floor(kk / 100), j = kk % 100, r = shown[i], c = cell(r.g, ms[j]); return `<b>${esc(labels[r.g])}</b> · ${dims.m[ms[j]]}<br>${M.t} ${M.f(c.v)}<br>주문 ${fmt(c.o.n)}건`; }, (kk) => [LW + (kk % 100 + .5) * cw, 8 + Math.floor(kk / 100) * RH - 4]);
+    }
+  }
+  $('cType').addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (!b) return; seg.chart = b.dataset.c; renderSeg(); writeHash(); });
+  $('segTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; seg.k = b.dataset.t; seg.sort = ''; seg.dir = -1; seg.all = false; renderSeg(); writeHash(); });
   $('segBody').addEventListener('click', (e) => {
     const t = e.target.closest('th[data-s]');
     if (t) { const c = t.dataset.s; if (seg.sort === c) seg.dir = -seg.dir; else { seg.sort = c; seg.dir = c === 'dd' || c === 'late' ? -1 : -1; } seg.bar = c; renderSeg(); return; }
     if (e.target.id === 'segAll') { seg.all = !seg.all; renderSeg(); return; }
-    const r = e.target.closest('tr.row'); if (!r) return;
+    const r = e.target.closest('[data-g]'); if (!r) return;
     const g = +r.dataset.g, k = seg.k;
     if (k === 'm') { const on = F.m0 === g && F.m1 === g; F.m0 = on ? 0 : g; F.m1 = on ? NM - 1 : g; $('m0').value = F.m0; $('m1').value = F.m1; }
     else if (F.sets[k].has(g)) F.sets[k].delete(g); else F.sets[k].add(g);
@@ -1016,7 +1124,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const q = [];
     if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
     FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
-    if (VIEW === 'cmp') q.push('v=cmp');
+    if (VIEW === 'cmp') { q.push('v=cmp'); if (seg.k !== 'ot') q.push('sk=' + seg.k); if (seg.chart !== 'table') q.push('sc=' + seg.chart); }
     if (DST > 1) q.push('d=' + DST);   // 보고 있는 단계
     const h = q.length ? '#' + q.join('&') : '';
     if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
@@ -1026,6 +1134,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     location.hash.slice(1).split('&').forEach((kv) => {
       const [k, v = ''] = kv.split('=');
       if (k === 'v') VIEW = v === 'cmp' ? 'cmp' : 'flow';
+      else if (k === 'sk' && SEG.some((x) => x[0] === v)) seg.k = v;
+      else if (k === 'sc' && CT.some((x) => x[0] === v)) seg.chart = v;
       else if (k === 'd') { const d = +v; if (d >= 1 && d <= 5) DST = d; }
       else if (k === 't') { if (v === '4') DST = 4; }   // 예전 주소: 리뷰 원문 탭 → ④ 리뷰
       else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
