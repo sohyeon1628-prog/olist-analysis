@@ -641,6 +641,29 @@ footer a { color: #111; font-weight: 700; }
   var mq = window.matchMedia('(min-width: 1001px)');
   var cur = -1, MIN = 0.6;
 
+  var secTitles = {
+    'summary': '00 · 요약',
+    'question': '01 · 질문 재정의',
+    'rules': '02 · 데이터와 규칙',
+    'results': '03 · 계획한 질문의 결과',
+    'explore': '04 · 평점이 깎이는 지점',
+    'sentiment': '05 · 리뷰 글 감성',
+    'seller': '06 · 판매자 지속',
+    'rating': '07 · 평점과 판매',
+    'recs': '08 · 제안과 다음 단계',
+    'limits': '09 · 한계'
+  };
+
+  var spSec = document.getElementById('spSec');
+  var spBadge = document.getElementById('spBadge');
+  var spFill = document.getElementById('spFill');
+  var spPage = document.getElementById('spPage');
+  var spTotPage = document.getElementById('spTotPage');
+  var spHint = document.getElementById('spHint');
+  var spSubNav = document.getElementById('spSubNav');
+  var spBtn1 = document.getElementById('spBtn1');
+  var spBtn2 = document.getElementById('spBtn2');
+
   function fit(pg) {
     var inner = pg.querySelector('.pg-in');
     inner.style.zoom = ''; inner.style.maxWidth = ''; pg.classList.remove('scroll');
@@ -654,17 +677,76 @@ footer a { color: #111; font-weight: 700; }
     }
     if (h > avail + 1) pg.classList.add('scroll');
   }
+
   function show(i, noHash) {
     if (i < 0 || i >= pages.length) return;
     pages.forEach(function (p, j) { p.classList.toggle('on', j === i); });
     cur = i; fit(pages[i]);
+
+    var curPg = pages[i];
+    var secKey = curPg.getAttribute('data-sec') || curPg.id;
+    var secPages = pages.filter(function (p) { return p.getAttribute('data-sec') === secKey; });
+    var subTotal = secPages.length;
+    var subIdx = secPages.indexOf(curPg) + 1;
+
     Object.keys(links).forEach(function (k) { links[k].classList.remove('on'); });
-    var a = links[pages[i].getAttribute('data-sec')]; if (a) a.classList.add('on');
-    document.getElementById('pgN').textContent = (i + 1) + ' / ' + pages.length;
-    document.getElementById('pgPrev').disabled = i === 0;
-    document.getElementById('pgNext').disabled = i === pages.length - 1;
+    var a = links[secKey]; if (a) a.classList.add('on');
+
+    // 사이드바 메뉴 내 서브페이지 번호 하이라이트
+    document.querySelectorAll('.sp-n').forEach(function (sp) {
+      sp.classList.toggle('on', sp.getAttribute('data-pg') === curPg.id);
+    });
+
+    // 사이드바 하단 페이지 번호 위젯 업데이트
+    if (spSec) spSec.textContent = secTitles[secKey] || secKey;
+    if (spBadge) {
+      spBadge.textContent = subTotal > 1 ? (subIdx + ' / ' + subTotal + '장') : '1 / 1장';
+      spBadge.style.color = subTotal > 1 ? 'var(--g)' : 'var(--mute)';
+      spBadge.style.borderColor = subTotal > 1 ? 'rgba(224, 74, 31, .35)' : 'rgba(0,0,0,.1)';
+      spBadge.style.background = subTotal > 1 ? '#FFF4F0' : '#fff';
+    }
+    if (spSubNav) {
+      if (subTotal > 1) {
+        spSubNav.style.display = 'flex';
+        if (spBtn1) {
+          spBtn1.classList.toggle('on', subIdx === 1);
+          spBtn1.onclick = function () { var idx = keys.indexOf(secPages[0].id); if (idx >= 0) show(idx); };
+        }
+        if (spBtn2) {
+          spBtn2.classList.toggle('on', subIdx === 2);
+          spBtn2.onclick = function () { var idx = keys.indexOf(secPages[1].id); if (idx >= 0) show(idx); };
+        }
+      } else {
+        spSubNav.style.display = 'none';
+      }
+    }
+    if (spFill) spFill.style.width = (((i + 1) / pages.length) * 100).toFixed(1) + '%';
+    if (spPage) spPage.textContent = (i + 1);
+    if (spTotPage) spTotPage.textContent = pages.length;
+    if (spHint) spHint.textContent = subTotal > 1 ? (subTotal + '장 중 ' + subIdx + '번째 장') : '단일 슬라이드';
+
+    // 메인 하단 페이저 업데이트
+    var pgN = document.getElementById('pgN');
+    if (pgN) pgN.textContent = (i + 1) + ' / ' + pages.length;
+    var pgPrev = document.getElementById('pgPrev');
+    if (pgPrev) pgPrev.disabled = i === 0;
+    var pgNext = document.getElementById('pgNext');
+    if (pgNext) pgNext.disabled = i === pages.length - 1;
+
     if (!noHash) { try { history.replaceState(null, '', '#' + keys[i]); } catch (e) {} }
   }
+
+  // 서브페이지 번호 클릭 이벤트 바인딩
+  document.querySelectorAll('.sp-n').forEach(function (sp) {
+    sp.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var targetId = sp.getAttribute('data-pg');
+      var targetIdx = keys.indexOf(targetId);
+      if (targetIdx >= 0) show(targetIdx);
+    });
+  });
+
   function fromHash() {
     var k = location.hash.slice(1), i = keys.indexOf(k);
     if (i < 0) { var sec = pages.filter(function (p) { return p.getAttribute('data-sec') === k; })[0]; i = sec ? keys.indexOf(sec.id) : 0; }
