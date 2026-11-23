@@ -199,7 +199,8 @@ table.sg td.gr { color: #9B978D; }
 .ctype button[aria-selected="true"] { background: var(--ink); color: #fff; font-weight: 700; }
 .copt { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 0 0 8px; font-size: 12.5px; color: var(--mute); }
 .copt select { margin-left: 6px; padding: 5px 8px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--paper); font: inherit; font-size: 13px; color: var(--ink); }
-.segwrap .svgbox { margin-top: 4px; } .segwrap [data-g] { cursor: pointer; }
+.cc { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); } .cc h3 { margin: 0 0 2px; font-size: 15px; font-weight: 700; }
+.segwrap .svgbox, .cc .svgbox { margin-top: 4px; } #segCharts [data-g] { cursor: pointer; } .segwrap [data-g] { cursor: pointer; }
 .stbl td.hot { color: var(--acc); font-weight: 700; }
 .tscroll2 { overflow-x: auto; }
 .sub b { color: var(--ink); font-weight: 600; }
@@ -360,9 +361,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       <section class="cmp card2" id="seg" aria-label="세그먼트 비교">
         <div class="ph"><h2>집단별 비교</h2><small>열 제목을 누르면 그 값으로 정렬하고 막대로 보여 줍니다 · 행을 누르면 그 집단만 조건으로 걸립니다</small></div>
         <div class="segtabs" id="segTabs" role="tablist"></div>
-        <div class="ctype" id="cType" role="tablist" aria-label="그래프 종류"></div>
-        <div class="copt" id="cOpt"></div>
         <div class="segwrap" id="segBody"></div>
+        <div id="segCharts"></div>
       </section>
       <div class="flow" id="dFlow" role="tablist" aria-label="분포 단계"></div>
       <div class="stg" id="stgBox">
@@ -807,12 +807,12 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   function renderSeg() {
     const k = seg.k, isM = k === 'm', labels = isM ? dims.m : k === 's' ? dims.sKo : FK[k].labels, get = isM ? (i) => C.m[i] : FK[k].get, pass = isM ? passOf() : passOf([k]);
     $('segTabs').innerHTML = SEG.map((x) => `<button role="tab" data-t="${x[0]}" aria-selected="${seg.k === x[0]}">${x[1]}</button>`).join('');
-    const mk = () => ({ n: 0, pvs: 0, dds: 0, ddn: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0, sq: 0, rc: [0, 0, 0, 0, 0, 0] }), G = {}, H = {}, T = mk(), ch = seg.chart;
+    const mk = () => ({ n: 0, pvs: 0, dds: 0, ddn: 0, dn: 0, late: 0, rev: 0, neg: 0, sum: 0, sq: 0, rc: [0, 0, 0, 0, 0, 0] }), G = {}, H = {}, T = mk(), plan = SEGPLAN[k] || ['stack'];
     const add = (o, i) => { o.n++; o.pvs += C.pv[i]; o.sq += C.sq[i]; const d = C.dd[i]; if (d >= 0) { o.ddn++; o.dds += d; } const dl = C.dl[i]; if (dl < 4) { o.dn++; if (dl > 0) o.late++; } const rs = C.rs[i]; o.rc[rs]++; if (rs > 0) { o.rev++; o.sum += rs; if (rs <= 2) o.neg++; } };
     for (let i = 0; i < N; i++) {
       if (!pass(i)) continue; const g = get(i), o = G[g] || (G[g] = mk()); add(o, i); add(T, i);
-      if (ch === 'box') { const L = o.L || (o.L = { dd: [], pv: [] }); L.pv.push(C.pv[i]); if (C.dd[i] >= 0) L.dd.push(C.dd[i]); }
-      if (ch === 'heat') add(H[g * 100 + C.m[i]] || (H[g * 100 + C.m[i]] = mk()), i);
+      if (plan.includes('box')) { const L = o.L || (o.L = { dd: [], pv: [] }); L.pv.push(C.pv[i]); if (C.dd[i] >= 0) L.dd.push(C.dd[i]); }
+      if (plan.includes('heat')) add(H[g * 100 + C.m[i]] || (H[g * 100 + C.m[i]] = mk()), i);
     }
     const val = (o) => ({ n: o.n, pv: o.n ? o.pvs / o.n : NaN, dd: o.ddn ? o.dds / o.ddn : NaN, late: o.dn ? o.late / o.dn : NaN, avg: o.rev ? o.sum / o.rev : NaN, neg: o.rev ? o.neg / o.rev : NaN, sq: o.n ? o.sq / o.n : NaN });
     const sel = (g) => (isM ? F.m0 === g && F.m1 === g : F.sets[k].has(g));
@@ -821,9 +821,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const base = val(T), col = seg.sort || (SEGO[k] ? '' : 'n'), dir = seg.sort ? seg.dir : -1, f = (x) => (isFinite(x) ? x : -1e9);
     rows.sort((a, b) => (!col ? a.g - b.g : (f(a.v[col]) - f(b.v[col])) * dir));
     const LIM = 12, cut = !SEGO[k] && !seg.all && rows.length > LIM, shown = cut ? rows.slice(0, LIM) : rows;
-    $('cType').innerHTML = CT.map((x) => `<button role="tab" data-c="${x[0]}" aria-selected="${seg.chart === x[0]}">${x[1]}</button>`).join('');
-    if (seg.chart !== 'table') { drawChart(seg.chart, { k, labels, rows, shown, base, T, H, val, mk, isM }); return; }
-    $('cOpt').innerHTML = '';
     const bc = COLS.find((x) => x.c === seg.bar), mx = Math.max(1e-9, ...shown.map((r) => (isFinite(r.v[seg.bar]) ? r.v[seg.bar] : 0))) * 1.05;
     const head = COLS.map((x) => `<th data-s="${x.c}" class="${seg.bar === x.c ? 'cur' : ''}" title="${x.tip}">${x.t}${(seg.sort || (col === 'n' && !SEGO[k])) && col === x.c ? (dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
     let h = `<table class="sg"><thead><tr><th>구분</th>${head}</tr></thead><tbody>`;
@@ -835,26 +832,24 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       }).join('') + '</tr>';
     });
     $('segBody').innerHTML = h + '</tbody></table><p class="segnote">막대로 보는 열: <b>' + bc.t + '</b>' + (seg.bar !== 'n' ? ' · 검은 눈금 = 이 표 전체 ' + (isFinite(base[seg.bar]) ? bc.f(base[seg.bar]) : '–') : '') + ' · 회색 숫자 = 그 열의 표본이 ' + SEGMIN + '건 미만이라 해석 주의' + (cut ? `<button id="segAll">전체 ${rows.length}개 보기</button>` : seg.all && !SEGO[k] ? '<button id="segAll">상위만 보기</button>' : '') + '</p>';
+    $('segCharts').innerHTML = '';
+    plan.forEach((t) => drawChart(t, { k, labels, rows, shown, base, T, H, val, mk, isM }));
   }
 
   /* ---------- 실무 그래프: 산점도 · 파레토 · 박스플롯 · 별점 구성 · 월 히트맵 ---------- */
-  const CT = [['table', '표'], ['bubble', '산점도'], ['pareto', '파레토'], ['box', '분포(박스)'], ['stack', '별점 구성'], ['heat', '월 히트맵']];
-  Object.assign(seg, { chart: 'table', bx: 'pv', by: 'avg', bm: 'dd', hm: 'late' });
+  // 기준에 따라 알맞은 그래프를 표 아래에 자동으로 붙인다: 많은 항목 → 집중도·관계, 지역 → 분포·월별 패턴, 나머지 → 별점 구성
+  const SEGPLAN = { c: ['pareto', 'bubble'], s: ['pareto', 'box', 'heat'] };
+  const CTITLE = { bubble: '결제 금액과 별점의 관계', pareto: '주문이 어디에 몰려 있나 (파레토)', box: '배송 소요일 분포', stack: '별점 구성', heat: '월별 늦게 도착 비율' };
+  Object.assign(seg, { bx: 'pv', by: 'avg', bm: 'dd', hm: 'late' });
+  let curType = '';
   const colOf = (c) => COLS.find((x) => x.c === c), shortT = (t, n = 14) => (t.length > n ? t.slice(0, n - 1) + '…' : t);
   const tks = (lo, hi, n) => { const span = hi - lo || 1, raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), st = [1, 2, 2.5, 5, 10].find((m) => m * p >= raw) * p, o = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + 1e-9; v += st) o.push(+v.toPrecision(10)); return o; };
   const qt = (a, p) => a[Math.min(a.length - 1, Math.floor(p * (a.length - 1) + .5))];
-  const optSel = (id, label, items, cur) => `<label>${label}<select id="${id}">${items.map((x) => `<option value="${x[0]}"${x[0] === cur ? ' selected' : ''}>${x[1]}</option>`).join('')}</select></label>`;
-  function mountChart(note) { $('segBody').innerHTML = '<div class="svgbox" id="cBox"><div class="tip"></div></div><p class="segnote">' + note + '</p>'; return $('cBox'); }
+  function mountChart(note) { const d = document.createElement('div'); d.className = 'cc'; d.innerHTML = '<h3>' + CTITLE[curType] + '</h3><div class="svgbox"><div class="tip"></div></div><p class="segnote">' + note + '</p>'; $('segCharts').appendChild(d); return d.querySelector('.svgbox'); }
   function drawChart(type, d) {
+    curType = type;
     const { k, labels, rows, shown, base, T, H, val, isM } = d, W = Math.max(560, $('segBody').clientWidth || 900), LW = 168;
-    const metricsAll = COLS.map((x) => [x.c, x.t]), metricsNo = COLS.filter((x) => x.c !== 'n').map((x) => [x.c, x.t]);
-    let opt = '';
-    if (type === 'bubble') opt = optSel('oBx', '가로축', metricsNo, seg.bx) + optSel('oBy', '세로축', metricsNo, seg.by);
-    if (type === 'box') opt = optSel('oBm', '값', [['dd', '배송 소요일'], ['pv', '결제 금액']], seg.bm);
-    if (type === 'heat') opt = optSel('oHm', '색으로 볼 값', metricsAll, seg.hm);
-    $('cOpt').innerHTML = opt;
-    const bind = (id, key) => { const e = $(id); if (e) e.onchange = () => { seg[key] = e.value; renderSeg(); }; };
-    bind('oBx', 'bx'); bind('oBy', 'by'); bind('oBm', 'bm'); bind('oHm', 'hm');
+    curType = type;
     const selG = (g) => (isM ? F.m0 === g && F.m1 === g : F.sets[k].has(g));
     if (type === 'bubble') {
       const X = colOf(seg.bx), Y = colOf(seg.by), pts = rows.filter((r) => r.o.n >= SEGMIN && isFinite(r.v[X.c]) && isFinite(r.v[Y.c])).sort((a, b) => b.o.n - a.o.n).slice(0, 30);
@@ -927,7 +922,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       bindTip(box, svg, W, (kk) => { const i = Math.floor(kk / 100), j = kk % 100, r = shown[i], c = cell(r.g, ms[j]); return `<b>${esc(labels[r.g])}</b> · ${dims.m[ms[j]]}<br>${M.t} ${M.f(c.v)}<br>주문 ${fmt(c.o.n)}건`; }, (kk) => [LW + (kk % 100 + .5) * cw, 8 + Math.floor(kk / 100) * RH - 4]);
     }
   }
-  $('cType').addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (!b) return; seg.chart = b.dataset.c; renderSeg(); writeHash(); });
   $('segTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; seg.k = b.dataset.t; seg.sort = ''; seg.dir = -1; seg.all = false; renderSeg(); writeHash(); });
   $('segBody').addEventListener('click', (e) => {
     const t = e.target.closest('th[data-s]');
@@ -1124,7 +1118,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const q = [];
     if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
     FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
-    if (VIEW === 'cmp') { q.push('v=cmp'); if (seg.k !== 'ot') q.push('sk=' + seg.k); if (seg.chart !== 'table') q.push('sc=' + seg.chart); }
+    if (VIEW === 'cmp') { q.push('v=cmp'); if (seg.k !== 'ot') q.push('sk=' + seg.k); }
     if (DST > 1) q.push('d=' + DST);   // 보고 있는 단계
     const h = q.length ? '#' + q.join('&') : '';
     if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
@@ -1135,7 +1129,6 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       const [k, v = ''] = kv.split('=');
       if (k === 'v') VIEW = v === 'cmp' ? 'cmp' : 'flow';
       else if (k === 'sk' && SEG.some((x) => x[0] === v)) seg.k = v;
-      else if (k === 'sc' && CT.some((x) => x[0] === v)) seg.chart = v;
       else if (k === 'd') { const d = +v; if (d >= 1 && d <= 5) DST = d; }
       else if (k === 't') { if (v === '4') DST = 4; }   // 예전 주소: 리뷰 원문 탭 → ④ 리뷰
       else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
