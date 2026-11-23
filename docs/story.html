@@ -329,6 +329,11 @@ footer a { color: #111; font-weight: 700; }
 .xc .cav a { font-weight: 700; color: var(--g); white-space: nowrap; }
 .pg code { font-size: 12px; }
 @media (max-width: 1000px) { .cards3 { grid-template-columns: 1fr; gap: 24px; } }
+.shot { margin: 0; } .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: #fff; }
+.shot figcaption { margin-top: 8px; font-size: 13px; line-height: 1.55; color: var(--mute); } .shot figcaption b { color: var(--ink); }
+.shot figcaption a { font-weight: 700; color: var(--g); }
+.plist { margin: 14px 0 0; padding: 0; list-style: none; } .plist li { padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.55; } .plist li b { display: block; font-size: 16px; }
+.plist li span { color: var(--mute); font-size: 13.5px; }
 </style>
 </head>
 <body>
@@ -340,7 +345,9 @@ footer a { color: #111; font-weight: 700; }
     <a href="#question"><span class="n">01</span><span class="txt">질문 재정의</span></a>
     <a href="#rules"><span class="n">02</span><span class="txt">데이터와 규칙</span></a>
     <a href="#results"><span class="n">03</span><span class="txt">계획한 질문의 결과</span></a>
+    <div class="sub-nav"><a href="#results" class="sub-link" data-pg="results"><span class="pip">|</span> 01</a><a href="#results-view" class="sub-link" data-pg="results-view"><span class="pip">|</span> 02</a></div>
     <a href="#explore"><span class="n">04</span><span class="txt">평점이 깎이는 지점</span></a>
+    <div class="sub-nav"><a href="#explore" class="sub-link" data-pg="explore"><span class="pip">|</span> 01</a><a href="#explore-2" class="sub-link" data-pg="explore-2"><span class="pip">|</span> 02</a><a href="#explore-3" class="sub-link" data-pg="explore-3"><span class="pip">|</span> 03</a></div>
     <a href="#sentiment"><span class="n">05</span><span class="txt">리뷰 글 감성</span></a>
     <div class="sub-nav">
       <a href="#sentiment" class="sub-link" data-pg="sentiment"><span class="pip">|</span> 01</a>
@@ -358,6 +365,8 @@ footer a { color: #111; font-weight: 700; }
       <a href="#limits" class="sub-link" data-pg="limits"><span class="pip">|</span> 01</a>
       <a href="#limits-2" class="sub-link" data-pg="limits-2"><span class="pip">|</span> 02</a>
     </div>
+    <a href="#service"><span class="n">10</span><span class="txt">탐색 사이트</span></a>
+    <a href="#closing"><span class="n">11</span><span class="txt">만든 방식</span></a>
   </nav>
   <div class="ft"><a href="index.html">← 직접 조회해 보기</a><br><a href="index.html#v=cmp">집단별로 비교해 보기 →</a><br><a href="https://github.com/sohyeon1628-prog/olist-analysis">분석 코드 보기 ↗</a><br>박소현</div>
 </aside>
@@ -432,6 +441,13 @@ footer a { color: #111; font-weight: 700; }
 </div>
 </div></div>
 
+<div class="pg" id="results-view" data-sec="results"><div class="pg-in">
+<div class="hd"><div class="kick">03 · 결과 ① · 탐색 화면으로 확인</div>
+<h2>배송이 늦을수록 별점 구성이 낮은 쪽으로 이동했습니다</h2></div>
+<figure class="shot"><img src="img/explorer-compare-dl.png" alt="탐색 화면 집단별 비교, 배송 기준: 늦게 도착한 구간일수록 별점 1점 비중이 커짐">
+<figcaption><b>탐색 화면 · 집단별 비교 · 배송.</b> 정시 도착은 ★5가 62%이고 별점 1~2점이 9.3%인데, 8일 이상 늦게 도착한 주문은 ★1이 70%, 별점 1~2점이 79.3%입니다. 같은 표에서 평균 배송일(10.5일 → 44.0일)과 평균 별점(4.29 → 1.70)도 함께 보입니다. 이 화면은 주문 단위 전체 집계라 앞 페이지의 고객 단위 첫 구매 분석(65.4% vs 9.5%)과 숫자가 다릅니다. <a href="index.html#v=cmp&amp;sk=dl">탐색 화면에서 직접 보기 →</a></figcaption></figure>
+</div></div>
+
 <div class="pg" id="explore" data-sec="explore"><div class="pg-in">
 <div class="hd"><div class="kick">04 · 평점이 깎이는 지점 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
 <h2>지연 말고도 평점이 깎이는 지점이 있었습니다</h2></div>
@@ -456,6 +472,20 @@ footer a { color: #111; font-weight: 700; }
     <p class="cav">블랙프라이데이 한 번의 사례입니다. <a href="index.html#m=14-14&amp;d=3">2017-11만 탐색 화면에서 보기 →</a></p></div>
 </div>
 <div class="res warn"><b>세 가지 모두 결과를 본 뒤 추가한 탐색이라 결론이 아니라 가설입니다.</b> 계산 코드와 상세 표는 저장소의 <code>results/8_posthoc_review_timing.md</code>, <code>9_multi_order_themes.md</code>, <code>10_structure_evidence.md</code>에 있습니다.</div>
+</div></div>
+
+<div class="pg" id="explore-2" data-sec="explore"><div class="pg-in">
+<div class="hd"><div class="kick">04 · 평점이 깎이는 지점 · 탐색 화면으로 확인</div>
+<h2>묶음 주문은 지연이 아닌데도 별점이 낮았습니다</h2></div>
+<figure class="shot"><img src="img/explorer-compare-ot.png" alt="탐색 화면 집단별 비교, 주문 구성 기준">
+<figcaption><b>탐색 화면 · 집단별 비교 · 주문 구성.</b> 여러 판매자 주문은 평균 별점 2.86, 별점 1~2점 47.3%로 상품 1개 주문(4.16, 12.7%)과 크게 다릅니다. 늦게 도착 비율은 오히려 1.0%로 낮아, 지연만으로는 설명되지 않습니다. <a href="index.html#v=cmp&amp;sk=ot">탐색 화면에서 직접 보기 →</a></figcaption></figure>
+</div></div>
+
+<div class="pg" id="explore-3" data-sec="explore"><div class="pg-in">
+<div class="hd"><div class="kick">04 · 평점이 깎이는 지점 · 탐색 화면으로 확인</div>
+<h2>지연은 지역보다 시기와 함께 움직였습니다</h2></div>
+<figure class="shot"><img src="img/explorer-region-heat.png" alt="탐색 화면 월 히트맵, 지역별 월별 늦게 도착 비율">
+<figcaption><b>탐색 화면 · 집단별 비교 · 고객 지역(월 히트맵, 늦게 도착 비율).</b> 2017-11과 2018-02·03 열이 대부분의 주에서 함께 진합니다. 특정 지역이 아니라 시기와 함께 움직였다는 뜻이지만, 블랙프라이데이 한 번의 사례라 가설입니다. <a href="index.html#v=cmp&amp;sk=s">탐색 화면에서 직접 보기 →</a></figcaption></figure>
 </div></div>
 
 <div class="pg" id="sentiment" data-sec="sentiment"><div class="pg-in">
@@ -606,10 +636,38 @@ footer a { color: #111; font-weight: 700; }
   박소현 · 2026
 </footer>
 </div></div>
+
+<div class="pg" id="service" data-sec="service"><div class="pg-in">
+<div class="hd"><div class="kick">10 · 탐색 사이트</div>
+<h2>이 숫자들을 직접 조회할 수 있는 사이트로 만들었습니다</h2></div>
+<div class="cols">
+<div><ul class="plist">
+<li><b>단계별 보기</b><span>구매 → 결제 → 배송 → 리뷰 → 재구매 5단계마다 월별 추이와 분포를 봅니다. 배송 결과에서 별점으로 이어지는 흐름은 생키 그림입니다.</span></li>
+<li><b>집단별 비교</b><span>주문 구성·판매자 규모·배송·카테고리·지역·결제 수단·결제 금액·주문 상태·월 중 기준을 고르면, 주문 수부터 재주문 비율까지 7개 열을 표로 비교합니다. 기준에 맞는 그래프(파레토·산점도·박스플롯·별점 구성·월 히트맵)가 표 아래에 자동으로 붙습니다.</span></li>
+<li><b>조건 걸기</b><span>막대나 표의 행을 누르면 그 집단만 조건으로 걸리고, 화면 전체가 그 주문만으로 바뀝니다. 설정은 링크로 공유됩니다.</span></li>
+<li><b>리뷰 원문 검색</b><span>포르투갈어 원문과 AI가 옮긴 한국어 번역(일부)을 함께 검색합니다. 분석은 번역이 아니라 원문으로 했습니다.</span></li>
+</ul>
+<p class="cav" style="margin-top:14px">이 화면에는 해석을 넣지 않았습니다. 해석과 판정은 이 분석 이야기에만 있습니다. <a href="index.html">탐색 사이트 열기 →</a></p></div>
+<figure class="shot"><img src="img/explorer-flow.png" alt="탐색 화면 단계별 보기, 배송 단계">
+<figcaption><b>단계별 보기 · ③ 배송.</b> 주문 99,441건, 고객 96,096명. 배송 소요일 중앙값 10일, 늦게 도착 6.8%.</figcaption></figure>
+</div>
+</div></div>
+
+<div class="pg" id="closing" data-sec="closing"><div class="pg-in">
+<div class="hd"><div class="kick">11 · 만든 방식</div>
+<h2>AI와 함께 만들고, 판단은 직접 했습니다</h2></div>
+<ul class="plist" style="max-width:820px">
+<li><b>별점과 글이 다를 수 있다고 짚어, 글 감성 분석을 추가했습니다</b></li>
+<li><b>발표용이 아니라 서비스용으로, 설명보다 표와 숫자 중심 화면으로 바꿨습니다</b></li>
+<li><b>재구매에서 판매자 관점으로 방향을 바꾸고, 검증되지 않은 전제는 결론에서 뺐습니다</b></li>
+<li><b>번역은 보여 주기용으로만 쓰고, 분석은 포르투갈어 원문으로 했습니다</b></li>
+</ul>
+<p class="cav" style="margin-top:18px;max-width:820px">데이터 정리 코드, 이 사이트, 리뷰 번역은 AI(Claude)와 함께 만들었고 그 범위는 저장소 README에 공개했습니다. 어떤 질문을 던지고, 어떤 결과를 결론으로 쓰고, 무엇을 접을지는 직접 판단했습니다.<br><a href="index.html">탐색 사이트</a> · <a href="https://github.com/sohyeon1628-prog/olist-analysis">저장소(코드·README) ↗</a></p>
+</div></div>
 </div>
 <div class="pager" id="pager" aria-label="페이지 이동">
   <button id="pgPrev" aria-label="이전 페이지">← 이전</button>
-  <span id="pgN">1 / 13</span>
+  <span id="pgN">1 / 18</span>
   <button id="pgNext" aria-label="다음 페이지">다음 →</button>
 </div>
 </main>
