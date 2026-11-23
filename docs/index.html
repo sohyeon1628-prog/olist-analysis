@@ -80,7 +80,7 @@ h1 b { font-weight: 700; }
 .scale b { color: var(--ink); font-weight: 600; }
 
 /* 분포: 고객 여정 */
-.flow { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .flow button { position: relative; padding: 14px 18px 13px; border: 0; border-left: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
 .flow button:first-child { border-left: 0; }
 .flow button:hover { background: var(--soft); }
@@ -160,7 +160,7 @@ h1 b { font-weight: 700; }
 .dr .t i.sev1 { background: #F0B39C; }
 .dr .t i.sev2 { background: #E9835E; }
 .dr .t i.mid { background: #CFCAC0; }
-.lab .ctl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 12px; }
+.lab .ctl { margin-top: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 12px; }
 .lab .ctl label { font-size: 12px; font-weight: 700; color: var(--mute); }
 .lab .ctl select { display: block; width: 100%; margin-top: 4px; padding: 8px 10px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--paper); font: inherit; font-size: 13.5px; color: var(--ink); }
 .lab .bar2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 14px 0 6px; }
@@ -390,15 +390,14 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
         <section id="st5" role="tabpanel"><h3><i>⑤</i>재구매<small>다시 샀나</small></h3>
           <div class="card2 cd trc"><div class="ph"><h2>월별 추이</h2><div class="tabs" id="tt5" role="group" aria-label="지표 선택"></div></div><div class="svgbox" id="tb5"><div class="tip"></div></div></div>
           <div class="card2 cd"><div class="ph"><h2>고객별 주문 횟수</h2><small id="dqCu"></small></div><div class="dist" id="drO"></div><p class="sub">주문 기준</p><div class="dist" id="drQ"></div></div></section>
-        <section id="st6" role="tabpanel" class="lab" hidden><h3><i>⑥</i>직접 분석<small>기준과 지표를 골라 직접 집계</small></h3>
-          <div class="card2 cd">
-            <div class="pre" id="lPre"></div>
-            <div class="ctl"><div><label for="lx">1 · 무엇으로 나눌까</label><select id="lx"></select></div><div><label for="lz">2 · 한 번 더 나누기 (선택)</label><select id="lz"></select></div><div><label for="ly">3 · 무엇을 볼까</label><select id="ly"></select></div></div>
-            <div class="sum" id="lSum"></div>
-            <div class="bar2"><b id="lTtl"></b><span style="flex:1"></span><small style="color:var(--mute)">정렬</small><button id="lo0" aria-pressed="true">기본</button><button id="lo1" aria-pressed="false">값 큰 순</button><button id="lo2" aria-pressed="false">주문 많은 순</button></div>
-            <div id="lOut"></div>
-            <p class="cav"><b>읽을 때 주의</b> · 위 <b>조건</b> 버튼의 필터가 그대로 적용됩니다. 관찰 데이터라 차이가 곧 원인은 아니며, 조건을 많이 걸수록 표본이 줄고 여러 조합을 훑어보면 우연한 차이도 나옵니다. 부정 리뷰는 별점 1~2점이고, 도착 기록이 없는 주문은 지연 비율에서 뺍니다.</p>
-          </div></section>
+        <div id="labHold" hidden><div class="card2 cd lab" id="labCard">
+          <div class="ph"><h2>다른 기준으로 나눠 보기</h2><small id="lSub"></small></div>
+          <div class="ctl"><div><label for="lx">무엇으로 나눌까</label><select id="lx"></select></div><div><label for="lz">한 번 더 나누기 (선택)</label><select id="lz"></select></div><div><label for="ly">무엇을 볼까</label><select id="ly"></select></div></div>
+          <div class="sum" id="lSum"></div>
+          <div class="bar2"><b id="lTtl"></b><span style="flex:1"></span><small style="color:var(--mute)">정렬</small><button id="lo0" aria-pressed="true">기본</button><button id="lo1" aria-pressed="false">값 큰 순</button><button id="lo2" aria-pressed="false">주문 많은 순</button></div>
+          <div id="lOut"></div>
+          <p class="cav">위 <b>조건</b>의 필터가 그대로 적용됩니다. 차이가 곧 원인은 아니며, 조건을 많이 걸수록 표본이 줄고 여러 조합을 훑어보면 우연한 차이도 나옵니다. 부정 리뷰는 별점 1~2점, 도착 기록이 없는 주문은 지연 비율에서 뺍니다.</p>
+        </div></div>
       </div>
       <p class="note">주문 상태·결제 수단·카테고리·지역·배송 결과·별점·주문 구분 막대를 누르면 그 항목이 조건으로 추가되고, 화면 전체가 그 주문만으로 바뀝니다. 다시 누르면 빠집니다.</p>
     </section>
@@ -736,13 +735,11 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       ['③ 배송', isFinite(D2.ddm) ? D2.ddm : '–', '일', `소요일 중앙값 · 늦게 도착 ${pc(lateOf(c.dl))}${all(pc(lateOf(A.dl)))}`],
       ['④ 리뷰', avgR(S), '점', `평균 별점 · 원문 보기${all(avgR(ALL) + '점')}`],
       ['⑤ 재구매', pc(multi(S.oc, S.cu)), '', `2회 이상 주문한 고객${all(pc(multi(ALL.oc, ALL.cu)))}`],
-      ['⑥ 직접 분석', '골라서', '', '기준·지표를 직접 선택'],
     ];
     $('scale').innerHTML = `기간 <b>${mlabel(F.m0)} ~ ${mlabel(F.m1)}</b> · 판매자 <b>${fmt(S.se)}</b>명 · 상품 <b>${fmt(S.items)}</b>개 · 카테고리 <b>${c.c.filter((v) => v > 0).length}</b>개`;
     $('dFlow').innerHTML = steps.map((x, k) => `<button role="tab" data-st="${k + 1}" aria-selected="${DST === k + 1}" aria-controls="st${k + 1}"><small>${x[0]}</small><strong>${x[1]}<em>${x[2]}</em></strong><span>${x[3]}</span></button>`).join('');
-    for (let k = 1; k <= 6; k++) $('st' + k).hidden = k !== DST;   // 보이는 단계만 그림 크기가 맞음
-    if (DST <= 5) renderTrend(DST);
-    if (DST === 6) { renderLab(); return; }
+    for (let k = 1; k <= 5; k++) $('st' + k).hidden = k !== DST;   // 보이는 단계만 그림 크기가 맞음
+    renderTrend(DST);
     document.querySelectorAll('#p2 .lgd .bl').forEach((e) => { e.hidden = !sub; });
 
     // ① 구매
@@ -789,6 +786,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     $('dqCu').textContent = `고객 ${fmt(S.cu)}명`;
     $('drO').innerHTML = rows(null, ['1회', '2회', '3회', '4회 이상'], S.oc, { order: [0, 1, 2, 3], base: ALL.oc });
     $('drQ').innerHTML = rows('sq', FK.sq.labels, c.sq, { order: [0, 1] });
+    renderLab();
   }
 
   /* ---------- ⑥ 직접 분석 (위 '조건'을 그대로 적용해, 기준·지표를 골라 집계) ---------- */
@@ -816,16 +814,14 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     pv: { l: '결제 금액 평균 (R$)', kind: 'm', d: 0, val: (i) => C.pv[i], dn: '전체 주문' },
     multi: { l: '여러 판매자 주문 비율', kind: 'p', num: (i) => C.ot[i] === 3, den: (i) => C.ot[i] !== 4, dn: '상품 정보 있는 주문' },
   };
-  const L = { x: 'dl', z: '', y: 'neg', o: 0 };
-  const LPRE = [['배송 지연별 부정 리뷰', 'dl', '', 'neg'], ['주문 구성별 부정 리뷰', 'ot', '', 'neg'], ['월별 늦게 도착한 비율', 'm', '', 'late'], ['카테고리별 평균 별점', 'c', '', 'rs'], ['주문 구성 × 배송 지연', 'ot', 'dl', 'neg'], ['지역별 평균 배송일', 's', '', 'dd']];
+  const L = { x: 'c', z: '', y: 'cnt', o: 0, st: 0 };
   const lopt = (o, blank) => (blank ? '<option value="">없음</option>' : '') + o.map((k) => `<option value="${k[0]}">${k[1]}</option>`).join('');
   $('lx').innerHTML = lopt(Object.keys(LDIM).map((k) => [k, LDIM[k].l]));
   $('lz').innerHTML = lopt(Object.keys(LDIM).map((k) => [k, LDIM[k].l]), 1);
   $('ly').innerHTML = lopt(Object.keys(LMET).map((k) => [k, LMET[k].l]));
-  $('lPre').innerHTML = LPRE.map((p, k) => `<button type="button" data-p="${k}">${p[0]}</button>`).join('');
-  $('lPre').onclick = (e) => { const b = e.target.closest('[data-p]'); if (!b) return; const p = LPRE[+b.dataset.p]; L.x = p[1]; L.z = p[2]; L.y = p[3]; L.o = 0; renderLab(); writeHash(); };
-  ['x', 'z', 'y'].forEach((k) => { $('l' + k).onchange = (e) => { L[k] = e.target.value; renderLab(); writeHash(); }; });
-  [0, 1, 2].forEach((i) => { $('lo' + i).onclick = () => { L.o = i; renderLab(); writeHash(); }; });
+  const LDEF = { 1: ['c', 'cnt'], 2: ['pt', 'pv'], 3: ['s', 'late'], 4: ['ot', 'neg'], 5: ['m', 'cnt'] }, LSUB = { 1: '구매', 2: '결제', 3: '배송', 4: '리뷰', 5: '재구매' };
+  ['x', 'z', 'y'].forEach((k) => { $('l' + k).onchange = (e) => { L[k] = e.target.value; L.keep = true; renderLab(); writeHash(); }; });
+  [0, 1, 2].forEach((i) => { $('lo' + i).onclick = () => { L.o = i; L.keep = true; renderLab(); writeHash(); }; });
   const lagg = (rows, grp, M) => {
     const G = {};
     rows.forEach((i) => { const g = grp(i), o = G[g] || (G[g] = { n: 0, a: 0, b: 0, s: 0 }); o.n++;
@@ -836,6 +832,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
   const lci = (o, M) => { if (M.kind !== 'p' || !o.b) return null; const p = o.a / o.b, z = 1.96, n = o.b, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d; return [Math.max(0, c - h) * 100, Math.min(1, c + h) * 100]; };
   const ltxt = (v, M) => (v === null ? '–' : M.kind === 'n' ? fmt(v) : M.kind === 'p' ? v.toFixed(1) + '%' : v.toFixed(M.d));
   function renderLab() {
+    if (L.st !== DST) { if (!L.fromHash) { L.x = LDEF[DST][0]; L.y = LDEF[DST][1]; L.z = ''; L.o = 0; L.keep = false; } L.st = DST; L.fromHash = false; }
+    const hold = $('labCard'); $('st' + DST).appendChild(hold); $('lSub').textContent = LSUB[DST] + ' 단계 · 기준과 지표를 바꿔 보세요';
     $('lx').value = L.x; $('lz').value = L.z; $('ly').value = L.y;
     [0, 1, 2].forEach((i) => $('lo' + i).setAttribute('aria-pressed', L.o === i));
     const X = LDIM[L.x], Zd = L.z && L.z !== L.x ? LDIM[L.z] : null, M = LMET[L.y], pass = passOf(), rows = [];
@@ -1045,7 +1043,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     if (F.m0 > 0 || F.m1 < NM - 1) q.push(`m=${F.m0}-${F.m1}`);
     FD.forEach((f) => { if (F.sets[f.k].size) q.push(f.k + '=' + [...F.sets[f.k]].sort((a, b) => a - b).join(',')); });
     if (DST > 1) q.push('d=' + DST);   // 보고 있는 단계
-    if (DST === 6) q.push('lx=' + L.x, 'ly=' + L.y, 'lo=' + L.o, ...(L.z ? ['lz=' + L.z] : []));
+    if (L.keep) q.push('lx=' + L.x, 'ly=' + L.y, 'lo=' + L.o, ...(L.z ? ['lz=' + L.z] : []));
     const h = q.length ? '#' + q.join('&') : '';
     if (location.hash !== h) try { history.replaceState(null, '', h || location.pathname + location.search); } catch (e) { /* 파일로 열었을 때 등 */ }
   }
@@ -1053,8 +1051,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     clearKey('m'); FD.forEach((f) => clearKey(f.k)); DST = 1;
     location.hash.slice(1).split('&').forEach((kv) => {
       const [k, v = ''] = kv.split('=');
-      if (k === 'd') { const d = +v; if (d >= 1 && d <= 6) DST = d; }
-      else if (k === 'lx' && LDIM[v]) L.x = v; else if (k === 'lz' && LDIM[v]) L.z = v; else if (k === 'ly' && LMET[v]) L.y = v; else if (k === 'lo') L.o = +v || 0;
+      if (k === 'd') { const d = +v; if (d >= 1 && d <= 5) DST = d; }
+      else if (k === 'lx' && LDIM[v]) { L.x = v; L.keep = L.fromHash = true; } else if (k === 'lz' && LDIM[v]) L.z = v; else if (k === 'ly' && LMET[v]) L.y = v; else if (k === 'lo') L.o = +v || 0;
       else if (k === 't') { if (v === '4') DST = 4; }   // 예전 주소: 리뷰 원문 탭 → ④ 리뷰
       else if (k === 'm') { const [a, b] = v.split('-').map(Number); if (a >= 0 && b < NM && a <= b) { F.m0 = a; F.m1 = b; $('m0').value = a; $('m1').value = b; } }
       else if (FK[k]) v.split(',').forEach((x) => { const i = +x; if (x !== '' && i >= 0 && i < FK[k].labels.length) F.sets[k].add(i); });
