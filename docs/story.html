@@ -236,6 +236,90 @@ footer a { color: #111; font-weight: 700; }
   .js .rv { opacity: 1; translate: none; }
   .js .rv .tr i, .js .rv .pair i { transform: none; }
 }
+
+/* ===== 한 화면에 한 페이지 ===== */
+.pg-in { width: 100%; max-width: 1080px; margin: 0 auto; }
+.pg .hd { margin-bottom: 4px; }
+.pg h1 { font-size: clamp(30px, 5vh, 46px); margin-top: 8px; }
+.pg h2 { font-size: clamp(22px, 3.7vh, 30px); margin-top: 6px; }
+.pg h3 { margin: 16px 0 4px; font-size: 16px; }
+.pg p { margin-top: 10px; font-size: 14px; line-height: 1.65; }
+.pg .lead { margin-top: 12px; font-size: 16px; line-height: 1.55; }
+.pg .chart { margin-top: 14px; }
+.pg .res { margin-top: 14px; padding: 12px 16px; font-size: 13.5px; line-height: 1.6; }
+.pg .tbl { margin-top: 10px; font-size: 13px; }
+.pg .tbl td { padding: 7px 6px; }
+.pg .rules > div { padding: 8px 0; }
+.pg .qs li { padding: 10px 0; }
+.pg .meta { margin-top: 20px; }
+.pg .st3 { margin-top: 22px; }
+.pg .st3 strong { font-size: 36px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 12px; align-items: start; }
+.cols.wideleft { grid-template-columns: 1.15fr 1fr; }
+.cols > div > :first-child { margin-top: 0; }
+.cols > div > .chart:first-child, .cols > div > .tscroll:first-child { margin-top: 0; }
+.cols.q1 .quotes { grid-template-columns: 1fr; margin-top: 0; }
+.cols .quotes { grid-template-columns: 1fr; margin-top: 0; gap: 10px; }
+.cols .qt { padding: 11px 14px; }
+.cols .qt .ko { margin-top: 6px; font-size: 13.5px; }
+.recs.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 26px; margin-top: 14px; }
+.recs.three .rec, .recs.two .rec { grid-template-columns: 1fr; gap: 8px; border-top: 1px solid #111; border-bottom: 1px solid #111; }
+.recs.three .rec:last-child, .recs.two .rec:last-child { border-bottom: 1px solid #111; }
+.recs.two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; margin-top: 14px; }
+.recs .rec { padding: 14px 0; align-content: start; }
+.recs .rec p { font-size: 13px; }
+.recs .rec h4 { font-size: 15px; }
+.lim.two { columns: 2; column-gap: 34px; margin-top: 14px; }
+.lim.two li { break-inside: avoid; font-size: 13px; line-height: 1.6; padding: 10px 0 10px 20px; }
+.lim.two li::before { top: 19px; }
+.pager { display: none; }
+@keyframes grow { from { transform: scaleX(0); } }
+@media (min-width: 1001px) {
+  html, body { height: 100%; overflow: hidden; }
+  main { margin-left: var(--sw); height: 100vh; height: 100dvh; position: relative; }
+  .pages { height: 100%; }
+  .pg { display: none; position: absolute; inset: 0; padding: 34px 56px 74px; align-items: center; }
+  .pg.on { display: flex; }
+  .pg.scroll { overflow-y: auto; align-items: flex-start; }
+  .pg.on .tr i, .pg.on .pair i { animation: grow .8s var(--e) both; transform-origin: 0 0; }
+  .pager { display: flex; position: absolute; left: 0; right: 0; bottom: 18px; align-items: center; justify-content: center; gap: 18px; z-index: 5; }
+  .pager button { padding: 7px 18px; border: 1px solid #111; border-radius: 999px; background: transparent; font: inherit; font-size: 13px; font-weight: 700; color: #111; cursor: pointer; }
+  .pager button:hover:not(:disabled) { background: #111; color: #fff; }
+  .pager button:disabled { opacity: .3; cursor: default; }
+  .pager span { min-width: 56px; text-align: center; font-size: 12.5px; font-weight: 700; color: var(--mute); font-variant-numeric: tabular-nums; }
+  footer { margin-top: 18px; padding: 12px 0 0; font-size: 11.5px; line-height: 1.7; }
+}
+@media (max-width: 1000px) {
+  .pg { display: block; padding: 0 16px; }
+  .pg + .pg { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
+  .cols, .cols.wideleft { grid-template-columns: 1fr; gap: 0; }
+  .recs.three, .recs.two { grid-template-columns: 1fr; }
+  .lim.two { columns: 1; }
+}
+@media print {
+  html, body { height: auto; overflow: visible; }
+  .pg { display: block !important; position: static; padding: 0; page-break-inside: avoid; }
+  .pg + .pg { margin-top: 28px; }
+  .pager { display: none !important; }
+}
+
+.note2 { padding: 12px 14px; background: var(--panel); font-size: 13px; line-height: 1.6; color: #222; }
+.note2 b { display: block; margin-bottom: 4px; font-size: 13.5px; color: #111; }
+.pg .cols .note2 { margin-top: 0; }
+.cols:has(.note2) { gap: 12px; margin-top: 14px; }
+.cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 18px; }
+.xc { border-top: 2px solid #111; padding-top: 12px; }
+.xc .lb { font-size: 12.5px; font-weight: 800; color: var(--g); }
+.xc strong { display: block; margin-top: 6px; font-size: 40px; font-weight: 900; letter-spacing: -1.6px; line-height: 1; }
+.xc strong small { margin-left: 3px; font-size: 16px; font-weight: 700; color: #888; letter-spacing: 0; }
+.xc .sub2 { margin-top: 8px; font-size: 13px; line-height: 1.55; color: #333; }
+.xc ul { margin: 12px 0 0; padding: 0; list-style: none; }
+.xc li { position: relative; padding: 7px 0 7px 14px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.55; color: #333; }
+.xc li::before { content: ''; position: absolute; left: 1px; top: 15px; width: 5px; height: 5px; border-radius: 50%; background: var(--g); }
+.xc li b { color: #111; }
+.xc .cav { margin-top: 10px; font-size: 12px; line-height: 1.55; color: var(--mute); }
+.pg code { font-size: 12px; }
+@media (max-width: 1000px) { .cards3 { grid-template-columns: 1fr; gap: 24px; } }
 </style>
 </head>
 <body>
@@ -246,67 +330,56 @@ footer a { color: #111; font-weight: 700; }
     <a href="#summary"><span class="n">00</span>요약</a>
     <a href="#question"><span class="n">01</span>질문 재정의</a>
     <a href="#rules"><span class="n">02</span>데이터와 규칙</a>
-    <a href="#r1"><span class="n">03</span>지연 → 부정 리뷰</a>
-    <a href="#r2"><span class="n">04</span>지연·리뷰 → 재구매</a>
-    <a href="#themes"><span class="n">05</span>불만 주제</a>
-    <a href="#bundle"><span class="n">06</span>묶음 주문</a>
-    <a href="#posthoc"><span class="n">07</span>받기 전에 쓴 리뷰</a>
-    <a href="#peak"><span class="n">08</span>세일 시기</a>
-    <a href="#sentiment"><span class="n">09</span>리뷰 글 감성</a>
-    <a href="#seller"><span class="n">10</span>판매자 지속</a>
-    <a href="#recs"><span class="n">11</span>제안과 다음 단계</a>
-    <a href="#limits"><span class="n">12</span>한계</a>
+    <a href="#results"><span class="n">03</span>계획한 질문의 결과</a>
+    <a href="#explore"><span class="n">04</span>평점이 깎이는 지점</a>
+    <a href="#sentiment"><span class="n">05</span>리뷰 글 감성</a>
+    <a href="#seller"><span class="n">06</span>판매자 지속</a>
+    <a href="#recs"><span class="n">07</span>제안과 다음 단계</a>
+    <a href="#limits"><span class="n">08</span>한계</a>
   </nav>
   <div class="ft"><a href="index.html">← 직접 조회해 보기</a><br><a href="https://github.com/sohyeon1628-prog/olist-analysis">분석 코드 보기 ↗</a><br>박소현</div>
 </aside>
 
 <main>
-<div class="wrap">
-
-<!-- 00 요약 -->
-<section class="hero" id="summary">
+<div class="pages">
+<div class="pg hero" id="summary" data-sec="summary"><div class="pg-in">
   <div class="kick rv">CASE STUDY · 고객 데이터 분석</div>
   <h1 class="rv">소비자는 Olist를 모른다.<br>판매자의 평점은 어디서 깎일까.</h1>
   <p class="lead rv">브라질 이커머스 Olist 데이터로, 소비자의 첫 구매 경험이 어디서 무너지는지와 재구매로 이어지는지 확인했습니다. 결과를 보기 전에 판단 규칙부터 정해 두고 그 규칙대로만 결론을 냈습니다. 결과를 본 뒤 추가한 분석은 "계획에 없던 탐색"으로 따로 표시했습니다.</p>
-
   <div class="meta rv">
     <div><b>데이터</b><span>Olist 공개 데이터<br>(Kaggle, 주문 약 10만 건)</span></div>
     <div><b>대상</b><span>첫 구매 고객 55,261명(2017.01~2018.02)<br>탐색은 전체 주문 약 10만 건</span></div>
     <div><b>방법</b><span>비율 비교 · 카이제곱 검정<br>로지스틱 회귀 · 리뷰 주제·감성 분류<br>판매자 지속(탐색+검증)</span></div>
     <div><b>도구</b><span>Python · pandas · scipy<br>statsmodels · BERTimbau</span></div>
   </div>
-
   <div class="st3 rv">
     <div><div class="lb">① 지연 → 부정 리뷰</div><strong>6.9<small>배</small></strong><span>배송이 늦은 고객의 65.4%가 1~2점을 줬습니다. 정시 배송 고객은 9.5%였습니다.</span></div>
     <div><div class="lb">②③ 지연·부정 리뷰 → 재구매</div><strong>차이 없음</strong><span>지연 1.61% vs 정시 1.98%, 부정 1.68% vs 긍정 2.01%로, 둘 다 우연으로 볼 수 있는 범위였습니다. 다만 재구매가 드물어 상대 25~34%보다 작은 차이는 이 표본으로 잡기 어렵습니다.</span></div>
     <div><div class="lb">탐색 · 묶음 주문</div><strong>47<small>%</small></strong><span>여러 판매자의 상품이 한 주문에 담기면 부정 리뷰가 47%였습니다(상품 1개 주문 12.7%). 정시에 도착한 주문만 봐도 46.9%였습니다.</span></div>
   </div>
-
   <p class="rv" style="margin-top:22px"><a href="index.html" style="font-weight:700;color:var(--g)">구매부터 재구매까지 직접 조회해 보기 →</a></p>
   <div class="res rv"><b>그래서</b> 첫 구매 경험은 재구매보다 <b>다음 구매자가 보는 판매자의 평점</b>을 지키는 문제로 봐야 합니다. 평점이 깎이는 지점은 배송 지연, 상품을 받기 전에 쓴 리뷰, 나뉘어 도착하는 묶음 주문, 세일 시기였습니다. (평점이 실제 판매에 영향을 주는지는 이번 분석에서 확인하지 못했습니다.)</div>
-</section>
+</div></div>
 
-<!-- 01 배경과 질문 -->
-<section id="question">
-  <div class="kick rv">01 · 질문 재정의</div>
-  <h2 class="rv">소비자는 Olist를 모릅니다.<br>그렇다면 무엇을 봐야 할까?</h2>
+<div class="pg" id="question" data-sec="question"><div class="pg-in">
+<div class="hd">  <div class="kick rv">01 · 질문 재정의</div>
+  <h2 class="rv">소비자는 Olist를 모릅니다.<br>그렇다면 무엇을 봐야 할까?</h2></div>
   <p class="rv">Olist 고객 96,096명 중 두 번 이상 주문한 사람은 3.1%뿐입니다. 이런 숫자를 보면 보통 "재구매를 어떻게 늘릴까"를 묻습니다. 그런데 공개 데이터 설명과 리뷰 글을 보면 Olist는 판매자를 대형 마켓플레이스에 연결해 주는 서비스에 가깝고, 소비자는 그 마켓플레이스에서 상품을 삽니다.</p>
   <div class="rules rv">
     <div><b>리뷰 글 40,809건</b><span>"Olist"를 언급한 글은 <b>0건</b>. 마켓플레이스 이름(lannister, stark 등)을 언급한 글은 1,944건(4.8%)</span></div>
     <div><b>2회 이상 주문한 고객 2,913명</b><span>다시 주문한 곳이 첫 주문과 같은 판매자인 경우는 <b>29%</b>, 같은 카테고리는 47%</span></div>
   </div>
-  <p class="rv">그래서 질문을 둘로 나눴습니다. 하나는 <b>계획한 질문</b>으로, 첫 구매 경험이 재구매로 이어지는지입니다. 다른 하나는 <b>결과를 본 뒤 추가한 탐색</b>으로, 소비자의 불만이 생기는 지점이 어디이고 그것이 판매자의 평점을 어떻게 깎는지입니다. 재구매가 드문 이유가 이 구조 때문이라고 단정하지는 않습니다(04에 근거와 한계를 적었습니다).</p>
+  <p class="rv">그래서 질문을 둘로 나눴습니다. 하나는 <b>계획한 질문</b>으로, 첫 구매 경험이 재구매로 이어지는지입니다. 다른 하나는 <b>결과를 본 뒤 추가한 탐색</b>으로, 소비자의 불만이 생기는 지점이 어디이고 그것이 판매자의 평점을 어떻게 깎는지입니다. 재구매가 드문 이유가 이 구조 때문이라고 단정하지는 않습니다(03에 근거와 한계를 적었습니다).</p>
   <ul class="qs rv">
     <li><span class="n">①</span><span class="q">배송이 늦으면 부정 리뷰가 늘어날까?</span><span class="a tag solid">의미 있는 차이</span></li>
     <li><span class="n">②</span><span class="q">배송이 늦으면 재구매가 줄어들까?</span><span class="a tag gray">차이 없음</span></li>
     <li><span class="n">③</span><span class="q">부정 리뷰를 남긴 고객은 재구매를 덜 할까?</span><span class="a tag gray">차이 없음</span></li>
   </ul>
-</section>
+</div></div>
 
-<!-- 02 데이터와 규칙 -->
-<section id="rules">
-  <div class="kick rv">02 · 데이터와 규칙</div>
-  <h2 class="rv">결과를 보기 전에<br>판단 규칙부터 정했습니다</h2>
+<div class="pg" id="rules" data-sec="rules"><div class="pg-in">
+<div class="hd">  <div class="kick rv">02 · 데이터와 규칙</div>
+  <h2 class="rv">결과를 보기 전에<br>판단 규칙부터 정했습니다</h2></div>
   <p class="rv">원하는 결론이 나올 때까지 기준을 바꾸지 않도록, 분석 전에 계획서(규칙 v1.2)를 확정했습니다. 코드는 이 규칙을 그대로 옮긴 것이고, 결과가 기대와 달라도 규칙을 고치지 않았습니다.</p>
   <div class="rules rv">
     <div><b>첫 구매 고객</b><span>배송 완료된 첫 주문이 2017년 1월 ~ 2018년 2월인 고객. 180일 뒤까지 관찰할 수 있도록 끝을 잘랐습니다.</span></div>
@@ -315,222 +388,75 @@ footer a { color: #111; font-weight: 700; }
     <div><b>부정 리뷰</b><span>별점 1~2점은 부정, 3점은 중립, 4~5점은 긍정으로 나눴습니다.</span></div>
     <div><b>판단 기준</b><span>카이제곱 검정에서 p &lt; 0.05일 때만 "의미 있는 차이"로 봤습니다. 그룹이 200명 미만이거나 재구매 고객이 10명 미만이면 결론을 내리지 않았습니다.</span></div>
   </div>
-  <p class="sm rv">06~10의 탐색은 계획서 밖의 분석입니다. 결과를 본 뒤 추가했기 때문에 결론이 아니라 가설로 다루고, 가능한 것은 탐색 구간과 검증 구간을 나눠 규칙을 먼저 적은 뒤 확인했습니다(10).</p>
-</section>
+  <p class="sm rv">04~06의 탐색은 계획서 밖의 분석입니다. 결과를 본 뒤 추가했기 때문에 결론이 아니라 가설로 다루고, 가능한 것은 탐색 구간과 검증 구간을 나눠 규칙을 먼저 적은 뒤 확인했습니다(06).</p>
+</div></div>
 
-<!-- 03 결과 ① -->
-<section id="r1">
-  <div class="kick rv">03 · 결과 ①</div>
-  <h2 class="rv">배송이 늦으면 부정 리뷰가<br>6.9배 많아졌습니다</h2>
-  <div class="chart rv">
-    <div class="cap">부정 리뷰(1~2점) 비율 <small>p &lt; 0.001</small></div>
-    <div class="bars">
-      <div class="bar hot"><div class="lb">지연<small>3,584명</small></div><div class="tr"><i style="--w:65.4%"></i></div><div class="v">65.4%</div></div>
-      <div class="bar"><div class="lb">정시<small>51,266명</small></div><div class="tr"><i style="--w:9.5%"></i></div><div class="v">9.5%</div></div>
-    </div>
-  </div>
+<div class="pg" id="results" data-sec="results"><div class="pg-in">
+<div class="hd"><div class="kick">03 · 계획한 질문의 결과</div>
+<h2>지연은 부정 리뷰를 늘렸고,<br>재구매에서는 차이를 찾지 못했습니다</h2></div>
+<div class="tscroll"><table class="tbl">
+  <thead><tr><th>질문</th><th>비교 (첫 구매 고객)</th><th>결과</th><th>판정</th></tr></thead>
+  <tbody>
+    <tr><td>① 배송 지연 → 부정 리뷰(1~2점)</td><td>지연 65.4% (3,584명) vs 정시 9.5% (51,266명)</td><td>6.9배, p &lt; 0.001</td><td><span class="tag solid">의미 있는 차이</span></td></tr>
+    <tr><td>② 배송 지연 → 180일 재구매</td><td>지연 1.61% vs 정시 1.98%</td><td>-0.37%p (95% 구간 -0.80 ~ +0.05), p = 0.12</td><td><span class="tag gray">차이 없음</span></td></tr>
+    <tr><td>③ 부정 리뷰 → 180일 재구매</td><td>부정 1.68% vs 긍정 2.01%</td><td>-0.33%p, p = 0.061</td><td><span class="tag gray">차이 없음</span></td></tr>
+  </tbody>
+</table></div>
+<div class="cols">
+  <div class="note2"><b>지연이 길수록 부정 리뷰가 늘었습니다.</b> 1~3일 35.6%, 4~7일 69.9%, 8일 이상 80.5%. 재구매율은 구간과 상관없이 1.4~1.8%였고, 재구매 고객이 14~27명뿐이라 해석하지 않았습니다.</div>
+  <div class="note2"><b>"차이 없음"은 "영향 없음"이 아닙니다.</b> 재구매가 1.95%로 드물어 확실히 잡을 수 있는 차이는 상대 25~34% 이상입니다. 카테고리·월·금액·지역을 통제한 회귀도 같은 결론이었습니다.</div>
+  <div class="note2"><b>불만의 내용이 달랐습니다.</b> 지연 고객의 부정 리뷰 51.8%는 "아직 못 받았다"였고, 정시 고객은 일부 누락 13.2%, 품질 10.6%, 설명과 다름 10.4%였습니다(미리 정한 단어 사전).</div>
+  <div class="note2"><b>재구매는 시점이 달랐고, 구조일 수도 있습니다.</b> 재구매한 1,080명의 중앙값은 59일(22~114일). 다시 사도 같은 판매자는 29%뿐이라 소비자가 판매자 단위로 돌아오지 않는 구조일 수 있습니다(가설, 확정 아님).</div>
+</div>
+</div></div>
 
-  <h3 class="rv">늦어질수록 더 나빠졌습니다</h3>
-  <p class="rv">지연 일수가 길수록 부정 리뷰 비율이 계속 올라갔습니다. 반면 재구매율은 지연 일수와 상관없이 2% 안팎에 머물렀습니다.</p>
-  <div class="tscroll rv">
-    <table class="tbl">
-      <thead><tr><th>지연 일수</th><th>고객</th><th>부정 리뷰 비율</th><th>재구매율</th></tr></thead>
-      <tbody>
-        <tr><td>정시</td><td>51,588</td><td><span class="mini ok" style="--w:9.5px"></span>9.5%</td><td>1.98%</td></tr>
-        <tr><td>1~3일</td><td>987</td><td class="hot"><span class="mini" style="--w:35.6px"></span>35.6%</td><td>1.82%</td></tr>
-        <tr><td>4~7일</td><td>970</td><td class="hot"><span class="mini" style="--w:69.9px"></span>69.9%</td><td>1.44%</td></tr>
-        <tr><td>8일 이상</td><td>1,714</td><td class="hot"><span class="mini" style="--w:80.5px"></span>80.5%</td><td>1.58%</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="sm rv">지연 구간별 재구매 고객은 14~27명뿐이라 구간끼리의 재구매율 차이는 해석하지 않았습니다(보조 분석, 검정 없음).</p>
-</section>
+<div class="pg" id="explore" data-sec="explore"><div class="pg-in">
+<div class="hd"><div class="kick">04 · 평점이 깎이는 지점 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
+<h2>지연 말고도 평점이 깎이는 지점이 있었습니다</h2></div>
+<div class="cards3">
+  <div class="xc"><div class="lb">묶음 주문</div><strong>47<small>%</small></strong>
+    <p class="sub2">여러 판매자의 상품이 한 주문에 담기면 부정 리뷰 비율 (상품 1개 주문은 12.7%)</p>
+    <ul><li>배송 완료 + 정시 도착만 봐도 <b>46.9%</b> (상품 1개 7.5%)</li>
+    <li>부정 리뷰 글의 "일부 누락": 4.3% → <b>26.8~33.8%</b></li>
+    <li>상품이 여러 개인 주문은 전체의 9.9%인데 부정 리뷰의 19.3%</li></ul>
+    <p class="cav">분할 배송 여부는 데이터에 없어서 "나뉘어 도착"은 가설입니다.</p></div>
+  <div class="xc"><div class="lb">받기 전에 쓴 리뷰</div><strong>72.6<small>%</small></strong>
+    <p class="sub2">지연 고객이 상품이 도착하기 전에 리뷰를 쓴 비율 (고객이 답한 시각 기준)</p>
+    <ul><li>지연 고객의 부정 리뷰 비율: 받기 전 <b>82.1%</b> vs 받은 뒤 21.3%</li>
+    <li>설문은 76.5%가 상품보다 먼저 발송됨</li>
+    <li>요청 시점을 도착 후로 바꾸면 전체 부정 리뷰 <b>약 2,700건(22%)</b> 감소 (최대치)</li></ul>
+    <p class="cav">받은 뒤 답한 고객이 원래 달랐을 수 있어 실제 효과는 더 작을 수 있습니다.</p></div>
+  <div class="xc"><div class="lb">세일 시기</div><strong>17.2<small>%</small></strong>
+    <p class="sub2">블랙프라이데이 주간(2017-11-20~27)에 늦게 도착한 주문 (직전 11/1~19는 5.9%)</p>
+    <ul><li>부정 리뷰: 12.0% → <b>20.1%</b></li>
+    <li>2017-11, 2018-02·03의 지연율은 12~19%, 2018-04~06은 1~7%</li>
+    <li>주문량이 비슷해도 지연이 달라 물량만으로는 설명되지 않음</li></ul>
+    <p class="cav">블랙프라이데이 한 번의 사례입니다.</p></div>
+</div>
+<div class="res warn"><b>세 가지 모두 결과를 본 뒤 추가한 탐색이라 결론이 아니라 가설입니다.</b> 계산 코드와 상세 표는 저장소의 <code>results/8_posthoc_review_timing.md</code>, <code>9_multi_order_themes.md</code>, <code>10_structure_evidence.md</code>에 있습니다.</div>
+</div></div>
 
-<!-- 04 결과 ②③ -->
-<section id="r2">
-  <div class="kick rv">04 · 결과 ② ③</div>
-  <h2 class="rv">재구매율은 지연에도, 부정 리뷰에도<br>뚜렷하게 흔들리지 않았습니다</h2>
-  <p class="rv">점은 재구매율, 옅은 막대는 95% 신뢰구간(실제 값이 있을 법한 범위)입니다. 그룹 사이의 막대가 서로 많이 겹칩니다. 규칙대로라면 "차이가 있다"고 말할 수 없습니다. 다만 이것이 "차이가 없다"는 증명은 아닙니다. 재구매가 2% 안팎으로 드물어서, 이 표본으로 확실히(검정력 80%) 잡을 수 있는 차이는 ②에서 상대 약 34%(0.67%p), ③에서 약 25%(0.50%p) 이상입니다. 지연 고객의 재구매가 최대 40% 낮을 가능성까지 배제하지는 못합니다.</p>
-
-  <div class="chart rv">
-    <div class="cap">② 배송 지연 → 180일 재구매율 <small>p = 0.12</small></div>
-    <div class="ci">
-      <div class="row"><div class="lb">지연<small>3,671명</small></div><div class="tr"><span class="rg" style="--lo:41.7%;--hi:69%"></span><span class="dot" style="--v:53.7%"></span></div><div class="v">1.61%<small>1.25 ~ 2.07</small></div></div>
-      <div class="row dim"><div class="lb">정시<small>51,588명</small></div><div class="tr"><span class="rg" style="--lo:62%;--hi:70%"></span><span class="dot" style="--v:66%"></span></div><div class="v">1.98%<small>1.86 ~ 2.10</small></div></div>
-    </div>
-    <div class="axis"><span></span><div class="sc"><span style="left:0">0%</span><span style="left:33.3%">1%</span><span style="left:66.7%">2%</span><span style="left:100%">3%</span></div><span></span></div>
-  </div>
-
-  <div class="chart rv" style="margin-top:36px">
-    <div class="cap">③ 리뷰 → 180일 재구매율 <small>부정 vs 긍정 p = 0.061</small></div>
-    <div class="ci">
-      <div class="row"><div class="lb">부정<small>7,209명</small></div><div class="tr"><span class="rg" style="--lo:47%;--hi:66.7%"></span><span class="dot" style="--v:56%"></span></div><div class="v">1.68%<small>1.41 ~ 2.00</small></div></div>
-      <div class="row dim"><div class="lb">중립<small>4,790명</small></div><div class="tr"><span class="rg" style="--lo:53.7%;--hi:80%"></span><span class="dot" style="--v:65.3%"></span></div><div class="v">1.96%<small>1.61 ~ 2.40</small></div></div>
-      <div class="row dim"><div class="lb">긍정<small>42,853명</small></div><div class="tr"><span class="rg" style="--lo:62.7%;--hi:71.7%"></span><span class="dot" style="--v:67%"></span></div><div class="v">2.01%<small>1.88 ~ 2.15</small></div></div>
-    </div>
-    <div class="axis"><span></span><div class="sc"><span style="left:0">0%</span><span style="left:33.3%">1%</span><span style="left:66.7%">2%</span><span style="left:100%">3%</span></div><span></span></div>
-  </div>
-
-  <div class="res warn rv"><b>다른 조건을 함께 넣어도 같았습니다.</b> 카테고리, 구매 월, 결제 금액을 함께 고려한 로지스틱 회귀에서도 배송 지연(오즈비 0.90, 95% 구간 0.68~1.21)과 부정 리뷰(0.87, 0.70~1.07) 모두 재구매와 뚜렷한 관계가 보이지 않았습니다. 주마다 지연율이 3.5%~13.4%로 달라서 고객 지역(주)을 더 넣어 봤고(지연 0.93), 리뷰를 빼고 지연의 전체 관계만 봐도(0.86, 0.65~1.12) 결론은 같았습니다.</div>
-
-  <h3 class="rv">대신 재구매에는 "시점"이 보였습니다</h3>
-  <p class="rv">재구매한 1,080명이 다시 사기까지 걸린 기간입니다. 절반은 첫 구매 후 22~114일 사이에 돌아왔고, 중앙값은 59일, 약 두 달이었습니다.</p>
-  <div class="time rv" aria-label="재구매까지 걸린 일수: 25% 22일, 중앙값 59일, 75% 114일">
-    <div class="base"></div>
-    <div class="iqr"></div>
-    <div class="med"></div>
-    <span class="lab" style="left:12.2%">22일</span>
-    <span class="lab m" style="left:32.8%">중앙값 59일</span>
-    <span class="lab" style="left:63.3%">114일</span>
-    <span class="tick" style="left:0;translate:0 0">첫 구매</span>
-    <span class="tick" style="left:50%">90일</span>
-    <span class="tick" style="left:100%;translate:-100% 0">180일</span>
-  </div>
-
-  <h3 class="rv">재구매가 드문 이유는 구조일 수도 있습니다</h3>
-  <p class="rv">소비자는 마켓플레이스 이름으로 사고(Olist 언급 0건), 다시 사도 같은 판매자로 돌아오는 경우가 29%뿐입니다. 이런 구조에서는 한 판매자가 준 첫 경험이 소비자의 다음 구매로 이어지기 어려울 수 있습니다. 다만 이것은 가설입니다. 침구나 가구처럼 구매 주기가 긴 상품이 많은 것, 가격, 다른 채널 이용 같은 이유는 이 데이터로 구분할 수 없습니다.</p>
-</section>
-
-<!-- 05 불만 주제 -->
-<section id="themes">
-  <div class="kick rv">05 · 불만 주제</div>
-  <h2 class="rv">늦은 고객은 "아직 못 받았다"고,<br>정시 고객은 "상품이 이상하다"고 썼습니다</h2>
-  <p class="rv">글이 있는 부정 리뷰 5,395건을 미리 정한 포르투갈어 단어 사전으로 다섯 가지 주제로 나눴습니다. 한 리뷰가 여러 주제에 걸릴 수 있습니다.</p>
-  <div class="chart rv">
-    <div class="cap">부정 리뷰 중 주제별 비율</div>
-    <div class="legend"><span><i style="background:var(--late)"></i>지연 고객 1,627건</span><span><i style="background:var(--ok)"></i>정시 고객 3,768건</span></div>
-    <div class="grp">
-      <div class="row"><div class="lb">미수령</div><div class="pair"><div class="l"><i style="--w:86.3%"></i><span>51.8%</span></div><div><i style="--w:21%"></i><span>12.6%</span></div></div></div>
-      <div class="row"><div class="lb">배송 지연</div><div class="pair"><div class="l"><i style="--w:18.8%"></i><span>11.3%</span></div><div><i style="--w:8.7%"></i><span>5.2%</span></div></div></div>
-      <div class="row"><div class="lb">일부 누락</div><div class="pair"><div class="l"><i style="--w:5.8%"></i><span>3.5%</span></div><div><i style="--w:22%"></i><span>13.2%</span></div></div></div>
-      <div class="row"><div class="lb">품질·파손</div><div class="pair"><div class="l"><i style="--w:1.2%"></i><span>0.7%</span></div><div><i style="--w:17.7%"></i><span>10.6%</span></div></div></div>
-      <div class="row"><div class="lb">설명과 다름·오배송</div><div class="pair"><div class="l"><i style="--w:1.8%"></i><span>1.1%</span></div><div><i style="--w:17.3%"></i><span>10.4%</span></div></div></div>
-    </div>
-  </div>
-  <div class="quotes rv">
-    <div class="qt"><div class="tp"><span class="tag">미수령</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"상품을 못 받았고 아무 소식도 없어요."</div><div class="pt">Não recebi o produto e não tenho nenhuma notícia</div></div>
-    <div class="qt"><div class="tp"><span class="tag">일부 누락</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"담요 두 개를 샀는데 하나만 왔어요."</div><div class="pt">Comprei dois cobertores e recebi apenas um</div></div>
-    <div class="qt"><div class="tp"><span class="tag">품질·파손</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"상품이 깨져서 왔어요. 반품하고 싶어요."</div><div class="pt">o produto veio quebrado ,,, quero devolver</div></div>
-    <div class="qt"><div class="tp"><span class="tag">설명과 다름·오배송</span><span class="stars"><b>★★</b>☆☆☆</span></div><div class="ko">"하나만 왔고 색도 틀렸어요. 베이지를 샀는데 흰색이 왔어요."</div><div class="pt">Foi entrege apenas 1 produto e na cor errada, veio branco e eu comprei bege</div></div>
-  </div>
-</section>
-
-<!-- 06 묶음 주문 (탐색) -->
-<section id="bundle">
-  <div class="kick rv">06 · 묶음 주문 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
-  <h2 class="rv">한 번에 다 오지 않는 주문은<br>정시에 도착해도 불만이 됩니다</h2>
-  <p class="rv">지연이 아닌데도 부정 리뷰가 많은 주문이 있는지 찾아봤습니다. 한 주문에 상품이 여러 개 담겼거나 판매자가 여러 명인 주문이 눈에 띄었습니다. 이런 주문은 전체의 약 10%인데 부정 리뷰의 약 19%를 차지합니다.</p>
-  <div class="chart rv">
-    <div class="cap">부정 리뷰(1~2점) 비율 <small>리뷰가 있는 주문 97,917건</small></div>
-    <div class="bars">
-      <div class="bar"><div class="lb">상품 1개<small>주문의 90.1%</small></div><div class="tr"><i style="--w:12.7%"></i></div><div class="v">12.7%</div></div>
-      <div class="bar"><div class="lb">같은 상품 여러 개<small>주문의 6.6%</small></div><div class="tr"><i style="--w:24.4%"></i></div><div class="v">24.4%</div></div>
-      <div class="bar"><div class="lb">한 판매자 · 다른 상품<small>주문의 2.0%</small></div><div class="tr"><i style="--w:25.7%"></i></div><div class="v">25.7%</div></div>
-      <div class="bar hot"><div class="lb">여러 판매자<small>주문의 1.3%</small></div><div class="tr"><i style="--w:47.3%"></i></div><div class="v">47.3%</div></div>
-    </div>
-  </div>
-  <div class="chart rv" style="margin-top:28px">
-    <div class="cap">배송 완료 + 정시 도착한 주문만 <small>배송 지연의 영향을 뺀 비교 (89,448건)</small></div>
-    <div class="bars">
-      <div class="bar"><div class="lb">상품 1개</div><div class="tr"><i style="--w:7.5%"></i></div><div class="v">7.5%</div></div>
-      <div class="bar"><div class="lb">같은 상품 여러 개</div><div class="tr"><i style="--w:20.6%"></i></div><div class="v">20.6%</div></div>
-      <div class="bar"><div class="lb">한 판매자 · 다른 상품</div><div class="tr"><i style="--w:22.2%"></i></div><div class="v">22.2%</div></div>
-      <div class="bar hot"><div class="lb">여러 판매자</div><div class="tr"><i style="--w:46.9%"></i></div><div class="v">46.9%</div></div>
-    </div>
-  </div>
-  <p class="rv">여러 판매자 주문은 늦게 도착한 비율이 1.0%로 오히려 낮은데도 부정 리뷰가 절반 가까이 됩니다. 지연이 원인이 아닙니다. 부정 리뷰의 글을 보면 불만의 성격이 달라집니다.</p>
-  <div class="tscroll rv">
-    <table class="tbl">
-      <thead><tr><th>주문 유형 (글 있는 부정 리뷰)</th><th>건수</th><th>일부 누락</th><th>미수령</th><th>품질·파손</th><th>설명과 다름</th></tr></thead>
-      <tbody>
-        <tr><td>상품 1개</td><td>8,139</td><td>4.3%</td><td>27.2%</td><td>7.8%</td><td>8.1%</td></tr>
-        <tr><td>같은 상품 여러 개</td><td>1,330</td><td class="hot">26.8%</td><td>15.5%</td><td>3.2%</td><td>4.6%</td></tr>
-        <tr><td>한 판매자 · 다른 상품</td><td>411</td><td class="hot">26.8%</td><td>24.3%</td><td>2.9%</td><td>5.4%</td></tr>
-        <tr><td>여러 판매자</td><td>509</td><td class="hot">33.8%</td><td class="hot">34.4%</td><td>2.6%</td><td>3.1%</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="quotes rv">
-    <div class="qt"><div class="tp"><span class="tag">일부 누락</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"바지를 두 벌 샀는데 한 벌만 받았어요. 그런데 상태에는 두 벌 다 받은 것으로 나와 있어요."</div><div class="pt">Comprei duas calças recebi apenas uma , mas consta no status que que recebi as duas</div></div>
-    <div class="qt"><div class="tp"><span class="tag">일부 누락</span><span class="stars"><b>★</b>☆☆☆☆</span></div><div class="ko">"상품 3개 중 1개만 배송됐어요. 왜 2개가 빠졌는지 알고 싶어요. 그런데 상태는 배송 완료로 나와요."</div><div class="pt">de tres produtos somente um foi entregue quero saber por que falto dois e esta dando e status entregue</div></div>
-  </div>
-  <div class="res warn rv"><b>"일부만 받았다"는 불만이 상품 1개 주문의 6~8배입니다.</b> 한 주문이 여러 번에 나뉘어 도착하는데, 고객은 첫 상자만 받고 평가하는 상황으로 보입니다. 다만 이 데이터에는 분할 배송 여부가 직접 들어 있지 않아서, 이 설명은 강하게 뒷받침되는 가설입니다. 불만 글은 단어 사전으로 센 것이라 놓치거나 잘못 잡은 글이 있을 수 있습니다.</div>
-</section>
-
-<!-- 07 사후 발견 -->
-<section id="posthoc">
-  <div class="kick rv">07 · 받기 전에 쓴 리뷰 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
-  <h2 class="rv">늦은 고객 10명 중 7명은<br>상품을 받기도 전에 리뷰를 썼습니다</h2>
-  <p class="rv">"미수령"이 이렇게 많은 이유가 궁금해 리뷰 작성 시점을 확인했습니다. 지연 고객의 <b>72.6%</b>가 상품이 도착하기 전에 리뷰를 남겼습니다(고객이 답한 시각 기준). Olist는 상품이 도착하거나 배송 예정일이 되면 만족도 설문을 보내는데, 지연 고객의 76.5%는 상품보다 설문을 먼저 받았습니다. 상품이 늦으면 고객은 받지도 못한 상태에서 평가를 하게 됩니다.</p>
-  <div class="chart rv">
-    <div class="cap">부정 리뷰(1~2점) 비율</div>
-    <div class="bars">
-      <div class="bar hot"><div class="lb">지연 · 받기 전<small>작성</small></div><div class="tr"><i style="--w:82.1%"></i></div><div class="v">82.1%</div></div>
-      <div class="bar"><div class="lb">지연 · 받은 뒤<small>작성</small></div><div class="tr"><i style="--w:21.3%"></i></div><div class="v">21.3%</div></div>
-      <div class="bar"><div class="lb">정시</div><div class="tr"><i style="--w:9.5%"></i></div><div class="v">9.5%</div></div>
-    </div>
-  </div>
-  <div class="quotes rv" style="grid-template-columns:1fr">
-    <div class="qt"><div class="tp"><span class="tag">미수령</span><span class="stars"><b>★★★</b>☆☆</span></div><div class="ko">"아직 못 받아서 평가할 수가 없어요."</div><div class="pt">Ainda não recebi então não posso avaliar</div></div>
-  </div>
-  <p class="sm rv">같은 지연 고객이라도 상품을 받은 뒤에 쓴 리뷰는 부정 비율이 크게 낮았습니다. 다만 이 비교는 결과를 본 뒤에 추가한 탐색적 분석이라, 검증된 결론이 아니라 다음에 실험해 볼 가설로 다룹니다.</p>
-</section>
-
-<!-- 08 세일 시기 (탐색) -->
-<section id="peak">
-  <div class="kick rv">08 · 세일 시기 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
-  <h2 class="rv">주문이 몰리는 주에<br>지연과 불만이 함께 올랐습니다</h2>
-  <p class="rv">2017년 11월 블랙프라이데이 주간(11/20~27)과 그 직전(11/1~19)을 비교했습니다. 주문이 몰린 주에 늦게 도착한 주문이 세 배 가까이 늘었고, 부정 리뷰도 함께 늘었습니다.</p>
-  <div class="tscroll rv">
-    <table class="tbl">
-      <thead><tr><th>기간</th><th>주문</th><th>늦게 도착</th><th>부정 리뷰</th></tr></thead>
-      <tbody>
-        <tr><td>2017-11-01 ~ 19</td><td>3,017</td><td>5.9%</td><td>12.0%</td></tr>
-        <tr><td>2017-11-20 ~ 27 (블랙프라이데이 주간)</td><td>3,283</td><td class="hot">17.2%</td><td class="hot">20.1%</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <h3 class="rv">월별로 보면</h3>
-  <div class="tscroll rv">
-    <table class="tbl">
-      <thead><tr><th>월</th><th>주문</th><th>늦게 도착</th><th>부정 리뷰</th></tr></thead>
-      <tbody>
-        <tr><td>2017-10</td><td>4,446</td><td>4.0%</td><td>11.1%</td></tr>
-        <tr><td>2017-11</td><td>7,237</td><td class="hot">12.3%</td><td class="hot">16.6%</td></tr>
-        <tr><td>2017-12</td><td>5,461</td><td>7.3%</td><td>14.4%</td></tr>
-        <tr><td>2018-01</td><td>7,013</td><td>5.6%</td><td>13.7%</td></tr>
-        <tr><td>2018-02</td><td>6,508</td><td class="hot">14.0%</td><td class="hot">19.4%</td></tr>
-        <tr><td>2018-03</td><td>6,948</td><td class="hot">18.7%</td><td class="hot">21.2%</td></tr>
-        <tr><td>2018-04</td><td>6,752</td><td>4.4%</td><td>11.8%</td></tr>
-        <tr><td>2018-05</td><td>6,722</td><td>6.5%</td><td>10.8%</td></tr>
-        <tr><td>2018-06</td><td>6,072</td><td>1.2%</td><td>10.0%</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="res warn rv"><b>수요가 급증한 시기에 배송 지연과 부정 리뷰가 함께 늘었습니다.</b> 다만 물량만이 원인이라고 할 수는 없습니다. 2018-04~06은 월 주문이 6,100~6,800건으로 2018-02·03(6,500~6,900건)과 비슷한데도 지연이 낮았습니다. 2018-02·03에 무슨 일이 있었는지는 이 데이터로 알 수 없고, 블랙프라이데이 한 번의 사례이므로 가설로만 다룹니다.</div>
-</section>
-
-<!-- 09 리뷰 글 감성 (탐색) -->
-<section id="sentiment">
-  <div class="kick rv">09 · 리뷰 글 감성 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
-  <h2 class="rv">별점 대신 글을 AI로 읽어 봤습니다.<br>글을 남긴 고객에서는 약한 차이가 보였습니다</h2>
+<div class="pg" id="sentiment" data-sec="sentiment"><div class="pg-in">
+<div class="hd"><div class="kick rv">05 · 리뷰 글 감성 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
+<h2 class="rv">별점 대신 글을 AI로 읽어 봤습니다</h2></div>
   <p class="rv">별점과 글이 어긋나는 리뷰가 있습니다. ★5를 주고 불만을 쓰기도 합니다. 그래서 결과 ③(부정 리뷰 → 재구매, 차이 없음)을 <b>별점이 아니라 글 내용</b>으로 다시 확인했습니다.</p>
-
-  <div class="rules rv">
+<div class="cols "><div>  <div class="rules rv">
     <div><b>모델</b><span>포르투갈어 언어 모델 BERTimbau</span></div>
     <div><b>학습</b><span>Olist와 무관한 다른 브라질 쇼핑몰(B2W) 리뷰 8,000건. Olist 별점으로 학습하면 별점과 비교할 때 순환 논리가 되기 때문</span></div>
     <div><b>정확도 측정</b><span>Olist 리뷰 400건을 <b>별점을 가리고 글만 읽고</b> 판정한 정답 세트로 측정. 사람이 50건을 따로 판정해 일치율 86.7% 확인</span></div>
     <div><b>정확도</b><span>모델 <b>98.2%</b> · 같은 리뷰를 별점만으로 판정 96.4% (280건 비교)</span></div>
-  </div>
-
-  <div class="chart rv">
+  </div></div><div>  <div class="chart rv">
     <div class="cap">별점과 글 감성이 어긋나는 리뷰 <small>Olist 글 리뷰 약 4만 건</small></div>
     <div class="bars">
       <div class="bar"><div class="lb">★4~5인데<small>글은 부정</small></div><div class="tr"><i style="--w:8.1%"></i></div><div class="v">8.1%</div></div>
       <div class="bar"><div class="lb">★1~2인데<small>글은 긍정</small></div><div class="tr"><i style="--w:5.4%"></i></div><div class="v">5.4%</div></div>
     </div>
-  </div>
+  </div></div></div>
+</div></div>
 
+<div class="pg" id="sentiment-2" data-sec="sentiment"><div class="pg-in">
+<div class="hd"><div class="kick rv">05 · 리뷰 글 감성 · 재구매율 <span class="tag gray" style="margin-left:6px">계획에 없던 탐색</span></div>
+<h2 class="rv">글을 남긴 고객에서는 약한 차이가 보였습니다</h2></div>
   <h3 class="rv">첫 구매 고객의 180일 재구매율</h3>
   <div class="tscroll rv">
     <table class="tbl">
@@ -544,14 +470,13 @@ footer a { color: #111; font-weight: 700; }
   </div>
   <div class="res warn rv"><b>차이를 만든 건 측정 방법이 아니라 대상이었습니다.</b> 글을 남긴 고객만 보면 별점으로 나누든 글로 나누든 부정 고객의 재구매율이 낮았습니다. 다만 결과를 본 뒤에 추가한 분석이고, 차이는 0.4~0.6%p로 작으며, 여러 번 검정했습니다. 그래서 결론이 아니라 <b>"글을 남긴 고객에서는 약한 관계가 있을 수 있다"는 가설</b>로 다룹니다.</div>
   <p class="sm rv">모델은 부정·긍정 두 가지로만 나누기 때문에 칭찬과 불만이 섞인 글은 어느 한쪽으로 분류됩니다. 표의 고객 수는 리뷰가 부정·중립·긍정 중 어디에 속하는지에 따라 조금씩 다릅니다. 정답 세트·모델 설정·전체 결과는 저장소의 results/sentiment 폴더에 있습니다.</p>
-</section>
+</div></div>
 
-<!-- 10 판매자 지속 (탐색 + 검증) -->
-<section id="seller">
-  <div class="kick rv">10 · 판매자 지속 <span class="tag gray" style="margin-left:6px">탐색 + 검증</span></div>
-  <h2 class="rv">판매자 쪽에서도 같은 패턴을 찾아봤지만,<br>검증에서는 확인되지 않았습니다</h2>
+<div class="pg" id="seller" data-sec="seller"><div class="pg-in">
+<div class="hd">  <div class="kick rv">06 · 판매자 지속 <span class="tag gray" style="margin-left:6px">탐색 + 검증</span></div>
+  <h2 class="rv">판매자 쪽에서도 같은 패턴을 찾아봤지만,<br>검증에서는 확인되지 않았습니다</h2></div>
   <p class="rv">Olist의 직접 고객이 판매자라면, 판매자가 초기에 겪은 경험이 이후 판매를 이어 가는 것과 관련이 있을까요? 판매자의 <b>처음 10건 주문의 부정 리뷰율</b>이 높을수록, 10번째 주문 뒤 90~180일 사이에 주문이 없을 가능성이 큰지 봤습니다.</p>
-  <div class="rules rv">
+<div class="cols "><div>  <div class="rules rv">
     <div><b>탐색 구간</b><span>10번째 주문이 2017-10 이전인 판매자 531명. 방향만 보고 판정하지 않음</span></div>
     <div><b>검증 구간</b><span>10번째 주문이 2017-11~2018-02인 판매자 293명. <b>규칙(지속의 정의, 비교 방법, 판정 기준)을 이 구간의 결과를 보기 전에 문서로 확정</b>하고 한 번만 계산</span></div>
   </div>
@@ -563,35 +488,37 @@ footer a { color: #111; font-weight: 700; }
         <tr><td>검증</td><td>293</td><td class="hot">0.88</td><td>0.70 ~ 1.10</td><td class="hot">0.272</td></tr>
       </tbody>
     </table>
-  </div>
-  <div class="res warn rv"><b>검증에서는 확인되지 않았습니다.</b> 방향은 같았지만 크기가 줄었습니다. 탐색 구간에서 우연히 크게 보인 부분이 섞여 있었을 가능성이 큽니다. 검증 구간이 293명으로 작아서 오즈비가 약 0.64 이하로 크지 않으면 잡히지 않습니다. 그래서 "관계가 없다"가 아니라 "이 표본으로는 판단할 수 없다"로 읽어야 합니다.</div>
-  <p class="sm rv">10번째 주문에 도달한 판매자만 포함했습니다. 판매자가 떠난 이유(정책, 다른 채널, 폐업 등)는 데이터에 없고, 지속은 "주문이 있었다"는 뜻입니다. 규칙과 계산은 저장소의 results/seller 폴더에 있습니다.</p>
-</section>
+  </div></div><div>  <div class="res warn rv"><b>검증에서는 확인되지 않았습니다.</b> 방향은 같았지만 크기가 줄었습니다. 탐색 구간에서 우연히 크게 보인 부분이 섞여 있었을 가능성이 큽니다. 검증 구간이 293명으로 작아서 오즈비가 약 0.64 이하로 크지 않으면 잡히지 않습니다. 그래서 "관계가 없다"가 아니라 "이 표본으로는 판단할 수 없다"로 읽어야 합니다.</div>
+  <p class="sm rv">10번째 주문에 도달한 판매자만 포함했습니다. 판매자가 떠난 이유(정책, 다른 채널, 폐업 등)는 데이터에 없고, 지속은 "주문이 있었다"는 뜻입니다. 규칙과 계산은 저장소의 results/seller 폴더에 있습니다.</p></div></div>
+</div></div>
 
-<!-- 11 제안 -->
-<section id="recs">
-  <div class="kick rv">11 · 제안과 다음 단계</div>
-  <h2 class="rv">판매자의 평점을 지키는 일로 보고,<br>재구매는 따로 설계해야 합니다</h2>
-  <div class="recs rv">
-    <div class="rec"><span class="n">01</span><div>
+<div class="pg" id="recs" data-sec="recs"><div class="pg-in">
+<div class="hd">  <div class="kick rv">07 · 제안과 다음 단계</div>
+  <h2 class="rv">판매자의 평점을 지키는 일로 보고,<br>재구매는 따로 설계해야 합니다</h2></div>
+<div class="recs three">    <div class="rec"><span class="n">01</span><div>
       <h4>리뷰 요청은 "예정일"이 아니라 "실제 도착 후"에</h4>
-      <p>받기 전에 쓴 리뷰가 부정 리뷰의 큰 부분을 차지합니다(07). 도착 확인 뒤에 요청하면 상품과 상관없는 1점을 줄일 수 있습니다.</p>
+      <p>받기 전에 쓴 리뷰가 부정 리뷰의 큰 부분을 차지합니다(04). 도착 확인 뒤에 요청하면 상품과 상관없는 1점을 줄일 수 있습니다.</p>
       <p><b>규모</b>: 받기 전에 답한 리뷰가 받은 뒤와 같은 비율로만 부정이었다면, Olist 전체 주문에서 부정 리뷰가 약 <b>2,700건(전체 부정 리뷰의 22%)</b> 줄고 평균 별점은 4.16 → 약 4.25가 됩니다. 단순 가정으로 계산한 최대치라 실제 효과는 실험으로 확인해야 합니다.</p>
       <div class="ab"><b>실험</b><span>리뷰 요청 시점: 예정일 발송(기존) vs 도착 확인 후 발송</span><b>지표</b><span>부정 리뷰 비율, 리뷰 작성률</span></div>
     </div></div>
     <div class="rec"><span class="n">02</span><div>
       <h4>묶음 주문은 나뉘어 올 수 있다고 먼저 알리고, 리뷰는 마지막 상품이 도착한 뒤에</h4>
-      <p>여러 판매자의 상품이 한 주문에 담기면 정시에 도착해도 부정 리뷰가 47%였고, 불만 글의 3분의 1이 "일부만 받았다"였습니다(06). 상품이 여러 번에 나뉘어 온다는 안내와, 모든 상품이 도착한 뒤의 리뷰 요청이 필요합니다.</p>
+      <p>여러 판매자의 상품이 한 주문에 담기면 정시에 도착해도 부정 리뷰가 47%였고, 불만 글의 3분의 1이 "일부만 받았다"였습니다(04). 상품이 여러 번에 나뉘어 온다는 안내와, 모든 상품이 도착한 뒤의 리뷰 요청이 필요합니다.</p>
       <div class="ab"><b>실험</b><span>묶음 주문에 분할 도착 안내 + 마지막 상품 도착 후 리뷰 요청 vs 기존</span><b>지표</b><span>부정 리뷰 비율, "일부 누락" 불만 비율</span></div>
     </div></div>
     <div class="rec"><span class="n">03</span><div>
       <h4>지연이 예상되면 먼저 알리고, 세일 전에는 출고 능력을 점검</h4>
-      <p>지연 고객의 부정 리뷰 절반 이상이 "아직 못 받았다"는 내용이었습니다. 지연이 몰리는 세일 시기(08)에는 판매자별 출고 능력을 미리 점검하고, 늦어질 주문에는 새 도착 예정일을 먼저 안내하면 고객이 리뷰 창에서 처음 지연을 알게 되는 상황을 막을 수 있습니다.</p>
+      <p>지연 고객의 부정 리뷰 절반 이상이 "아직 못 받았다"는 내용이었습니다. 지연이 몰리는 세일 시기(04)에는 판매자별 출고 능력을 미리 점검하고, 늦어질 주문에는 새 도착 예정일을 먼저 안내하면 고객이 리뷰 창에서 처음 지연을 알게 되는 상황을 막을 수 있습니다.</p>
       <div class="ab"><b>실험</b><span>지연 예상 주문에 선제 안내 발송 vs 미발송</span><b>지표</b><span>부정 리뷰 비율, 문의 건수</span></div>
-    </div></div>
-    <div class="rec"><span class="n">04</span><div>
+    </div></div></div>
+</div></div>
+
+<div class="pg" id="recs-2" data-sec="recs"><div class="pg-in">
+<div class="hd"><div class="kick rv">07 · 제안과 다음 단계 · 이어서</div>
+<h2 class="rv">불만 응대와 재구매, 그리고 적용</h2></div>
+<div class="recs two">    <div class="rec"><span class="n">04</span><div>
       <h4>불만을 글로 남긴 고객에게는 먼저 응대하기</h4>
-      <p>리뷰에 글을 남긴 고객에서는 부정 고객의 재구매율이 조금 낮았습니다(09). 결과를 본 뒤 찾은 약한 관계라 원인이라고 할 수 없지만, 글로 불만을 쓴 고객은 따로 알아볼 수 있으니 응대 실험으로 확인할 수 있습니다.</p>
+      <p>리뷰에 글을 남긴 고객에서는 부정 고객의 재구매율이 조금 낮았습니다(05). 결과를 본 뒤 찾은 약한 관계라 원인이라고 할 수 없지만, 글로 불만을 쓴 고객은 따로 알아볼 수 있으니 응대 실험으로 확인할 수 있습니다.</p>
       <div class="ab"><b>실험</b><span>부정 글 리뷰 고객에게 사과·해결 안내 발송 vs 미발송</span><b>지표</b><span>180일 재구매율, 리뷰 수정률</span></div>
     </div></div>
     <div class="rec"><span class="n">05</span><div>
@@ -602,61 +529,97 @@ footer a { color: #111; font-weight: 700; }
   </div>
   <h3 class="rv">이렇게 적용할 수 있습니다</h3>
   <div class="apply rv">
-    <div><b>여러 브랜드가 입점한 플랫폼이라면</b><strong>입점 판매자의 평점 관리</strong><p>같은 방법으로 판매자별 지연율, 묶음 주문의 분할 배송, 세일 시기 출고 지연을 보고 판매자에게 먼저 알립니다. 이번 데이터에서는 초기 경험과 판매 지속의 관계를 확인하지 못했으므로(10), 규모가 더 큰 자체 데이터로 확인해야 합니다.</p></div>
+    <div><b>여러 브랜드가 입점한 플랫폼이라면</b><strong>입점 판매자의 평점 관리</strong><p>같은 방법으로 판매자별 지연율, 묶음 주문의 분할 배송, 세일 시기 출고 지연을 보고 판매자에게 먼저 알립니다. 이번 데이터에서는 초기 경험과 판매 지속의 관계를 확인하지 못했으므로(06), 규모가 더 큰 자체 데이터로 확인해야 합니다.</p></div>
     <div><b>자사몰을 운영하는 브랜드라면</b><strong>첫 구매 → 두 번째 구매 설계</strong><p>소모품은 사용 기간이 곧 재구매 주기입니다. 첫 구매 고객의 실제 재구매 간격을 같은 방식으로 재고, 그 시점에 맞춘 리마인드와 도착 후 리뷰 요청, 묶음 주문 안내를 함께 실험합니다.</p></div>
   </div>
-</section>
+</div></div>
 
-<!-- 08 한계 -->
-<section id="limits">
-  <div class="kick rv">12 · 한계</div>
-  <h2 class="rv">이 분석이 말해 주지 않는 것</h2>
-  <ul class="lim rv">
-    <li><b>관계일 뿐 원인은 아닙니다.</b> 지연과 부정 리뷰가 함께 나타난다는 것까지가 이 분석의 결론입니다. 원인인지는 위의 A/B 테스트로 확인해야 합니다.</li>
-    <li><b>"판매자의 평점이 중요하다"는 전제는 확인하지 못했습니다.</b> 평점이 깎이면 실제 판매가 줄어드는지는 이번 분석에 들어 있지 않습니다. 제안은 이 전제를 둔 것이고, 상품 평점 변화 뒤의 판매 변화를 보는 별도 분석이 필요합니다.</li>
-    <li><b>재구매가 워낙 드물어서 작은 차이는 잡아내기 어렵습니다.</b> 첫 구매 고객 5.5만 명 중 180일 안에 다시 산 사람은 1,080명(1.95%)뿐입니다. 그래서 "차이 없음"은 "영향이 전혀 없다"가 아니라 "있더라도 작다"로 읽어야 합니다. 실제로 부정 vs 긍정 비교는 p = 0.061로 기준(0.05)에 가까웠고, 글을 남긴 고객만 보면 기준을 넘는 차이가 나왔습니다(09). 미리 정한 규칙에 따라 결론은 "차이 없음"으로 두고, 09의 결과는 가설로만 다룹니다.</li>
-    <li><b>"소비자가 Olist를 모른다"는 구조 설명은 가설입니다.</b> 리뷰에 Olist가 한 번도 언급되지 않고 같은 판매자로 돌아오는 경우가 29%뿐이라는 데이터는 이 설명과 맞지만, 재구매가 드문 진짜 이유(구매 주기, 가격, 다른 채널)는 구분하지 못합니다.</li>
-    <li><b>묶음 주문의 "나뉘어 도착" 설명도 가설입니다.</b> 데이터에 분할 배송 여부가 없고, 불만 글은 단어 사전으로 센 것이라 놓치거나 잘못 잡은 글이 있습니다. 세일 시기는 블랙프라이데이 한 번의 사례이고, 물량만으로는 설명되지 않는 달(2018-02·03)이 있습니다.</li>
-    <li><b>판매자 지속 분석은 표본이 작아 판단을 보류합니다.</b> 탐색 구간에서 보인 관계가 검증 구간(293명)에서는 확인되지 않았습니다. 판매자가 떠난 이유는 데이터에 없습니다.</li>
-    <li><b>감성 모델은 부정과 긍정 두 가지로만 나눕니다.</b> 칭찬과 불만이 섞인 글은 어느 한쪽으로 분류됩니다. 정확도를 잰 정답 세트(400건)도 Claude가 판정한 것이라, 사람이 50건을 따로 판정해 일치율(86.7%)을 함께 공개했습니다.</li>
-    <li><b>단어 사전에 오류가 하나 있었습니다.</b> 칭찬인 "ótima qualidade(아주 좋은 품질)"가 부정 표현 "ma qualidade(나쁜 품질)"와 글자가 겹쳐 품질 주제에 잘못 걸렸습니다. 고치면 품질 주제가 412건 → 400건(7.6% → 7.4%)이라 결론은 같습니다. 규칙을 바꾸지 않는다는 원칙에 따라 v1.2 결과를 그대로 싣고 오류를 공개합니다.</li>
-    <li><b>사후 발견의 숫자를 한 번 바로잡았습니다.</b> 처음에는 Olist가 설문을 보낸 날짜를 기준으로 계산해 "받기 전 작성 76.5%"로 적었습니다. 고객이 실제로 답한 시각으로 다시 계산해 72.6%(부정 비율 82.1% vs 21.3%)로 고쳤습니다. 방향과 결론은 같습니다. 계산 코드는 저장소의 posthoc_review_timing.py에 있습니다.</li>
-    <li><b>카테고리별 결론은 내리지 않았습니다.</b> 대부분 카테고리에서 지연 후 재구매 고객이 10명 미만이었습니다.</li>
-    <li><b>2017~2018년 브라질 데이터입니다.</b> 배송 환경과 구매 습관이 다른 시장에 그대로 옮기기보다, 같은 방법을 자체 데이터에 다시 적용해야 합니다.</li>
-  </ul>
-</section>
+<div class="pg" id="limits" data-sec="limits"><div class="pg-in">
+<div class="hd">  <div class="kick rv">08 · 한계</div>
+  <h2 class="rv">이 분석이 말해 주지 않는 것</h2></div>
+<ul class="lim two"><li><b>관계일 뿐 원인은 아닙니다.</b> 지연과 부정 리뷰가 함께 나타난다는 것까지가 이 분석의 결론입니다. 원인인지는 위의 A/B 테스트로 확인해야 합니다.</li>
+<li><b>"판매자의 평점이 중요하다"는 전제는 확인하지 못했습니다.</b> 평점이 깎이면 실제 판매가 줄어드는지는 이번 분석에 들어 있지 않습니다. 제안은 이 전제를 둔 것이고, 상품 평점 변화 뒤의 판매 변화를 보는 별도 분석이 필요합니다.</li>
+<li><b>재구매가 워낙 드물어서 작은 차이는 잡아내기 어렵습니다.</b> 첫 구매 고객 5.5만 명 중 180일 안에 다시 산 사람은 1,080명(1.95%)뿐입니다. 그래서 "차이 없음"은 "영향이 전혀 없다"가 아니라 "있더라도 작다"로 읽어야 합니다. 실제로 부정 vs 긍정 비교는 p = 0.061로 기준(0.05)에 가까웠고, 글을 남긴 고객만 보면 기준을 넘는 차이가 나왔습니다(05). 미리 정한 규칙에 따라 결론은 "차이 없음"으로 두고, 05의 결과는 가설로만 다룹니다.</li>
+<li><b>"소비자가 Olist를 모른다"는 구조 설명은 가설입니다.</b> 리뷰에 Olist가 한 번도 언급되지 않고 같은 판매자로 돌아오는 경우가 29%뿐이라는 데이터는 이 설명과 맞지만, 재구매가 드문 진짜 이유(구매 주기, 가격, 다른 채널)는 구분하지 못합니다.</li>
+<li><b>묶음 주문의 "나뉘어 도착" 설명도 가설입니다.</b> 데이터에 분할 배송 여부가 없고, 불만 글은 단어 사전으로 센 것이라 놓치거나 잘못 잡은 글이 있습니다. 세일 시기는 블랙프라이데이 한 번의 사례이고, 물량만으로는 설명되지 않는 달(2018-02·03)이 있습니다.</li>
+<li><b>판매자 지속 분석은 표본이 작아 판단을 보류합니다.</b> 탐색 구간에서 보인 관계가 검증 구간(293명)에서는 확인되지 않았습니다. 판매자가 떠난 이유는 데이터에 없습니다.</li></ul>
+</div></div>
 
+<div class="pg" id="limits-2" data-sec="limits"><div class="pg-in">
+<div class="hd"><div class="kick rv">08 · 한계 · 이어서</div>
+<h2 class="rv">이 분석이 말해 주지 않는 것 (2)</h2></div>
+<ul class="lim two"><li><b>감성 모델은 부정과 긍정 두 가지로만 나눕니다.</b> 칭찬과 불만이 섞인 글은 어느 한쪽으로 분류됩니다. 정확도를 잰 정답 세트(400건)도 Claude가 판정한 것이라, 사람이 50건을 따로 판정해 일치율(86.7%)을 함께 공개했습니다.</li>
+<li><b>단어 사전에 오류가 하나 있었습니다.</b> 칭찬인 "ótima qualidade(아주 좋은 품질)"가 부정 표현 "ma qualidade(나쁜 품질)"와 글자가 겹쳐 품질 주제에 잘못 걸렸습니다. 고치면 품질 주제가 412건 → 400건(7.6% → 7.4%)이라 결론은 같습니다. 규칙을 바꾸지 않는다는 원칙에 따라 v1.2 결과를 그대로 싣고 오류를 공개합니다.</li>
+<li><b>사후 발견의 숫자를 한 번 바로잡았습니다.</b> 처음에는 Olist가 설문을 보낸 날짜를 기준으로 계산해 "받기 전 작성 76.5%"로 적었습니다. 고객이 실제로 답한 시각으로 다시 계산해 72.6%(부정 비율 82.1% vs 21.3%)로 고쳤습니다. 방향과 결론은 같습니다. 계산 코드는 저장소의 posthoc_review_timing.py에 있습니다.</li>
+<li><b>카테고리별 결론은 내리지 않았습니다.</b> 대부분 카테고리에서 지연 후 재구매 고객이 10명 미만이었습니다.</li>
+<li><b>2017~2018년 브라질 데이터입니다.</b> 배송 환경과 구매 습관이 다른 시장에 그대로 옮기기보다, 같은 방법을 자체 데이터에 다시 적용해야 합니다.</li></ul>
 <footer>
   데이터: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Brazilian E-Commerce Public Dataset by Olist (Kaggle)</a><br>
   분석 코드와 결과 표: <a href="https://github.com/sohyeon1628-prog/olist-analysis">GitHub 저장소</a> · <a href="index.html">조회 사이트</a><br>
   박소현 · 2026
 </footer>
-
+</div></div>
+</div>
+<div class="pager" id="pager" aria-label="페이지 이동">
+  <button id="pgPrev" aria-label="이전 페이지">← 이전</button>
+  <span id="pgN">1 / 12</span>
+  <button id="pgNext" aria-label="다음 페이지">다음 →</button>
 </div>
 </main>
 
 <script>
 (function () {
-  var els = document.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window)) return;
-  document.documentElement.classList.add('js');
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -8% 0px' });
-  els.forEach(function (e) { io.observe(e); });
+  var pages = [].slice.call(document.querySelectorAll('.pg'));
+  var keys = pages.map(function (p) { return p.id; });
+  var links = {};
+  document.querySelectorAll('#side nav a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  var mq = window.matchMedia('(min-width: 1001px)');
+  var cur = -1, MIN = 0.6;
 
-  var links = document.querySelectorAll('#side nav a');
-  var map = {};
-  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
-  var nav = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (e.isIntersecting) {
-        links.forEach(function (a) { a.classList.remove('on'); });
-        var a = map[e.target.id]; if (a) a.classList.add('on');
-      }
-    });
-  }, { rootMargin: '-40% 0px -55% 0px' });
-  document.querySelectorAll('main section[id]').forEach(function (s) { nav.observe(s); });
+  function fit(pg) {
+    var inner = pg.querySelector('.pg-in');
+    inner.style.zoom = ''; inner.style.maxWidth = ''; pg.classList.remove('scroll');
+    if (!mq.matches) return;
+    var cs = getComputedStyle(pg), avail = pg.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    var h = inner.getBoundingClientRect().height, z = 1;
+    for (var k = 0; k < 4 && h > avail; k++) {
+      z = Math.max(MIN, z * avail / h * 0.99);
+      inner.style.zoom = z; inner.style.maxWidth = (1080 / z) + 'px';
+      h = inner.getBoundingClientRect().height;
+    }
+    if (h > avail + 1) pg.classList.add('scroll');
+  }
+  function show(i, noHash) {
+    if (i < 0 || i >= pages.length) return;
+    pages.forEach(function (p, j) { p.classList.toggle('on', j === i); });
+    cur = i; fit(pages[i]);
+    Object.keys(links).forEach(function (k) { links[k].classList.remove('on'); });
+    var a = links[pages[i].getAttribute('data-sec')]; if (a) a.classList.add('on');
+    document.getElementById('pgN').textContent = (i + 1) + ' / ' + pages.length;
+    document.getElementById('pgPrev').disabled = i === 0;
+    document.getElementById('pgNext').disabled = i === pages.length - 1;
+    if (!noHash) { try { history.replaceState(null, '', '#' + keys[i]); } catch (e) {} }
+  }
+  function fromHash() {
+    var k = location.hash.slice(1), i = keys.indexOf(k);
+    if (i < 0) { var sec = pages.filter(function (p) { return p.getAttribute('data-sec') === k; })[0]; i = sec ? keys.indexOf(sec.id) : 0; }
+    show(i, true);
+    if (!mq.matches && k) { var el = document.getElementById(k); if (el) el.scrollIntoView(); }
+  }
+  document.getElementById('pgPrev').onclick = function () { show(cur - 1); };
+  document.getElementById('pgNext').onclick = function () { show(cur + 1); };
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || !mq.matches) return;
+    var t = e.target; if (t && /INPUT|TEXTAREA|SELECT/.test(t.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) { e.preventDefault(); show(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(pages.length - 1); }
+  });
+  window.addEventListener('hashchange', fromHash);
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (cur >= 0) fit(pages[cur]); }, 120); });
+  window.storyPager = { show: show, count: pages.length, fit: function () { return pages.map(function (p, i) { show(i, true); var inner = p.querySelector('.pg-in'); return { key: keys[i], zoom: inner.style.zoom || '1', scroll: p.classList.contains('scroll') }; }); } };
+  fromHash();
 })();
 </script>
 </body>
