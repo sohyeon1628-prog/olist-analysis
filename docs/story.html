@@ -33,9 +33,9 @@ a { color: inherit; }
 #side nav > a.on { border-left-color: var(--g); background: var(--g-soft); color: #111; font-weight: 800; }
 #side nav > a.on .n { color: var(--g); }
 /* 사이드바 서브페이지 미니멀 표시 (| 01) */
-.sub-nav { display: flex; align-items: center; gap: 7px; margin: 1px 0 3px 26px; }
-.sub-link { display: inline-flex; align-items: center; gap: 2.5px; margin: 0; padding: 0 2px; border: none !important; border-left: none !important; background: transparent !important; font-size: 10px; font-weight: 600; color: #9A968D; text-decoration: none; font-variant-numeric: tabular-nums; line-height: 1.2; transition: color .15s; }
-.sub-link .pip { color: #CDC9BF; font-weight: 300; font-size: 9px; }
+.sub-nav { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin: 2px 0 4px 26px; }
+.sub-link { display: inline-flex; align-items: center; gap: 3px; margin: 0; padding: 1px 2px; border: none !important; border-left: none !important; background: transparent !important; font-size: 10px; font-weight: 600; color: #9A968D; text-decoration: none; font-variant-numeric: tabular-nums; line-height: 1.3; transition: color .15s; }
+.sub-link .pip { color: #CDC9BF; font-weight: 300; font-size: 9.5px; }
 .sub-link:hover { color: #111; background: transparent !important; }
 .sub-link.on { color: var(--g); font-weight: 800; border-left: none !important; background: transparent !important; }
 .sub-link.on .pip { color: var(--g); font-weight: 800; }
