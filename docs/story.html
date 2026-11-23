@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Olist 분석 이야기</title>
-<meta name="description" content="Olist 브라질 이커머스 첫 구매 고객 55,261명 분석: 배송 지연은 리뷰를 무너뜨리지만 재구매와는 관계가 보이지 않았다.">
+<meta name="description" content="Olist 브라질 이커머스 첫 구매 고객 55,261명 분석: 배송 지연은 리뷰를 무너뜨렸지만, 재구매에서는 차이를 찾지 못했다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -263,7 +263,7 @@ footer a { color: #111; font-weight: 700; }
 <!-- 00 요약 -->
 <section class="hero" id="summary">
   <div class="kick rv">CASE STUDY · 고객 데이터 분석</div>
-  <h1 class="rv">배송이 늦으면 리뷰는 무너졌다.<br>그런데 재구매는 그대로였다.</h1>
+  <h1 class="rv">배송이 늦으면 리뷰는 무너졌다.<br>그런데 재구매에서는 차이를 찾지 못했다.</h1>
   <p class="lead rv">브라질 이커머스 Olist의 첫 구매 고객 55,261명을 분석해, 첫 구매 경험(배송·리뷰)이 재구매로 이어지는지 확인했습니다. 결과를 보기 전에 판단 규칙부터 정해 두고, 그 규칙대로만 결론을 내렸습니다.</p>
 
   <div class="meta rv">
@@ -275,7 +275,7 @@ footer a { color: #111; font-weight: 700; }
 
   <div class="st3 rv">
     <div><div class="lb">① 지연 → 부정 리뷰</div><strong>6.9<small>배</small></strong><span>배송이 늦은 고객의 65.4%가 1~2점을 줬습니다. 정시 배송 고객은 9.5%였습니다.</span></div>
-    <div><div class="lb">②③ 지연·부정 리뷰 → 재구매</div><strong>차이 없음</strong><span>지연 1.61% vs 정시 1.98%, 부정 1.68% vs 긍정 2.01%로, 둘 다 우연으로 볼 수 있는 범위였습니다. 단, 리뷰에 글을 남긴 고객만 보면 부정 쪽이 조금 낮았습니다(<a href="#sentiment">07</a>, 가설).</span></div>
+    <div><div class="lb">②③ 지연·부정 리뷰 → 재구매</div><strong>차이 없음</strong><span>지연 1.61% vs 정시 1.98%, 부정 1.68% vs 긍정 2.01%로, 둘 다 우연으로 볼 수 있는 범위였습니다. 다만 재구매가 드물어 상대 25~34%보다 작은 차이는 이 표본으로 잡기 어렵습니다. 글을 남긴 고객만 보면 부정 쪽이 조금 낮았습니다(<a href="#sentiment">07</a>, 가설).</span></div>
     <div><div class="lb">재구매까지 걸린 기간</div><strong>59<small>일</small></strong><span>재구매 고객의 절반은 첫 구매 후 22~114일 사이에 다시 샀습니다(중앙값 59일).</span></div>
   </div>
 
@@ -341,7 +341,7 @@ footer a { color: #111; font-weight: 700; }
 <section id="r2">
   <div class="kick rv">04 · 결과 ② ③</div>
   <h2 class="rv">재구매율은 지연에도, 부정 리뷰에도<br>뚜렷하게 흔들리지 않았습니다</h2>
-  <p class="rv">점은 재구매율, 옅은 막대는 95% 신뢰구간(실제 값이 있을 법한 범위)입니다. 그룹 사이의 막대가 서로 많이 겹칩니다. 규칙대로라면 "차이가 있다"고 말할 수 없습니다.</p>
+  <p class="rv">점은 재구매율, 옅은 막대는 95% 신뢰구간(실제 값이 있을 법한 범위)입니다. 그룹 사이의 막대가 서로 많이 겹칩니다. 규칙대로라면 "차이가 있다"고 말할 수 없습니다. 다만 이것이 "차이가 없다"는 증명은 아닙니다. 재구매가 2% 안팎으로 드물어서, 이 표본으로 확실히(검정력 80%) 잡을 수 있는 차이는 ②에서 상대 약 34%(0.67%p), ③에서 약 25%(0.50%p) 이상입니다. 지연 고객의 재구매가 최대 40% 낮을 가능성까지 배제하지는 못합니다.</p>
 
   <div class="chart rv">
     <div class="cap">② 배송 지연 → 180일 재구매율 <small>p = 0.12</small></div>
