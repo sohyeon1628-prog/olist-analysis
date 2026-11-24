@@ -236,6 +236,7 @@ table.sg td.gr { color: #9B978D; }
 input:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
 .rvcount { margin-top: 10px; font-size: 13px; color: var(--mute); }
 .rvcount b { color: var(--ink); }
+.rv p .mt { display: inline-block; margin-left: 6px; padding: 0 7px; border: 1px solid var(--line); border-radius: 999px; font-size: 10.5px; font-weight: 600; font-style: normal; line-height: 1.7; color: var(--mute); vertical-align: 1px; white-space: nowrap; }
 .rvcard .rvlist { margin-top: 10px; }
 .stg > section > .card2 + .card2, .stg > section > .g2 + .card2 { margin-top: 16px; }
 .rvlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
@@ -342,7 +343,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       <b>배송</b>실제 도착일을 안내된 예정일과 비교합니다(날짜 기준). '도착 기록 없음'은 배송 중, 취소 등으로 도착일이 없는 주문입니다.
       <b>리뷰</b>주문마다 가장 늦게 답변된 리뷰 하나를 씁니다.
       <b>재주문</b>같은 고객의 두 번째 이후 주문입니다.
-      <div class="ai"><b>AI 활용</b>데이터 정리 코드, 이 사이트, 리뷰 번역은 AI(Claude)와 함께 만들었습니다. 화면의 숫자는 모두 원본 데이터에서 코드로 계산했고, 이 화면에서는 해석하지 않습니다. 해석은 보는 분의 몫입니다. AI와 함께 해 본 분석 예시는 <a href="story.html">분석 이야기</a>에 있습니다.</div>
+      <div class="ai"><b>AI 활용</b>데이터 정리 코드, 이 사이트, 리뷰 번역(일부는 Azure 기계 번역, 화면에 표시)은 AI와 함께 만들었습니다. 화면의 숫자는 모두 원본 데이터에서 코드로 계산했고, 이 화면에서는 해석하지 않습니다. 해석은 보는 분의 몫입니다. AI와 함께 해 본 분석 예시는 <a href="story.html">분석 이야기</a>에 있습니다.</div>
     </div>
   </details>
 </header>
@@ -396,7 +397,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
           <div class="card2 cd rvcard"><div class="ph"><h2>리뷰 원문</h2><label class="sortl">정렬 <select id="rvSort" aria-label="정렬">
             <option value="new">최신순</option><option value="old">오래된 순</option><option value="hi">별점 높은 순</option><option value="lo">별점 낮은 순</option>
           </select></label></div>
-            <p class="q">글이 있는 리뷰를 위 조건대로 모아 봅니다. 별점 막대를 누르면 그 별점의 리뷰만 남습니다. 원문은 포르투갈어이고, 일부 리뷰에는 AI(Claude)가 옮긴 한국어 번역이 붙어 있습니다. 한국어·포르투갈어 모두 검색됩니다.</p>
+            <p class="q">글이 있는 리뷰를 위 조건대로 모아 봅니다. 별점 막대를 누르면 그 별점의 리뷰만 남습니다. 원문은 포르투갈어이고, 한국어 번역은 AI(Claude)가 옮긴 것과 <b>"기계 번역"</b> 표시가 붙은 것이 있습니다. 기계 번역은 틀릴 수 있으니 원문을 함께 보세요. 한국어·포르투갈어 모두 검색됩니다.</p>
             <div class="rvtools">
               <input type="search" id="rvq" placeholder="리뷰 검색 (예: 배송, 환불, recebi)" aria-label="리뷰 검색">
               <label><input type="checkbox" id="rvKo"> 한국어 번역이 있는 리뷰만</label>
@@ -1099,7 +1100,8 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
     const list = base;
     const by = { new: (a, b) => b[0] - a[0], old: (a, b) => a[0] - b[0], hi: (a, b) => b[1] - a[1] || b[0] - a[0], lo: (a, b) => a[1] - b[1] || b[0] - a[0] }[RV.sort];
     list.sort(by);
-    $('rvcount').innerHTML = `<b>${fmt(list.length)}</b>건 · 그중 한국어 번역 ${fmt(list.filter((r) => r[3]).length)}건`;
+    const nk = list.filter((r) => r[3]).length, nm = list.filter((r) => r[4]).length;
+    $('rvcount').innerHTML = `<b>${fmt(list.length)}</b>건 · 그중 한국어 번역 ${fmt(nk)}건` + (nm ? ` <span style="color:var(--mute)">(기계 번역 ${fmt(nm)}건 포함)</span>` : '');
     const hl = (s) => {
       if (!RV.q || !s) return esc(s);
       const i = norm(s).indexOf(RV.q);
@@ -1109,7 +1111,7 @@ select { width: 100%; padding: 7px 6px; border: 1px solid var(--line); border-ra
       const i = r[0];
       const meta = [mlabel(C.m[i]), dims.c[C.c[i]], dims.sKo[C.s[i]], C.st[i] === 0 ? dims.dl[C.dl[i]] : dims.st[C.st[i]]].map(esc).join(' · ');
       return `<div class="rv"><div class="tp"><span class="score" aria-label="별점 ${r[1]}점"><b>★</b>${r[1]}</span><span>${meta}</span></div>` +
-        (r[3] ? `<p>${hl(r[3])}</p><p class="pt" lang="pt">${hl(r[2])}</p>` : `<p lang="pt">${hl(r[2])}</p>`) + '</div>';
+        (r[3] ? `<p>${hl(r[3])}${r[4] ? ' <span class="mt" title="기계 번역이라 틀릴 수 있습니다. 원문을 함께 보세요.">기계 번역</span>' : ''}</p><p class="pt" lang="pt">${hl(r[2])}</p>` : `<p lang="pt">${hl(r[2])}</p>`) + '</div>';
     }).join('') : '<div class="empty" style="grid-column:1/-1">조건에 맞는 리뷰가 없습니다.</div>';
     $('rvmore').hidden = list.length <= RV.shown;
   }

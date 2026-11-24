@@ -112,7 +112,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 감성 분석은 `requirements-sentiment.txt`(PyTorch, transformers)와 B2W 리뷰 데이터가 따로 필요하고, GPU 없는 맥에서 약 1시간 걸립니다.
 
 ## AI 활용
-분석 코드, 웹 화면, 리뷰 번역, 감성 분석 정답 세트 판정은 AI(Claude)와 함께 작업했습니다.
+분석 코드, 웹 화면, 리뷰 번역, 감성 분석 정답 세트 판정은 AI(Claude)와 함께 작업했습니다. 리뷰 번역 중 23,431건은 Azure 기계 번역이며 화면에 "기계 번역"으로 표시합니다(무작위 100건 검사에서 뜻 오류 16%, `results/machine_translation_audit.md`).
 정답 세트는 사람이 50건을 따로 판정해 일치율(86.7%, 카파 0.77)을 확인했습니다. 화면의 숫자는 모두 원본 데이터에서 코드로 계산한 값입니다.
 
 ## 데이터와 라이선스
