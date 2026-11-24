@@ -4,7 +4,7 @@
 결과를 보기 전에 판단 규칙(계획서 v1.2)을 먼저 정하고 그 규칙대로만 결론을 냈습니다. 결과를 본 뒤 추가한 분석은 "탐색"으로 구분했고, 가능한 것은 탐색 구간과 검증 구간을 나눠 확인했습니다.
 
 - 탐색 화면: https://sohyeon1628-prog.github.io/olist-analysis/
-- 분석 이야기(20페이지, 탐색 화면 캡처 포함): https://sohyeon1628-prog.github.io/olist-analysis/story.html
+- 분석 이야기(18페이지, 탐색 화면 캡처 포함): https://sohyeon1628-prog.github.io/olist-analysis/story.html
 
 ## 한 줄 요약
 - 소비자는 마켓플레이스 이름으로 사고 Olist를 언급하지 않으며, 다시 사도 같은 판매자로 돌아오는 경우가 29%뿐입니다. 그래서 **소비자 재구매보다 판매자의 평점**을 지키는 관점으로 읽었습니다.
@@ -72,11 +72,12 @@
 olist-analysis/
 ├── docs/                          # GitHub Pages
 │   ├── index.html                 # 탐색 화면: "단계별 보기"(구매 → 재구매 추이·분포, 생키, 리뷰 원문)와 "집단별 비교"(기준 9개 × 열 7개 표 + 기준별 그래프 자동 배치), 해석 없이 사실만
-│   ├── story.html                 # 분석 이야기 (한 화면에 한 페이지, 20페이지: 분석 결과 + 탐색 화면 캡처 + 사이트 소개·만든 방식)
+│   ├── story.html                 # 분석 이야기 (한 화면에 한 페이지, 18페이지: 분석 결과 + 탐색 화면 캡처 + 사이트 소개·만든 방식)
 │   ├── lab.html                   # 예전 주소 호환용(탐색 화면으로 이동)
 │   ├── img/                       # 분석 이야기에 넣은 탐색 화면 캡처
 │   └── data/                      # 조회용 데이터 (orders.js, reviews.js)
 ├── results/
+│   ├── limits.md                  # 분석의 한계 (분석 이야기에서 분리한 본인 확인용 정리)
 │   ├── summary.md                 # 계획한 질문의 결과 상세 (규칙 v1.2)
 │   ├── 7_robustness_region.md     # 지역을 넣은 회귀
 │   ├── 8_posthoc_review_timing.md # 받기 전에 쓴 리뷰, 규모 추정
