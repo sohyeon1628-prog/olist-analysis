@@ -33,10 +33,10 @@ FREE_MONTHLY = 2_000_000              # F0 등급: 월 200만 자
 def fix(src, ko):
     s = src.lower()
     if re.search(r"\bprazo", s):                       # prazo = 배송 예정일 (마감일·기한으로 번역되는 오류)
-        ko = re.sub(r"마감\s*일|마감\s*기한|마감\s*시간|기한", "예정일", ko)
+        ko = re.sub(r"마감\s*일|마감\s*기한|마감\s*기간|마감\s*시간|기한|마감", "예정일", ko)   # 검사 100건에서 "마감 전" 등이 남아 확장
     if re.search(r"nota fiscal|\bnf-?e?\b", s):         # nota fiscal = 세금계산서 (청구서로 번역되는 오류)
         ko = ko.replace("청구서", "세금계산서")
-    for en, pat in (("Lannister", r"라니스터|라니스타"), ("Stark", r"스타크"), ("Targaryen", r"타르가르옌|타르가리엔|타르가르|타르가리안"),
+    for en, pat in (("Lannister", r"래니스터|라니스터|라니스타"), ("Stark", r"스타크"), ("Targaryen", r"타르가르옌|타르가리엔|타르가르|타르가리안"),
                     ("Baratheon", r"바라테온|바라시온|바라티온")):   # 마켓플레이스 이름은 번역하지 않음
         if en.lower() in s:
             ko = re.sub(rf"(?:{pat})(?:\s*(?:가문|가|집안|하우스))?", en, ko)
