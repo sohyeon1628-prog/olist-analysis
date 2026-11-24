@@ -335,6 +335,12 @@ footer a { color: #111; font-weight: 700; }
 .shot figcaption a { font-weight: 700; color: var(--g); }
 .plist { margin: 14px 0 0; padding: 0; list-style: none; } .plist li { padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.55; } .plist li b { display: block; font-size: 16px; }
 .plist li span { color: var(--mute); font-size: 13.5px; }
+.ltab { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 13.5px; line-height: 1.6; }
+.ltab th { padding: 8px 12px; border-bottom: 2px solid #111; font-size: 11.5px; font-weight: 800; color: #444; text-align: left; }
+.ltab td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; color: #333; }
+.ltab td:first-child { width: 27%; font-weight: 800; color: #111; }
+.ltab td:nth-child(2) { width: 33%; color: #555; }
+.ltab tbody tr:nth-child(odd) td { background: rgba(0,0,0,.022); }
 </style>
 </head>
 <body>
@@ -629,23 +635,27 @@ footer a { color: #111; font-weight: 700; }
 
 <div class="pg" id="limits" data-sec="limits"><div class="pg-in">
 <div class="hd">  <div class="kick rv">09 · 한계</div>
-  <h2 class="rv">이 분석이 말해 주지 않는 것</h2></div>
-<ul class="lim two"><li><b>관계일 뿐 원인은 아닙니다.</b> 지연과 부정 리뷰가 함께 나타난다는 것까지가 이 분석의 결론입니다. 원인인지는 위의 A/B 테스트로 확인해야 합니다.</li>
-<li><b>"평점이 판매에 영향을 준다"는 전제는 확인되지 않았습니다.</b> 상품의 초기 평점과 이후 판매를 탐색·검증으로 확인했지만 검증 구간에서는 뒷받침되지 않았고(07), Olist 별점은 만족도 설문이라 고객에게 보이는 값인지도 모릅니다. 제안은 "불만을 줄이는 실험"까지만 말하고, 판매 효과는 자체 데이터와 실험으로 확인해야 합니다.</li>
-<li><b>재구매가 워낙 드물어서 작은 차이는 잡아내기 어렵습니다.</b> 첫 구매 고객 5.5만 명 중 180일 안에 다시 산 사람은 1,080명(1.95%)뿐입니다. 그래서 "차이 없음"은 "영향이 전혀 없다"가 아니라 "있더라도 작다"로 읽어야 합니다. 실제로 부정 vs 긍정 비교는 p = 0.061로 기준(0.05)에 가까웠고, 글을 남긴 고객만 보면 기준을 넘는 차이가 나왔습니다(05). 미리 정한 규칙에 따라 결론은 "차이 없음"으로 두고, 05의 결과는 가설로만 다룹니다.</li>
-<li><b>"소비자가 Olist를 모른다"는 구조 설명은 가설입니다.</b> 리뷰에 Olist가 한 번도 언급되지 않고 같은 판매자로 돌아오는 경우가 29%뿐이라는 데이터는 이 설명과 맞지만, 재구매가 드문 진짜 이유(구매 주기, 가격, 다른 채널)는 구분하지 못합니다.</li>
-<li><b>묶음 주문의 "나뉘어 도착" 설명도 가설입니다.</b> 데이터에 분할 배송 여부가 없고, 불만 글은 단어 사전으로 센 것이라 놓치거나 잘못 잡은 글이 있습니다. 세일 시기는 블랙프라이데이 한 번의 사례이고, 물량만으로는 설명되지 않는 달(2018-02·03)이 있습니다.</li>
-<li><b>판매자 지속 분석은 표본이 작아 판단을 보류합니다.</b> 탐색 구간에서 보인 관계가 검증 구간(293명)에서는 확인되지 않았습니다. 판매자가 떠난 이유는 데이터에 없습니다.</li></ul>
+  <h2 class="rv">이 분석이 말해 주지 않는 것 ① 결론으로 쓰지 않은 것</h2></div>
+<table class="ltab"><thead><tr><th>한계</th><th>왜 그런가</th><th>그래서 이렇게 읽어 주세요</th></tr></thead><tbody>
+<tr><td>관계일 뿐 원인은 아닙니다</td><td>지연과 부정 리뷰가 함께 나타난다는 관찰입니다.</td><td>원인인지는 제안한 A/B 테스트로 확인해야 합니다(08).</td></tr>
+<tr><td>"평점이 판매에 영향을 준다"는 전제는 확인되지 않았습니다</td><td>탐색에서 보인 관계가 검증 구간에서 뒷받침되지 않았습니다(07). Olist 별점은 만족도 설문이라 고객에게 보이는 값인지도 모릅니다.</td><td>제안은 "불만을 줄이는 실험"까지입니다. 판매 효과는 자체 데이터와 실험으로 확인해야 합니다.</td></tr>
+<tr><td>재구매 차이는 작으면 잡아내지 못합니다</td><td>첫 구매 고객 5.5만 명 중 180일 안에 다시 산 사람은 1,080명(1.95%)뿐입니다.</td><td>"차이 없음"은 "영향이 전혀 없다"가 아니라 "있더라도 작다"입니다. 부정 vs 긍정은 p = 0.061로 기준(0.05)에 가까웠고 글을 남긴 고객만 보면 기준을 넘었지만(05), 미리 정한 규칙대로 결론은 "차이 없음"이고 05는 가설입니다.</td></tr>
+<tr><td>"소비자가 Olist를 모른다"는 구조 설명은 가설입니다</td><td>리뷰에 Olist 언급이 0건이고 같은 판매자로 돌아오는 경우가 29%뿐이라는 데이터는 이 설명과 맞습니다.</td><td>재구매가 드문 진짜 이유(구매 주기, 가격, 다른 채널)는 구분하지 못합니다.</td></tr>
+<tr><td>묶음 주문의 "나뉘어 도착"과 세일 시기도 가설입니다</td><td>분할 배송 여부가 데이터에 없고, 불만 글은 단어 사전으로 세어 놓치거나 잘못 잡은 글이 있습니다.</td><td>세일 시기는 블랙프라이데이 한 번의 사례이고, 물량만으로는 설명되지 않는 달(2018-02·03)이 있습니다.</td></tr>
+<tr><td>판매자 지속은 판단을 보류합니다</td><td>탐색 구간에서 보인 관계가 검증 구간(293명)에서는 확인되지 않았습니다.</td><td>판매자가 떠난 이유는 데이터에 없습니다.</td></tr>
+</tbody></table>
 </div></div>
 
 <div class="pg" id="limits-2" data-sec="limits"><div class="pg-in">
 <div class="hd"><div class="kick rv">09 · 한계 · 이어서</div>
-<h2 class="rv">이 분석이 말해 주지 않는 것 (2)</h2></div>
-<ul class="lim two"><li><b>감성 모델은 부정과 긍정 두 가지로만 나눕니다.</b> 칭찬과 불만이 섞인 글은 어느 한쪽으로 분류됩니다. 정확도를 잰 정답 세트(400건)도 Claude가 판정한 것이라, 사람이 50건을 따로 판정해 일치율(86.7%)을 함께 공개했습니다.</li>
-<li><b>단어 사전에 오류가 하나 있었습니다.</b> 칭찬인 "ótima qualidade(아주 좋은 품질)"가 부정 표현 "ma qualidade(나쁜 품질)"와 글자가 겹쳐 품질 주제에 잘못 걸렸습니다. 고치면 품질 주제가 412건 → 400건(7.6% → 7.4%)이라 결론은 같습니다. 규칙을 바꾸지 않는다는 원칙에 따라 v1.2 결과를 그대로 싣고 오류를 공개합니다.</li>
-<li><b>사후 발견의 숫자를 한 번 바로잡았습니다.</b> 처음에는 Olist가 설문을 보낸 날짜를 기준으로 계산해 "받기 전 작성 76.5%"로 적었습니다. 고객이 실제로 답한 시각으로 다시 계산해 72.6%(부정 비율 82.1% vs 21.3%)로 고쳤습니다. 방향과 결론은 같습니다. 계산 코드는 저장소의 posthoc_review_timing.py에 있습니다.</li>
-<li><b>카테고리별 결론은 내리지 않았습니다.</b> 대부분 카테고리에서 지연 후 재구매 고객이 10명 미만이었습니다.</li>
-<li><b>2017~2018년 브라질 데이터입니다.</b> 배송 환경과 구매 습관이 다른 시장에 그대로 옮기기보다, 같은 방법을 자체 데이터에 다시 적용해야 합니다.</li></ul>
+<h2 class="rv">이 분석이 말해 주지 않는 것 ② 방법·데이터의 한계와 바로잡은 것</h2></div>
+<table class="ltab"><thead><tr><th>한계</th><th>왜 그런가</th><th>그래서 이렇게 읽어 주세요</th></tr></thead><tbody>
+<tr><td>감성 모델은 부정과 긍정 두 가지로만 나눕니다</td><td>칭찬과 불만이 섞인 글도 어느 한쪽으로 분류됩니다. 정확도를 잰 정답 세트(400건)도 Claude가 판정했습니다.</td><td>사람이 50건을 따로 판정한 일치율(86.7%)을 함께 공개했습니다.</td></tr>
+<tr><td>단어 사전에 오류가 하나 있었습니다</td><td>칭찬인 "ótima qualidade(아주 좋은 품질)"가 "ma qualidade(나쁜 품질)"와 글자가 겹쳐 품질 주제에 잘못 걸렸습니다.</td><td>고치면 품질 주제가 412건 → 400건(7.6% → 7.4%)이라 결론은 같습니다. 규칙을 바꾸지 않는 원칙에 따라 v1.2 결과를 그대로 싣고 오류를 공개합니다.</td></tr>
+<tr><td>사후 발견의 숫자를 한 번 바로잡았습니다</td><td>처음에는 Olist가 설문을 보낸 날짜를 기준으로 "받기 전 작성 76.5%"라고 적었습니다.</td><td>고객이 실제로 답한 시각으로 다시 계산해 72.6%(부정 비율 82.1% vs 21.3%)로 고쳤습니다. 방향과 결론은 같습니다. 코드: posthoc_review_timing.py</td></tr>
+<tr><td>카테고리별 결론은 내리지 않았습니다</td><td>대부분 카테고리에서 지연 후 재구매 고객이 10명 미만이었습니다.</td><td>카테고리별 차이는 결론으로 쓰지 않았습니다.</td></tr>
+<tr><td>2017~2018년 브라질 데이터입니다</td><td>배송 환경과 구매 습관이 다른 시장과 다릅니다.</td><td>결과를 그대로 옮기기보다, 같은 방법을 자체 데이터에 다시 적용해야 합니다.</td></tr>
+</tbody></table>
 <footer>
   데이터: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Brazilian E-Commerce Public Dataset by Olist (Kaggle)</a><br>
   분석 코드와 결과 표: <a href="https://github.com/sohyeon1628-prog/olist-analysis">GitHub 저장소</a> · <a href="index.html">조회 사이트</a><br>
